@@ -1,0 +1,5 @@
+package lk.ijse.AutoCareCenter.Util;
+
+public enum TextField {
+    ID,NAME,ADDRESS,CONTACT,VNUMBER,UNITPRICE,SERVICECHARGE,QTY,USERNAME,PASSWORD
+}

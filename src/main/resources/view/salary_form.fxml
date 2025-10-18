@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="rootNode" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.AutoCareCenter.controller.SalaryFormController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="55.0" layoutY="63.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1015.0">
+         <fill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color green="0.5166666507720947" blue="1.0" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Rectangle>
+      <ImageView fitHeight="582.0" fitWidth="1015.0" layoutY="117.0" opacity="0.16">
+         <image>
+            <Image url="@../asserts/2d-graphic-wallpaper-with-colorful-grainy-gradients.jpg" />
+         </image>
+      </ImageView>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="190.0" layoutX="39.0" layoutY="132.0" opacity="0.44" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="674.0" />
+      <Label layoutX="451.0" layoutY="70.0" text="Salary">
+         <font>
+            <Font name="Sitka Text Bold" size="35.0" />
+         </font>
+      </Label>
+      <Label layoutX="396.0" layoutY="151.0" text="Employee Id" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="85.0" layoutY="231.0" text="Amount" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tblSalary" layoutX="401.0" layoutY="371.0" onMouseClicked="#getSalary" prefHeight="306.0" prefWidth="565.0">
+         <columns>
+            <TableColumn fx:id="colId" prefWidth="138.39996337890625" text="Salary Id" />
+            <TableColumn fx:id="colSid" prefWidth="142.39996337890625" text="Employee Id" />
+            <TableColumn fx:id="colAmount" prefWidth="141.59991455078125" text="Amount" />
+            <TableColumn fx:id="colMonth" prefWidth="141.59991455078125" text="Month" />
+         </columns>
+      </TableView>
+      <Label layoutX="88.0" layoutY="151.0" text="Salary Id" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="223.0" layoutY="293.0" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <JFXComboBox fx:id="CmbEmpId" layoutX="365.0" layoutY="175.0" onAction="#cmbEmployeeOnAction" prefHeight="26.0" prefWidth="171.0" />
+      <Line endX="-73.00001525878906" endY="31.29290008544922" layoutX="74.0" layoutY="32.0" startX="-73.00001525878906" startY="-30.9999942779541" />
+      <Text layoutX="93.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Auto Care Center - Admin" />
+      <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="162.0" layoutY="28.0" startX="-100.0" strokeWidth="2.0" />
+      <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="162.0" layoutY="38.0" startX="-100.0" strokeWidth="2.0" />
+      <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="162.0" layoutY="33.0" startX="-100.0" strokeWidth="2.0" />
+      <Line endX="952.0" endY="7.62939453125E-6" layoutX="60.0" layoutY="689.0" opacity="0.13" startX="-59.00001525878906" startY="7.62939453125E-6" />
+      <ImageView fitHeight="485.0" fitWidth="330.0" layoutX="48.0" layoutY="279.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts/Remove-bg.ai_1715179846876.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="413.0" layoutY="231.0" text="Month" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="63.0" layoutX="3.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1015.0" />
+      <Text layoutX="818.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Auto Care Center - Admin" />
+      <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="887.0" layoutY="26.0" startX="-100.0" strokeWidth="2.0" />
+      <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="887.0" layoutY="36.0" startX="-100.0" strokeWidth="2.0" />
+      <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="887.0" layoutY="31.0" startX="-100.0" strokeWidth="2.0" />
+      <ImageView fitHeight="63.0" fitWidth="200.0" layoutX="44.0" layoutY="1.0">
+         <image>
+            <Image url="@../asserts/360_F_509624928_TY0Y57HE5ly2gW65lwfYhSF8WHe5mlR2-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="43.0" fitWidth="44.0" layoutX="967.0" layoutY="9.0">
+         <image>
+            <Image url="@../asserts/people.png" />
+         </image>
+      </ImageView>
+      <JFXComboBox fx:id="CmbMonth" layoutX="365.0" layoutY="251.0" prefHeight="34.0" prefWidth="171.0" />
+      <Label layoutX="574.0" layoutY="151.0" text="Employee Name" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="LblEmpName" layoutX="587.0" layoutY="180.0" prefHeight="19.0" prefWidth="100.0">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <JFXButton buttonType="RAISED" contentDisplay="RIGHT" layoutX="492.0" layoutY="331.0" onAction="#btnSaveOnAction" prefHeight="31.0" prefWidth="90.0" style="-fx-background-color: blue;" text="  Save" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton buttonType="RAISED" contentDisplay="RIGHT" layoutX="388.0" layoutY="331.0" onAction="#btnUpdateOnAction" prefHeight="31.0" prefWidth="90.0" style="-fx-background-color: #e67e22;" text="   Update" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton buttonType="RAISED" contentDisplay="RIGHT" layoutX="182.0" layoutY="332.0" onAction="#btnDeleteOnAction" prefHeight="31.0" prefWidth="90.0" style="-fx-background-color: red;" text="   Delete" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <ImageView fitHeight="19.0" fitWidth="19.0" layoutX="498.0" layoutY="337.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts/icons8-add-50.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="19.0" fitWidth="19.0" layoutX="186.0" layoutY="339.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts/icons8-delete-50.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="19.0" fitWidth="23.0" layoutX="392.0" layoutY="338.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts/icons8-update-52.png" />
+         </image>
+      </ImageView>
+      <JFXButton buttonType="RAISED" contentDisplay="RIGHT" layoutX="285.0" layoutY="331.0" onAction="#btnClearOnAction" prefHeight="31.0" prefWidth="90.0" style="-fx-background-color: #7f8c8d;" text="   Clear" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <ImageView fitHeight="19.0" fitWidth="23.0" layoutX="292.0" layoutY="337.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../asserts/icons8-clear-50.png" />
+         </image>
+      </ImageView>
+      <JFXTextField fx:id="sId" layoutX="85.0" layoutY="177.0" onAction="#txtSearchOnAction" onKeyReleased="#txtIDOnKeyReleased" prefHeight="26.0" prefWidth="190.0" />
+      <JFXTextField fx:id="amount" layoutX="85.0" layoutY="260.0" onKeyReleased="#txtAmountOnKeyReleased" prefHeight="26.0" prefWidth="190.0" />
+      <Label fx:id="lblId" layoutX="117.0" layoutY="177.0">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
