@@ -24,9 +24,17 @@ public class DbConnection {
         String usersTable = "CREATE TABLE IF NOT EXISTS users (" +
                 "username TEXT PRIMARY KEY, " +
                 "password TEXT NOT NULL)";
-        PreparedStatement stmt = connection.prepareStatement(usersTable);
-        stmt.executeUpdate();
-        System.out.println("✅ Users table created (if not exists)");
+        connection.prepareStatement(usersTable).executeUpdate();
+
+        // ✅ Auto-create suppliers table
+        String supplierTable = "CREATE TABLE IF NOT EXISTS suppliers (" +
+                "supId TEXT PRIMARY KEY, " +
+                "supName TEXT NOT NULL, " +
+                "contact TEXT NOT NULL, " +
+                "address TEXT NOT NULL)";
+        connection.prepareStatement(supplierTable).executeUpdate();
+
+        System.out.println("✅ Tables created (if not exists)");
     }
 
     public static DbConnection getInstance() throws SQLException {
