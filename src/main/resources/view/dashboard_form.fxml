@@ -14,11 +14,6 @@
 
 <AnchorPane fx:id="rootNode" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.AutoCareCenter.controller.DashboardFormController">
    <children>
-      <ImageView fitHeight="175.0" fitWidth="200.0" layoutX="-1.0" layoutY="-68.0">
-         <image>
-            <Image url="@../asserts/Black%20and%20White%20Auto%20Repair%20Logo%20(1).png" />
-         </image>
-      </ImageView>
       <Pane layoutX="-1.0" layoutY="62.4" prefHeight="640.0" prefWidth="200.0" style="-fx-background-color: #2262C6; -fx-background-radius: 0px 50px 0px 0px;" AnchorPane.topAnchor="62.0">
          <children>
             <JFXButton buttonType="RAISED" layoutX="8.0" layoutY="111.0" onAction="#btnCustomerOnAction" prefHeight="35.0" prefWidth="185.0" style="-fx-background-color: #9AFEFF;" text="Customer">
@@ -45,7 +40,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </JFXButton>
-            <JFXButton buttonType="RAISED" layoutX="8.0" layoutY="327.0" onAction="#btnMaterialsOnAction" prefHeight="35.0" prefWidth="185.0" style="-fx-background-color: #9AFEFF;" text="Materials">
+            <JFXButton buttonType="RAISED" layoutX="8.0" layoutY="327.0" onAction="#btnMaterialsOnAction" prefHeight="35.0" prefWidth="185.0" style="-fx-background-color: #9AFEFF;" text="Products">
                <font>
                   <Font name="Sitka Display Bold" size="19.0" />
                </font>
@@ -193,14 +188,10 @@
                   <Image url="@../asserts/v915-techi-014-g.jpg" />
                </image>
             </ImageView>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="112.0" layoutX="83.0" layoutY="191.0" opacity="0.27" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="137.0">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></Rectangle>
             <Line endX="960.2000732421875" layoutX="53.0" layoutY="64.0" startX="-100.0" />
             <Line endX="-73.00001525878906" endY="31.29290008544922" layoutX="75.0" layoutY="31.0" startX="-73.00001525878906" startY="-30.9999942779541" />
             <Line endX="954.5999755859375" endY="7.62939453125E-6" layoutX="61.0" layoutY="128.0" startX="-59.00001525878906" startY="7.62939453125E-6" />
-            <Label layoutX="27.0" layoutY="73.0" text="Welcome to Auto Care Center">
+            <Label layoutX="27.0" layoutY="73.0" text="Welcome to Gamage Oil Mart" textFill="#0262db">
                <font>
                   <Font name="System Bold" size="29.0" />
                </font>
@@ -209,53 +200,25 @@
             <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="860.0" layoutY="27.0" startX="-100.0" strokeWidth="2.0" />
             <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="860.0" layoutY="37.0" startX="-100.0" strokeWidth="2.0" />
             <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="860.0" layoutY="32.0" startX="-100.0" strokeWidth="2.0" />
-            <Label layoutX="120.0" layoutY="201.0" prefHeight="26.0" prefWidth="96.0" text="Customer Count">
-               <font>
-                  <Font name="System Bold Italic" size="12.0" />
-               </font>
-            </Label>
             <ImageView fitHeight="35.0" fitWidth="25.0" layoutX="90.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../asserts/icons8-customerDTO-50.png" />
                </image>
             </ImageView>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="112.0" layoutX="316.0" layoutY="191.0" opacity="0.27" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="137.0">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="112.0" layoutX="46.0" layoutY="145.0" opacity="0.27" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="137.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Rectangle>
-            <Label layoutX="358.0" layoutY="201.0" prefHeight="26.0" prefWidth="96.0" text="Material Count">
+            <Label layoutX="88.0" layoutY="155.0" prefHeight="26.0" prefWidth="96.0" text="Material Count">
                <font>
                   <Font name="System Bold Italic" size="12.0" />
                </font>
             </Label>
-            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="324.0" layoutY="198.0">
+            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="54.0" layoutY="152.0">
                <image>
                   <Image url="@../asserts/icons8-item-50.png" />
                </image>
             </ImageView>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="112.0" layoutX="552.0" layoutY="191.0" opacity="0.27" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="137.0">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></Rectangle>
-            <Label layoutX="594.0" layoutY="201.0" prefHeight="26.0" prefWidth="96.0" text="Orders Count">
-               <font>
-                  <Font name="System Bold Italic" size="12.0" />
-               </font>
-            </Label>
-            <ImageView fitHeight="25.0" fitWidth="36.0" layoutX="564.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../asserts/icons8-order-50.png" />
-               </image>
-            </ImageView>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="112.0" layoutX="785.0" layoutY="191.0" opacity="0.27" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="137.0">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></Rectangle>
-            <Label layoutX="822.0" layoutY="201.0" prefHeight="26.0" prefWidth="96.0" text="Booking Count">
-               <font>
-                  <Font name="System Bold Italic" size="12.0" />
-               </font>
-            </Label>
             <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="793.0" layoutY="201.0">
                <image>
                   <Image url="@../asserts/icons8-bookingDTO-32.png" />
@@ -266,22 +229,7 @@
                   <Image url="@../asserts/20618-removebg-preview.png" />
                </image>
             </ImageView>
-            <Label fx:id="lblCustomerCount" layoutX="125.0" layoutY="234.0" prefHeight="54.0" prefWidth="53.0" text="10">
-               <font>
-                  <Font name="System Bold Italic" size="37.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblMaterialCount" layoutX="358.0" layoutY="234.0" prefHeight="54.0" prefWidth="53.0" text="20">
-               <font>
-                  <Font name="System Bold Italic" size="37.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblOrdersCount" layoutX="593.0" layoutY="235.0" prefHeight="54.0" prefWidth="53.0" text="03">
-               <font>
-                  <Font name="System Bold Italic" size="37.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblBookingCount" layoutX="827.0" layoutY="235.0" prefHeight="54.0" prefWidth="53.0" text="07">
+            <Label fx:id="lblMaterialCount" layoutX="88.0" layoutY="188.0" prefHeight="54.0" prefWidth="53.0" text="20">
                <font>
                   <Font name="System Bold Italic" size="37.0" />
                </font>
@@ -293,34 +241,18 @@
                </font>
             </Label>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="63.0" layoutX="3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1015.0" />
-            <Text layoutX="818.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Auto Care Center - Admin" />
-            <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="887.0" layoutY="27.0" startX="-100.0" strokeWidth="2.0" />
-            <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="887.0" layoutY="37.0" startX="-100.0" strokeWidth="2.0" />
-            <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="887.0" layoutY="32.0" startX="-100.0" strokeWidth="2.0" />
-            <ImageView fitHeight="70.0" fitWidth="200.0" layoutX="44.0" layoutY="-2.0">
-               <image>
-                  <Image url="@../asserts/360_F_509624928_TY0Y57HE5ly2gW65lwfYhSF8WHe5mlR2-removebg-preview.png" />
-               </image>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
-            <ImageView fitHeight="43.0" fitWidth="44.0" layoutX="967.0" layoutY="10.0">
+            <Text layoutX="816.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gamage Oil Mart - Admin" />
+            <ImageView fitHeight="43.0" fitWidth="44.0" layoutX="965.0" layoutY="10.0">
                <image>
                   <Image url="@../asserts/people.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="35.0" fitWidth="25.0" layoutX="91.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../asserts/icons8-customer-50.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="792.0" layoutY="200.0">
-               <image>
-                  <Image url="@../asserts/icons8-booking-32.png" />
-               </image>
-            </ImageView>
          </children>
       </AnchorPane>
+      <ImageView fitHeight="85.0" fitWidth="100.0" layoutX="37.0" layoutY="-8.0">
+         <image>
+            <Image url="@../asserts/Gemini_Generated_Image_45mldj45mldj45ml-removebg-preview.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
