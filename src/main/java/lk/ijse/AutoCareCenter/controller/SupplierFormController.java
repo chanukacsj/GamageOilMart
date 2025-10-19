@@ -1,10 +1,12 @@
 package lk.ijse.AutoCareCenter.controller;
 
 import com.jfoenix.controls.JFXTextField;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -57,6 +59,7 @@ public class SupplierFormController {
         setCellValueFactory();
         loadAllSupplier();
         loadNextId();
+        setupKeyListeners();
 
     }
 
@@ -95,15 +98,21 @@ public class SupplierFormController {
     }
 
     private String nextId(String currentId) {
-        if (currentId != null) {
+        if (currentId != null && currentId.startsWith("S")) {
             String[] split = currentId.split("S");
-//            System.out.println("Arrays.toString(split) = " + Arrays.toString(split));
-            int id = Integer.parseInt(split[1]);    //2
-            return "S" + ++id;
+            int id = 0;
 
+            if (split.length > 1 && !split[1].isEmpty()) {
+                id = Integer.parseInt(split[1]);
+            }
+
+            id++;
+            return String.format("S%03d", id);
         }
-        return "S";
+
+        return "S001";
     }
+
 
     public void loadAllSupplier() {
         tblSupplier.getItems().clear();
@@ -160,7 +169,21 @@ public class SupplierFormController {
             clearFields();
         }
     }
+    private void setupKeyListeners() {
+        Platform.runLater(() -> {
+            lblId.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    btnSaveOnAction(new ActionEvent());
+                    event.consume();
+                }
 
+                else if (event.getCode() == KeyCode.DELETE) {
+                    btnDeleteOnAction(new ActionEvent());
+                    event.consume();
+                }
+            });
+        });
+    }
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
 

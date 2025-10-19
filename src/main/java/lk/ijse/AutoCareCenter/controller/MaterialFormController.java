@@ -6,11 +6,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import lk.ijse.AutoCareCenter.Util.Regex;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
 import lk.ijse.AutoCareCenter.bo.SuperBO;
@@ -26,6 +28,7 @@ import lk.ijse.AutoCareCenter.model.*;
 
 import lk.ijse.AutoCareCenter.model.tm.MaterialsTm;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,19 +79,19 @@ public class MaterialFormController {
     Integer index;
 
     public void initialize() {
-        setCellValueFactory();
-        loadNextId();
-        loadAllMaterials();
-        getSuplierIds();
+       // setCellValueFactory();
+       // loadNextId();
+       // loadAllMaterials();
+      //  getSuplierIds();
     }
 
-    private void setCellValueFactory() {
-        colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
-        colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
-        colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
-        colQtyOnHand.setCellValueFactory(new PropertyValueFactory<>("qtyOnHand"));
-        colSupId.setCellValueFactory(new PropertyValueFactory<>("supId"));
-    }
+//    private void setCellValueFactory() {
+//        colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
+//        colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+//        colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+//        colQtyOnHand.setCellValueFactory(new PropertyValueFactory<>("qtyOnHand"));
+//        colSupId.setCellValueFactory(new PropertyValueFactory<>("supId"));
+//    }
 
     @FXML
     void getMaterials(MouseEvent event) {
@@ -102,6 +105,29 @@ public class MaterialFormController {
             txtQtyOnHand.setText(String.valueOf(tblMaterial.getItems().get(index).getQtyOnHand()));
             cmbSupId.setValue(tblMaterial.getItems().get(index).getSupId());
         }
+    }
+
+    private void setUi(String fileName) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/" + fileName));
+        Pane Newroot = fxmlLoader.load();
+        try {
+            root.getChildren().clear();
+            root.getChildren().setAll(Newroot);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    void btnOilOnAction(ActionEvent event) throws IOException {
+        setUi("oil_form.fxml");
+    }
+
+    @FXML
+    void btnTyreOnAction(ActionEvent event) throws IOException {
+        setUi("tyre_form.fxml");
     }
 
     private void loadNextId() {
