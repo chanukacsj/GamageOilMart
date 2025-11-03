@@ -122,12 +122,12 @@ public class MaterialFormController {
 
     @FXML
     void btnOilOnAction(ActionEvent event) throws IOException {
-        setUi("oil_form.fxml");
+        setUi("oils_form.fxml");
     }
 
     @FXML
     void btnTyreOnAction(ActionEvent event) throws IOException {
-        setUi("tyre_form.fxml");
+        setUi("tyres_form.fxml");
     }
 
     private void loadNextId() {
