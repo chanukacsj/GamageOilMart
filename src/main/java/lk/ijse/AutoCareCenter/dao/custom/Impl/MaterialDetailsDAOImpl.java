@@ -3,6 +3,7 @@ package lk.ijse.AutoCareCenter.dao.custom.Impl;
 import lk.ijse.AutoCareCenter.dao.SqlUtil;
 import lk.ijse.AutoCareCenter.dao.custom.MaterialDetailDAO;
 import lk.ijse.AutoCareCenter.entity.MaterialDetails;
+import lk.ijse.AutoCareCenter.model.MaterialDetailsDTO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,8 +21,12 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
                     rst.getString("code"),
                     rst.getString("supId"),
                     rst.getString("description"),
-                    rst.getDouble("unit_price"),
-                    rst.getInt("qty_on_hand")
+                    rst.getDouble("unitPrice"),
+                    rst.getInt("qtyOnHand"),
+                    rst.getString("category"),
+                    rst.getString("brand"),
+                    rst.getString("addedDate"),
+                    rst.getString("status")
             ));
         }
         return allMaterialDetails;
@@ -29,25 +34,33 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
 
     @Override
     public boolean save(MaterialDetails entity) throws SQLException, ClassNotFoundException {
-        // Explicit column list — safer for SQLite
+        // ✅ Fixed: 9 columns and 9 placeholders
         return SqlUtil.execute(
-                "INSERT INTO material_details (code, supId, description, unit_price, qty_on_hand) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO material_details (code, supId, description, unitPrice, qtyOnHand, category, brand, addedDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 entity.getCode(),
                 entity.getSupId(),
                 entity.getDescription(),
                 entity.getUnitPrice(),
-                entity.getQtyOnHand()
+                entity.getQtyOnHand(),
+                entity.getCategory(),
+                entity.getBrand(),
+                entity.getAddedDate(),
+                entity.getStatus()
         );
     }
 
     @Override
     public boolean update(MaterialDetails entity) throws SQLException, ClassNotFoundException {
         return SqlUtil.execute(
-                "UPDATE material_details SET supId = ?, description = ?, unit_price = ?, qty_on_hand = ? WHERE code = ?",
+                "UPDATE material_details SET supId = ?, description = ?, unitPrice = ?, qtyOnHand = ?, category = ?, brand = ?, addedDate = ?, status = ? WHERE code = ?",
                 entity.getSupId(),
                 entity.getDescription(),
                 entity.getUnitPrice(),
                 entity.getQtyOnHand(),
+                entity.getCategory(),
+                entity.getBrand(),
+                entity.getAddedDate(),
+                entity.getStatus(),
                 entity.getCode()
         );
     }
@@ -60,8 +73,12 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
                     rst.getString("code"),
                     rst.getString("supId"),
                     rst.getString("description"),
-                    rst.getDouble("unit_price"),
-                    rst.getInt("qty_on_hand")
+                    rst.getDouble("unitPrice"),
+                    rst.getInt("qtyOnHand"),
+                    rst.getString("category"),
+                    rst.getString("brand"),
+                    rst.getString("addedDate"),
+                    rst.getString("status")
             );
         }
         return null;
@@ -93,10 +110,44 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
 
     @Override
     public String currentId() throws SQLException, ClassNotFoundException {
-        ResultSet rst = SqlUtil.execute("SELECT code FROM material_details ORDER BY code DESC LIMIT 1");
+        System.out.println("in currentId method");
+        ResultSet rst = SqlUtil.execute(
+                "SELECT code FROM material_details ORDER BY CAST(SUBSTR(code, 2) AS INTEGER) DESC LIMIT 1"
+        );
+
+
         if (rst.next()) {
-            return rst.getString("code");
+            String code = rst.getString("code");
+            return code;
+        } else {
+            System.out.println("No code found in material_details table!");
         }
+
         return null;
+    }
+
+
+    @Override
+    public ArrayList<MaterialDetailsDTO> loadAllByCategory(String category) {
+        ArrayList<MaterialDetailsDTO> list = new ArrayList<>();
+        try {
+            ResultSet rs = SqlUtil.execute("SELECT * FROM material_details WHERE category = ?", category);
+            while (rs.next()) {
+                list.add(new MaterialDetailsDTO(
+                        rs.getString("code"),
+                        rs.getString("supId"),
+                        rs.getString("description"),
+                        rs.getDouble("unitPrice"),
+                        rs.getInt("qtyOnHand"),
+                        rs.getString("category"),
+                        rs.getString("brand"),
+                        rs.getString("addedDate"),
+                        rs.getString("status")
+                ));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

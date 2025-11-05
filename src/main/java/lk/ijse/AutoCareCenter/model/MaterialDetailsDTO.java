@@ -13,5 +13,9 @@ public class MaterialDetailsDTO {
     private String description;
     private double unitPrice;
     private int qtyOnHand;
+    private String category;
+    private String brand;
+    private String addedDate;
+    private String status;
 
 }

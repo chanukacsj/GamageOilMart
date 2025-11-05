@@ -31,15 +31,6 @@
          </image>
       </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="166.0" layoutX="145.0" layoutY="146.0" opacity="0.37" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="737.0" />
-      <TableView fx:id="tblMaterial" layoutX="41.0" layoutY="372.0" onMouseClicked="#getMaterials" prefHeight="311.0" prefWidth="713.0">
-         <columns>
-            <TableColumn fx:id="colCode" prefWidth="92.0" text="Code" />
-            <TableColumn fx:id="colDescription" prefWidth="187.1999969482422" text="Description" />
-            <TableColumn fx:id="colUnitPrice" prefWidth="152.0" text="Unit Price" />
-            <TableColumn fx:id="colQtyOnHand" prefWidth="140.79998779296875" text="Qty On Hand" />
-            <TableColumn fx:id="colSupId" prefWidth="140.79998779296875" text="Supplier Id" />
-         </columns>
-      </TableView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="55.0" layoutY="63.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1015.0">
          <fill>
             <LinearGradient endX="1.0" endY="1.0">
@@ -167,5 +158,23 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
+      <TableView fx:id="tblMaterial" layoutX="49.0" layoutY="372.0" onMouseClicked="#getMaterials" prefHeight="311.0" prefWidth="912.0">
+         <columns>
+            <TableColumn fx:id="colCode" prefWidth="92.0" text="Code" />
+            <TableColumn fx:id="colDescription" prefWidth="152.7999725341797" text="Description" />
+            <TableColumn fx:id="colUnitPrice" prefWidth="105.59991455078125" text="Unit Price" />
+            <TableColumn fx:id="colQtyOnHand" prefWidth="150.39996337890625" text="Qty On Hand" />
+            <TableColumn fx:id="colSupId" prefWidth="120.79998779296875" text="Supplier Id" />
+            <TableColumn fx:id="colBrand" prefWidth="98.39990234375" text="Brand" />
+            <TableColumn fx:id="colDate" prefWidth="111.9998779296875" text="Added Date" />
+            <TableColumn fx:id="colStatus" prefWidth="78.39990234375" text="Status" />
+         </columns>
+      </TableView>
+      <Label layoutX="720.0" layoutY="240.0" text="brand" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <JFXTextField fx:id="txtBrand" layoutX="719.0" layoutY="263.0" onKeyReleased="#txtQtyOnKeyReleased" prefHeight="26.0" prefWidth="146.0" />
    </children>
 </AnchorPane>

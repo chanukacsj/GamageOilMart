@@ -16,4 +16,10 @@ public interface MaterialDetailBO extends SuperBO {
 
     public MaterialDetails searchById(String code) throws SQLException, ClassNotFoundException;
 
+    ArrayList<MaterialDetailsDTO> loadAllByCategory(String category) throws SQLException, ClassNotFoundException;
+
+    public String currentId() throws SQLException, ClassNotFoundException ;
+
+    public boolean delete(String code) throws SQLException, ClassNotFoundException;
+
 }

@@ -3,7 +3,6 @@ package lk.ijse.AutoCareCenter.db;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DbConnection {
@@ -16,6 +15,7 @@ public class DbConnection {
         File dbDir = new File("C:/Users/CHANUKA/Documents/intellig/GamageOilMart/database");
         if (!dbDir.exists()) dbDir.mkdirs();
 
+        // ✅ Connect to SQLite DB
         String url = "jdbc:sqlite:C:/Users/CHANUKA/Documents/intellig/GamageOilMart/database/OilMart.db";
         connection = DriverManager.getConnection(url);
         System.out.println("✅ Connected to SQLite database successfully!");
@@ -33,6 +33,20 @@ public class DbConnection {
                 "contact TEXT NOT NULL, " +
                 "address TEXT NOT NULL)";
         connection.prepareStatement(supplierTable).executeUpdate();
+
+        // ✅ Auto-create material_details table
+        String materialDetailTable = "CREATE TABLE IF NOT EXISTS material_details (" +
+                "code TEXT PRIMARY KEY, " +
+                "supId TEXT NOT NULL, " +
+                "description TEXT NOT NULL, " +
+                "category TEXT NOT NULL, " +
+                "brand TEXT, " +
+                "unitPrice REAL NOT NULL, " +
+                "qtyOnHand INTEGER NOT NULL, " +
+                "addedDate TEXT DEFAULT (datetime('now')), " +
+                "status TEXT DEFAULT 'Active', " +
+                "FOREIGN KEY (supId) REFERENCES suppliers(supId))";
+        connection.prepareStatement(materialDetailTable).executeUpdate();
 
         System.out.println("✅ Tables created (if not exists)");
     }

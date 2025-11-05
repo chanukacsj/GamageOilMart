@@ -19,24 +19,40 @@ public class MaterialDetailBOImpl implements MaterialDetailBO {
         ArrayList<MaterialDetails> all = materialDetailDAO.loadAll();
         ArrayList<MaterialDetailsDTO> allMaterialDetails = new ArrayList<>();
         for (MaterialDetails m : all) {
-            allMaterialDetails.add(new MaterialDetailsDTO(m.getCode(), m.getSupId(), m.getDescription(), m.getUnitPrice(), m.getQtyOnHand()));
+            allMaterialDetails.add(new MaterialDetailsDTO(m.getCode(), m.getSupId(), m.getDescription(), m.getUnitPrice(), m.getQtyOnHand(), m.getCategory(), m.getBrand(), m.getAddedDate(), m.getStatus()));
         }
         return allMaterialDetails;
     }
 
     @Override
     public boolean save(MaterialDetailsDTO materialDetailsDTO) throws SQLException, ClassNotFoundException {
-        return materialDetailDAO.save(new MaterialDetails(materialDetailsDTO.getCode(), materialDetailsDTO.getSupId(), materialDetailsDTO.getDescription(), materialDetailsDTO.getUnitPrice(), materialDetailsDTO.getQtyOnHand()));
+        return materialDetailDAO.save(new MaterialDetails(materialDetailsDTO.getCode(), materialDetailsDTO.getSupId(), materialDetailsDTO.getDescription(), materialDetailsDTO.getUnitPrice(), materialDetailsDTO.getQtyOnHand(), materialDetailsDTO.getCategory(), materialDetailsDTO.getBrand(), materialDetailsDTO.getAddedDate(), materialDetailsDTO.getStatus()));
     }
 
     @Override
     public boolean update(MaterialDetailsDTO materialDetailsDTO) throws SQLException, ClassNotFoundException {
-        return materialDetailDAO.update(new MaterialDetails(materialDetailsDTO.getCode(), materialDetailsDTO.getSupId(), materialDetailsDTO.getDescription(), materialDetailsDTO.getUnitPrice(), materialDetailsDTO.getQtyOnHand()));
+        return materialDetailDAO.update(new MaterialDetails(materialDetailsDTO.getCode(), materialDetailsDTO.getSupId(), materialDetailsDTO.getDescription(), materialDetailsDTO.getUnitPrice(), materialDetailsDTO.getQtyOnHand(), materialDetailsDTO.getCategory(), materialDetailsDTO.getBrand(), materialDetailsDTO.getAddedDate(), materialDetailsDTO.getStatus()));
     }
 
     @Override
     public MaterialDetails searchById(String code) throws SQLException, ClassNotFoundException {
         return materialDetailDAO.searchById(code);
     }
+
+    @Override
+    public ArrayList<MaterialDetailsDTO> loadAllByCategory(String category) throws SQLException, ClassNotFoundException {
+        return materialDetailDAO.loadAllByCategory(category);
+    }
+
+    @Override
+    public String currentId() throws SQLException, ClassNotFoundException {
+        return materialDetailDAO.currentId();
+    }
+
+    @Override
+    public boolean delete(String code) throws SQLException, ClassNotFoundException {
+        return materialDetailDAO.delete(code);
+    }
+
 
 }
