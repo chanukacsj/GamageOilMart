@@ -50,4 +50,7 @@ public class OilsFormController {
         setUi("other_form.fxml");
     }
 
+    public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("material_form.fxml");
+    }
 }

@@ -92,4 +92,8 @@ public class MaterialFormController {
     void btnTyreOnAction(ActionEvent event) throws IOException {
         setUi("tyres_form.fxml");
     }
+
+    public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("dashboard_form.fxml");
+    }
 }

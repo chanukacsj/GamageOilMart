@@ -16,6 +16,7 @@ import lk.ijse.AutoCareCenter.bo.custom.SupplierBO;
 import lk.ijse.AutoCareCenter.dao.custom.Impl.SupplierDAOImpl;
 import lk.ijse.AutoCareCenter.entity.Supplier;
 import lk.ijse.AutoCareCenter.model.SupplierDTO;
+import lk.ijse.AutoCareCenter.model.tm.MaterialsTm;
 import lk.ijse.AutoCareCenter.model.tm.SupplierTm;
 
 import java.sql.SQLException;
@@ -146,6 +147,19 @@ public class SupplierFormController {
 
     }
 
+//    @FXML
+//    void get(MouseEvent event) {
+//        index = tblSupplier.getSelectionModel().getSelectedIndex();
+//        if (index <= -1) return;
+//
+//        SupplierTm tm = tblSupplier.getItems().get(index);
+//        lblId.setText(tm.getId());
+//        txtName.setText(tm.getName());
+//        txtAddress.setText(tm.getAddress());
+//        txtContact.setText(tm.getContact());
+//
+//    }
+
     @FXML
     void btnSaveOnAction(ActionEvent event) {
         String id = lblId.getText();
@@ -231,22 +245,46 @@ public class SupplierFormController {
     }
 
     @FXML
-    public void btnDeleteOnAction(ActionEvent actionEvent) {
+    public void btnDeleteOnAction(ActionEvent event) {
         String id = lblId.getText();
 
-        try {
-            boolean isDeleted = supplierBO.delete(id);
-            if (isDeleted) {
-                new Alert(Alert.AlertType.CONFIRMATION, "supplier deleted!").show();
-            }
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        // Check if a supplier is selected
+        if (id == null || id.isEmpty()) {
+            new Alert(Alert.AlertType.WARNING, "Please select a supplier to delete!").show();
+            return;
         }
-        loadAllSupplier();
-        clearFields();
+
+        // Confirmation alert
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirm Delete");
+        confirmAlert.setHeaderText(null);
+        confirmAlert.setContentText("Are you sure you want to delete this supplier?");
+
+        // Wait for user choice
+        ButtonType result = confirmAlert.showAndWait().orElse(ButtonType.CANCEL);
+
+        if (result == ButtonType.OK) {
+            try {
+                boolean isDeleted = supplierBO.delete(id);
+
+                if (isDeleted) {
+                    new Alert(Alert.AlertType.INFORMATION, "Supplier deleted successfully!").show();
+                    loadAllSupplier();
+                    clearFields();
+                    loadNextId();
+                } else {
+                    new Alert(Alert.AlertType.WARNING, "Delete failed. Supplier may not exist!").show();
+                }
+
+            } catch (SQLException | ClassNotFoundException e) {
+                new Alert(Alert.AlertType.ERROR, "Error while deleting supplier: " + e.getMessage()).show();
+            }
+
+        } else {
+            new Alert(Alert.AlertType.INFORMATION, "Delete cancelled.").show();
+        }
     }
+
 
     public boolean isValid() {
         // if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.ID, (JFXTextField) txtId)) return false;
