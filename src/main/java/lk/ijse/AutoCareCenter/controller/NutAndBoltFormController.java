@@ -6,13 +6,16 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import lk.ijse.AutoCareCenter.Util.Regex;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
 import lk.ijse.AutoCareCenter.bo.custom.MaterialBO;
@@ -21,6 +24,7 @@ import lk.ijse.AutoCareCenter.model.MaterialDetailsDTO;
 import lk.ijse.AutoCareCenter.model.MaterialsDTO;
 import lk.ijse.AutoCareCenter.model.tm.MaterialsTm;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -52,6 +56,8 @@ public class NutAndBoltFormController {
             (MaterialBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.MATERIAL);
 
     private Integer index;
+
+    private EventHandler<KeyEvent> keyHandler;
 
     public void initialize() {
         setCellValueFactory();
@@ -92,6 +98,17 @@ public class NutAndBoltFormController {
         return "M1";
     }
 
+    private void setUi(String fileName) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/" + fileName));
+        Pane Newroot = fxmlLoader.load();
+        try {
+            root.getChildren().clear();
+            root.getChildren().setAll(Newroot);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void loadAllNutBoltMaterials() {
         tblMaterial.getItems().clear();
@@ -141,6 +158,8 @@ public class NutAndBoltFormController {
         int qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
         String addedDate = LocalDate.now().toString();
         String status = "Active";
+
+        System.out.println("unit " + unitPrice);
 
         MaterialsDTO materialsDTO = new MaterialsDTO(code);
         MaterialDetailsDTO detailsDTO = new MaterialDetailsDTO(code, supId, description, unitPrice, qtyOnHand, category, brand, addedDate, status);
@@ -258,17 +277,16 @@ public class NutAndBoltFormController {
     }
     private void setupKeyListeners() {
         Platform.runLater(() -> {
-            lblId.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            keyHandler = event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     btnSaveOnAction(new ActionEvent());
                     event.consume();
-                }
-
-                else if (event.getCode() == KeyCode.DELETE) {
+                } else if (event.getCode() == KeyCode.DELETE) {
                     btnDeleteOnAction(new ActionEvent());
                     event.consume();
                 }
-            });
+            };
+            lblId.getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyHandler);
         });
     }
 
@@ -283,4 +301,13 @@ public class NutAndBoltFormController {
     }
 
     public void txtIDOnKeyReleased(KeyEvent keyEvent) {}
+
+    public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
+        if (keyHandler != null && lblId.getScene() != null) {
+            lblId.getScene().removeEventFilter(KeyEvent.KEY_PRESSED, keyHandler);
+        }
+        setUi("oils_form.fxml");
+    }
+
+
 }

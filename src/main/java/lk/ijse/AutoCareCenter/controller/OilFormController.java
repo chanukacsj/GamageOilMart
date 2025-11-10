@@ -6,13 +6,16 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import lk.ijse.AutoCareCenter.Util.Regex;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
 import lk.ijse.AutoCareCenter.bo.custom.MaterialBO;
@@ -21,6 +24,7 @@ import lk.ijse.AutoCareCenter.model.MaterialDetailsDTO;
 import lk.ijse.AutoCareCenter.model.MaterialsDTO;
 import lk.ijse.AutoCareCenter.model.tm.MaterialsTm;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -46,6 +50,8 @@ public class OilFormController {
 
     @FXML
     private AnchorPane root;
+
+    private EventHandler<KeyEvent> keyHandler;
 
     private final MaterialDetailBO materialDetailBO =
             (MaterialDetailBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.MATERIALDETAILS);
@@ -248,17 +254,16 @@ public class OilFormController {
 
     private void setupKeyListeners() {
         Platform.runLater(() -> {
-            lblId.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            keyHandler = event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     btnSaveOnAction(new ActionEvent());
                     event.consume();
-                }
-
-                else if (event.getCode() == KeyCode.DELETE) {
+                } else if (event.getCode() == KeyCode.DELETE) {
                     btnDeleteOnAction(new ActionEvent());
                     event.consume();
                 }
-            });
+            };
+            lblId.getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyHandler);
         });
     }
     private void getSupplierIds() {
@@ -276,6 +281,17 @@ public class OilFormController {
         return Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, txtUnitPrice)
                 && Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, txtQtyOnHand);
     }
+    private void setUi(String fileName) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/" + fileName));
+        Pane Newroot = fxmlLoader.load();
+        try {
+            root.getChildren().clear();
+            root.getChildren().setAll(Newroot);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     void txtPriceOnKeyReleased(KeyEvent event) {
@@ -290,7 +306,10 @@ public class OilFormController {
     public void txtIDOnKeyReleased(KeyEvent keyEvent) {
     }
 
-    public void btnBackOnAction(ActionEvent actionEvent) {
-        
+    public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
+        if (keyHandler != null && lblId.getScene() != null) {
+            lblId.getScene().removeEventFilter(KeyEvent.KEY_PRESSED, keyHandler);
+        }
+        setUi("oils_form.fxml");
     }
 }
