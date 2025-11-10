@@ -42,10 +42,10 @@
       <JFXComboBox fx:id="cmbSupId" layoutX="690.0" layoutY="165.0" prefWidth="150.0" styleClass="form-field" />
 
       <Label layoutX="190.0" layoutY="220.0" styleClass="form-label" text="Unit Price" />
-      <JFXTextField fx:id="txtUnitPrice" layoutX="190.0" layoutY="245.0" prefWidth="200.0" styleClass="form-field" />
+      <JFXTextField fx:id="txtUnitPrice" layoutX="190.0" layoutY="245.0" onKeyReleased="#txtPriceOnKeyReleased" prefWidth="200.0" styleClass="form-field" />
 
       <Label layoutX="440.0" layoutY="220.0" styleClass="form-label" text="Qty On Hand" />
-      <JFXTextField fx:id="txtQtyOnHand" layoutX="440.0" layoutY="245.0" prefWidth="200.0" styleClass="form-field" />
+      <JFXTextField fx:id="txtQtyOnHand" layoutX="440.0" layoutY="245.0" onKeyReleased="#txtQtyOnKeyReleased" prefWidth="200.0" styleClass="form-field" />
 
       <Label layoutX="690.0" layoutY="220.0" styleClass="form-label" text="Brand" />
       <JFXTextField fx:id="txtBrand" layoutX="690.0" layoutY="245.0" prefWidth="150.0" styleClass="form-field" />

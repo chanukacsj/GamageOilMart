@@ -47,7 +47,7 @@ public class OilsFormController {
 
     @FXML
     void btnOtherOnAction(ActionEvent event) throws IOException {
-        setUi("other_form.fxml");
+        setUi("other.fxml");
     }
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {

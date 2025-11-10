@@ -10,171 +10,71 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.AutoCareCenter.controller.NutAndBoltFormController">
+<AnchorPane fx:id="root" prefHeight="720.0" prefWidth="1020.0" styleClass="root" stylesheets="@../css/oil.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.AutoCareCenter.controller.NutAndBoltFormController">
+
    <children>
-      <ImageView fitHeight="588.0" fitWidth="1015.0" layoutX="1.0" layoutY="117.0" opacity="0.16">
-         <image>
-            <Image url="@../asserts/2d-graphic-wallpaper-with-colorful-grainy-gradients.jpg" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="371.0" fitWidth="445.0" layoutX="642.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../asserts/Remove-bg.ai_1715259632691.png" />
-         </image>
-      </ImageView>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="166.0" layoutX="145.0" layoutY="146.0" opacity="0.37" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="737.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="55.0" layoutY="63.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1015.0">
-         <fill>
-            <LinearGradient endX="1.0" endY="1.0">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color green="0.5166666507720947" blue="1.0" />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0" />
-                     </color>
-                  </Stop>
-               </stops>
-            </LinearGradient>
-         </fill>
-      </Rectangle>
-      <Label layoutX="448.0" layoutY="61.0" text="Materials ">
-         <font>
-            <Font name="System Bold" size="40.0" />
-         </font>
-      </Label>
-      <Label layoutX="192.0" layoutY="161.0" text="Material Code" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font></Label>
-      <Label layoutX="454.0" layoutY="161.0" text="Description" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font></Label>
-      <Label layoutX="193.0" layoutY="238.0" text="Unit Price" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="13.0" />
-         </font></Label>
-      <Label layoutX="454.0" layoutY="238.0" text="Qty On Hand" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font></Label>
-      <Line endX="-73.00001525878906" endY="31.29290008544922" layoutX="73.0" layoutY="32.0" startX="-73.00001525878906" startY="-30.9999942779541" />
-      <Text layoutX="92.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Auto Care Center - Admin" />
-      <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="161.0" layoutY="28.0" startX="-100.0" strokeWidth="2.0" />
-      <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="161.0" layoutY="38.0" startX="-100.0" strokeWidth="2.0" />
-      <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="161.0" layoutY="33.0" startX="-100.0" strokeWidth="2.0" />
-      <Line endX="952.0" endY="7.62939453125E-6" layoutX="59.0" layoutY="689.0" opacity="0.13" startX="-59.00001525878906" startY="7.62939453125E-6" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="63.0" layoutX="2.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1015.0" />
-      <Text layoutX="817.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Auto Care Center - Admin" />
-      <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="886.0" layoutY="26.0" startX="-100.0" strokeWidth="2.0" />
-      <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="886.0" layoutY="36.0" startX="-100.0" strokeWidth="2.0" />
-      <Line endX="-76.39997863769531" endY="5.7220458984375E-6" layoutX="886.0" layoutY="31.0" startX="-100.0" strokeWidth="2.0" />
-      <ImageView fitHeight="63.0" fitWidth="200.0" layoutX="43.0" layoutY="1.0">
-         <image>
-            <Image url="@../asserts/360_F_509624928_TY0Y57HE5ly2gW65lwfYhSF8WHe5mlR2-removebg-preview.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="43.0" fitWidth="44.0" layoutX="966.0" layoutY="9.0">
+
+      <!-- Header bar -->
+      <Rectangle fill="#1a237e" height="70.0" width="1020.0" />
+      <Label layoutX="355.0" layoutY="12.0" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Manage Nuts &amp; Bolts" textFill="WHITE" />
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="960.0" layoutY="15.0">
          <image>
             <Image url="@../asserts/people.png" />
          </image>
       </ImageView>
-      <JFXButton buttonType="RAISED" contentDisplay="RIGHT" layoutX="629.0" layoutY="326.0" onAction="#btnSaveOnAction" prefHeight="31.0" prefWidth="90.0" style="-fx-background-color: blue;" text="  Save" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
+
+      <!-- Form background -->
+      <Rectangle arcHeight="15.0" arcWidth="15.0" fill="white" height="174.0" layoutX="60.0" layoutY="119.0" opacity="0.12" width="900.0" />
+
+      <!-- Form Fields -->
+      <Label layoutX="190.0" layoutY="140.0" styleClass="form-label" text="Material Code" />
+      <JFXTextField fx:id="txtCode" layoutX="190.0" layoutY="165.0" prefWidth="200.0" styleClass="form-field" />
+
+      <Label fx:id="lblId" layoutX="190.0" layoutY="164.0" prefHeight="26.0" prefWidth="150.0" styleClass="form-label" />
+
+      <Label layoutX="440.0" layoutY="140.0" styleClass="form-label" text="Description" />
+      <JFXTextField fx:id="txtDescription" layoutX="440.0" layoutY="165.0" prefWidth="200.0" styleClass="form-field" />
+
+      <Label layoutX="690.0" layoutY="140.0" styleClass="form-label" text="Supplier ID" />
+      <JFXComboBox fx:id="cmbSupId" layoutX="690.0" layoutY="165.0" prefWidth="150.0" styleClass="form-field" />
+
+      <Label layoutX="190.0" layoutY="220.0" styleClass="form-label" text="Unit Price" />
+      <JFXTextField fx:id="txtUnitPrice" layoutX="190.0" layoutY="245.0" onKeyReleased="#txtPriceOnKeyReleased" prefWidth="200.0" styleClass="form-field" />
+
+      <Label layoutX="440.0" layoutY="220.0" styleClass="form-label" text="Qty On Hand" />
+      <JFXTextField fx:id="txtQtyOnHand" layoutX="440.0" layoutY="245.0" onKeyReleased="#txtQtyOnKeyReleased" prefWidth="200.0" styleClass="form-field" />
+
+      <Label layoutX="690.0" layoutY="220.0" styleClass="form-label" text="Bolt Type" />
+      <JFXTextField fx:id="txtBrand" layoutX="690.0" layoutY="245.0" prefWidth="150.0" styleClass="form-field" />
+
+      <!-- Buttons -->
+      <JFXButton fx:id="btnDelete" layoutX="290.0" layoutY="305.0" onAction="#btnDeleteOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #e74c3c; -fx-background-radius: 8;" text="Delete" textFill="white">
+         <cursor><Cursor fx:constant="HAND" /></cursor>
       </JFXButton>
-      <JFXButton buttonType="RAISED" contentDisplay="RIGHT" layoutX="522.0" layoutY="326.0" onAction="#btnUpdateOnAction" prefHeight="31.0" prefWidth="90.0" style="-fx-background-color: #e67e22;" text="   Update" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </JFXButton>
-      <JFXButton buttonType="RAISED" contentDisplay="RIGHT" layoutX="305.0" layoutY="325.0" onAction="#btnDeleteOnAction" prefHeight="31.0" prefWidth="90.0" style="-fx-background-color: red;" text="   Delete" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </JFXButton>
-      <ImageView fitHeight="19.0" fitWidth="19.0" layoutX="635.0" layoutY="332.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../asserts/icons8-add-50.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="19.0" fitWidth="19.0" layoutX="309.0" layoutY="332.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../asserts/icons8-delete-50.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="19.0" fitWidth="23.0" layoutX="526.0" layoutY="333.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../asserts/icons8-update-52.png" />
-         </image>
-      </ImageView>
-      <JFXButton buttonType="RAISED" contentDisplay="RIGHT" layoutX="416.0" layoutY="325.0" onAction="#btnClearOnAction" prefHeight="31.0" prefWidth="90.0" style="-fx-background-color: #7f8c8d;" text="   Clear" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </JFXButton>
-      <ImageView fitHeight="19.0" fitWidth="23.0" layoutX="423.0" layoutY="331.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../asserts/icons8-clear-50.png" />
-         </image>
-      </ImageView>
-      <JFXTextField fx:id="txtCode" layoutX="193.0" layoutY="185.0" onAction="#codeSearchOnAction" onKeyReleased="#txtIDOnKeyReleased" prefHeight="26.0" prefWidth="202.0" />
-      <JFXTextField fx:id="txtUnitPrice" layoutX="193.0" layoutY="263.0" onKeyReleased="#txtPriceOnKeyReleased" prefHeight="26.0" prefWidth="202.0" />
-      <JFXTextField fx:id="txtDescription" layoutX="460.0" layoutY="185.0" prefHeight="26.0" prefWidth="202.0" />
-      <JFXTextField fx:id="txtQtyOnHand" layoutX="457.0" layoutY="263.0" onKeyReleased="#txtQtyOnKeyReleased" prefHeight="26.0" prefWidth="202.0" />
-      <JFXComboBox fx:id="cmbSupId" layoutX="718.0" layoutY="185.0" prefHeight="26.0" prefWidth="146.0" />
-      <Label layoutX="718.0" layoutY="161.0" text="Supplier Id" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-      <Label fx:id="lblId" layoutX="227.0" layoutY="182.0">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </Label>
-      <TableView fx:id="tblMaterial" layoutX="49.0" layoutY="372.0" onMouseClicked="#getMaterials" prefHeight="311.0" prefWidth="912.0">
+
+      <JFXButton fx:id="btnClear" layoutX="395.0" layoutY="305.0" onAction="#btnClearOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #7f8c8d; -fx-background-radius: 8;" text="Clear" textFill="white" />
+
+      <JFXButton fx:id="btnUpdate" layoutX="500.0" layoutY="305.0" onAction="#btnUpdateOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #f39c12; -fx-background-radius: 8;" text="Update" textFill="white" />
+
+      <JFXButton fx:id="btnSave" layoutX="605.0" layoutY="305.0" onAction="#btnSaveOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #2980b9; -fx-background-radius: 8;" text="Save" textFill="white" />
+
+      <!-- Table -->
+      <TableView fx:id="tblMaterial" layoutX="64.0" layoutY="351.0" onMouseClicked="#getMaterials" prefHeight="330.0" prefWidth="900.0" style="-fx-background-color: white; -fx-background-radius: 10;">
          <columns>
-            <TableColumn fx:id="colCode" prefWidth="92.0" text="Code" />
-            <TableColumn fx:id="colDescription" prefWidth="152.7999725341797" text="Description" />
-            <TableColumn fx:id="colUnitPrice" prefWidth="105.59991455078125" text="Unit Price" />
-            <TableColumn fx:id="colQtyOnHand" prefWidth="150.39996337890625" text="Qty On Hand" />
-            <TableColumn fx:id="colSupId" prefWidth="120.79998779296875" text="Supplier Id" />
-            <TableColumn fx:id="colBrand" prefWidth="98.39990234375" text="Brand" />
-            <TableColumn fx:id="colDate" prefWidth="111.9998779296875" text="Added Date" />
-            <TableColumn fx:id="colStatus" prefWidth="78.39990234375" text="Status" />
+            <TableColumn fx:id="colCode" prefWidth="100.0" text="Code" />
+            <TableColumn fx:id="colDescription" prefWidth="150.0" text="Description" />
+            <TableColumn fx:id="colUnitPrice" prefWidth="120.0" text="Unit Price" />
+            <TableColumn fx:id="colQtyOnHand" prefWidth="120.0" text="Qty On Hand" />
+            <TableColumn fx:id="colSupId" prefWidth="120.0" text="Supplier ID" />
+            <TableColumn fx:id="colBrand" prefWidth="120.0" text="Bolt Type" />
+            <TableColumn fx:id="colDate" prefWidth="100.0" text="Added Date" />
+            <TableColumn fx:id="colStatus" prefWidth="90.0" text="Status" />
          </columns>
       </TableView>
-      <Label layoutX="720.0" layoutY="240.0" text="brand" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-      <JFXTextField fx:id="txtBrand" layoutX="719.0" layoutY="263.0" onKeyReleased="#txtQtyOnKeyReleased" prefHeight="26.0" prefWidth="146.0" />
+
+      <JFXButton fx:id="btnBack" buttonType="RAISED" contentDisplay="LEFT" layoutX="30.0" layoutY="16.0" onAction="#btnBackOnAction" prefHeight="40.0" prefWidth="100.0" styleClass="back-button" text="← Back" />
+
    </children>
 </AnchorPane>
