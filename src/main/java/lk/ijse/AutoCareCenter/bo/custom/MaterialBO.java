@@ -4,6 +4,7 @@ import lk.ijse.AutoCareCenter.bo.SuperBO;
 import lk.ijse.AutoCareCenter.dao.SqlUtil;
 import lk.ijse.AutoCareCenter.entity.Materials;
 import lk.ijse.AutoCareCenter.model.MaterialsDTO;
+import lk.ijse.AutoCareCenter.model.SupplierDTO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,5 +23,8 @@ public interface MaterialBO extends SuperBO {
     public String currentId() throws SQLException, ClassNotFoundException ;
 
     public List<String> getSupplierIds() throws SQLException, ClassNotFoundException;
+
+    public List<SupplierDTO> getAllSuppliers() throws SQLException, ClassNotFoundException;
+
 
 }

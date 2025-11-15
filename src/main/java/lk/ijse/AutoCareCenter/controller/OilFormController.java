@@ -22,6 +22,7 @@ import lk.ijse.AutoCareCenter.bo.custom.MaterialBO;
 import lk.ijse.AutoCareCenter.bo.custom.MaterialDetailBO;
 import lk.ijse.AutoCareCenter.model.MaterialDetailsDTO;
 import lk.ijse.AutoCareCenter.model.MaterialsDTO;
+import lk.ijse.AutoCareCenter.model.SupplierDTO;
 import lk.ijse.AutoCareCenter.model.tm.MaterialsTm;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class OilFormController {
     private TableColumn<?, ?> colCode, colDescription, colUnitPrice, colQtyOnHand, colSupId, colBrand, colDate, colStatus;
 
     @FXML
-    private JFXComboBox<String> cmbSupId;
+    private JFXComboBox<SupplierDTO> cmbSupId;
 
     @FXML
     private JFXTextField txtDescription, txtUnitPrice, txtQtyOnHand, txtBrand;
@@ -47,6 +48,8 @@ public class OilFormController {
     @FXML
     private Label lblId;
 
+    @FXML
+    private JFXTextField txtSearchDescription;
 
     @FXML
     private AnchorPane root;
@@ -66,6 +69,10 @@ public class OilFormController {
         loadAllOilMaterials();
         getSupplierIds();
         setupKeyListeners();
+        Platform.runLater(() -> {
+            lblId.getScene().getWindow().setOnHidden(event -> onClose());
+        });
+
     }
 
     private void setCellValueFactory() {
@@ -133,14 +140,20 @@ public class OilFormController {
         txtDescription.setText(tm.getDescription());
         txtUnitPrice.setText(String.valueOf(tm.getUnitPrice()));
         txtQtyOnHand.setText(String.valueOf(tm.getQtyOnHand()));
-        cmbSupId.setValue(tm.getSupId());
+        for (SupplierDTO supplier : cmbSupId.getItems()) {
+            if (supplier.getId().equals(tm.getSupId())) {
+                cmbSupId.setValue(supplier);
+                break;
+            }
+        }
         txtBrand.setText(tm.getBrand());
     }
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
         String code = lblId.getText();
-        String supId = cmbSupId.getValue();
+        SupplierDTO selectedSupplier = cmbSupId.getValue();
+        String supId = selectedSupplier != null ? selectedSupplier.getId() : null;
         String description = txtDescription.getText();
         String category = "Oil";
         String brand = txtBrand.getText();
@@ -149,30 +162,28 @@ public class OilFormController {
         String addedDate = LocalDate.now().toString();
         String status = "Active";
 
-        System.out.println("" + code + " " + supId + " " + description + " " + category + " " + brand + " " + unitPrice + " " + qtyOnHand + " " + addedDate + " " + status);
-
         MaterialsDTO materialsDTO = new MaterialsDTO(code);
         MaterialDetailsDTO detailsDTO = new MaterialDetailsDTO(code, supId, description, unitPrice, qtyOnHand, category, brand, addedDate, status);
 
         try {
-                boolean isDetailSaved = materialDetailBO.save(detailsDTO);
-                if (isDetailSaved) {
-                    new Alert(Alert.AlertType.INFORMATION, "Oil item saved successfully!").show();
-                    loadAllOilMaterials();
-                    clearFields();
-                    loadNextId();
-                }
-
+            boolean isDetailSaved = materialDetailBO.save(detailsDTO);
+            if (isDetailSaved) {
+                new Alert(Alert.AlertType.INFORMATION, "Oil item saved successfully!").show();
+                loadAllOilMaterials();
+                clearFields();
+                loadNextId();
+            }
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
 
+
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
         String code = lblId.getText();
-        String supId = cmbSupId.getValue();
+        SupplierDTO selectedSupplier = cmbSupId.getValue();
+        String supId = selectedSupplier != null ? selectedSupplier.getId() : null;
         String description = txtDescription.getText();
         String brand = txtBrand.getText();
         double unitPrice = Double.parseDouble(txtUnitPrice.getText());
@@ -194,6 +205,7 @@ public class OilFormController {
             }
         }
     }
+
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
@@ -266,16 +278,36 @@ public class OilFormController {
             lblId.getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyHandler);
         });
     }
+
     private void getSupplierIds() {
-        ObservableList<String> obList = FXCollections.observableArrayList();
+        ObservableList<SupplierDTO> obList = FXCollections.observableArrayList();
+
         try {
-            List<String> idList = materialBO.getSupplierIds();
-            obList.addAll(idList);
+            List<SupplierDTO> supplierList = materialBO.getAllSuppliers();
+
+            obList.addAll(supplierList);
             cmbSupId.setItems(obList);
+
+            cmbSupId.setCellFactory(param -> new ListCell<>() {
+                @Override
+                protected void updateItem(SupplierDTO item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? null : item.getName());
+                }
+            });
+
+            cmbSupId.setButtonCell(new ListCell<>() {
+                protected void updateItem(SupplierDTO item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? null : item.getName());
+                }
+            });
+
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     public boolean isValid() {
         return Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, txtUnitPrice)
@@ -312,4 +344,62 @@ public class OilFormController {
         }
         setUi("oils_form.fxml");
     }
+
+
+
+    @FXML
+    void btnSearchOnAction(ActionEvent event) {
+        String searchText = txtSearchDescription.getText().trim().toLowerCase();
+
+        if (searchText.isEmpty()) {
+            loadAllOilMaterials();
+            return;
+        }
+
+        ObservableList<MaterialsTm> filteredList = FXCollections.observableArrayList();
+
+        for (MaterialsTm tm : tblMaterial.getItems()) {
+            if (tm.getDescription().toLowerCase().contains(searchText)) {
+                filteredList.add(tm);
+            }
+        }
+
+        tblMaterial.setItems(filteredList);
+
+        if (filteredList.isEmpty()) {
+            new Alert(Alert.AlertType.INFORMATION, "No results found for '" + searchText + "'").show();
+        }
+    }
+
+    @FXML
+    void btnResetOnAction(ActionEvent event) {
+        txtSearchDescription.clear();
+        loadAllOilMaterials();
+    }
+
+    @FXML
+    void txtDescriptionOnKeyReleased(KeyEvent event) {
+        String searchText = txtSearchDescription.getText().trim().toLowerCase();
+
+        if (searchText.isEmpty()) {
+            loadAllOilMaterials();
+            return;
+        }
+
+        ObservableList<MaterialsTm> filteredList = FXCollections.observableArrayList();
+        for (MaterialsTm tm : tblMaterial.getItems()) {
+            if (tm.getDescription().toLowerCase().contains(searchText)) {
+                filteredList.add(tm);
+            }
+        }
+        tblMaterial.setItems(filteredList);
+    }
+    public void onClose() {
+        System.out.println("On close Oil Form");
+        if (keyHandler != null && lblId.getScene() != null) {
+            lblId.getScene().removeEventFilter(KeyEvent.KEY_PRESSED, keyHandler);
+        }
+    }
+
+
 }

@@ -5,9 +5,12 @@ import lk.ijse.AutoCareCenter.dao.DAOFactory;
 import lk.ijse.AutoCareCenter.dao.custom.MaterialDAO;
 import lk.ijse.AutoCareCenter.dao.custom.SupplierDAO;
 import lk.ijse.AutoCareCenter.entity.Materials;
+import lk.ijse.AutoCareCenter.entity.Supplier;
 import lk.ijse.AutoCareCenter.model.MaterialsDTO;
+import lk.ijse.AutoCareCenter.model.SupplierDTO;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MaterialBOImpl implements MaterialBO {
@@ -41,4 +44,16 @@ public class MaterialBOImpl implements MaterialBO {
     public List<String> getSupplierIds() throws SQLException, ClassNotFoundException {
         return supplierDAO.getIds();
     }
+
+    @Override
+    public List<SupplierDTO> getAllSuppliers() throws SQLException, ClassNotFoundException {
+        List<Supplier> suppliers = supplierDAO.loadAll();
+        List<SupplierDTO> dtoList = new ArrayList<>();
+
+        for (Supplier s : suppliers) {
+            dtoList.add(new SupplierDTO(s.getId(), s.getName()));
+        }
+        return dtoList;
+    }
+
 }
