@@ -14,4 +14,13 @@ public class SupplierDTO {
     private String contact;
     private String address;
 
+    public SupplierDTO(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name; // ComboBox එකේ display වෙන්න
+    }
 }

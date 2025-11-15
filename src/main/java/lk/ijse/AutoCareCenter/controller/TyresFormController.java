@@ -9,7 +9,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
-public class tyresFormController {
+public class TyresFormController {
 
     @FXML
     private Label lblId;
@@ -50,4 +50,6 @@ public class tyresFormController {
         setUi("tyre_form.fxml");
     }
 
+    public void btnBackOnAction(ActionEvent actionEvent) {
+    }
 }

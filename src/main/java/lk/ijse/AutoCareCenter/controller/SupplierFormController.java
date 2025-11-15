@@ -3,6 +3,7 @@ package lk.ijse.AutoCareCenter.controller;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -52,7 +53,10 @@ public class SupplierFormController {
     private AnchorPane root;
     @FXML
     private Label lblId;
+
     Integer index;
+
+    private EventHandler<KeyEvent> keyHandler;
 
     SupplierBO supplierBO = (SupplierBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.SUPPLIER);
 
@@ -175,6 +179,7 @@ public class SupplierFormController {
                     new Alert(Alert.AlertType.CONFIRMATION, "Supplier saved!").show();
                 }
             } catch (SQLException e) {
+                System.out.println("e = " + e);
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
@@ -185,17 +190,16 @@ public class SupplierFormController {
     }
     private void setupKeyListeners() {
         Platform.runLater(() -> {
-            lblId.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            keyHandler = event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     btnSaveOnAction(new ActionEvent());
                     event.consume();
-                }
-
-                else if (event.getCode() == KeyCode.DELETE) {
+                } else if (event.getCode() == KeyCode.DELETE) {
                     btnDeleteOnAction(new ActionEvent());
                     event.consume();
                 }
-            });
+            };
+            lblId.getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyHandler);
         });
     }
     @FXML
@@ -310,4 +314,12 @@ public class SupplierFormController {
     public void txtContactOnKeyReleased(KeyEvent keyEvent) {
         Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.CONTACT, (JFXTextField) txtContact);
     }
+
+    public void onClose() {
+        System.out.println("On close");
+        if (keyHandler != null && lblId.getScene() != null) {
+            lblId.getScene().removeEventFilter(KeyEvent.KEY_PRESSED, keyHandler);
+        }
+    }
+
 }
