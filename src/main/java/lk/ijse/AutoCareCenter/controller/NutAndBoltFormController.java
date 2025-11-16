@@ -21,11 +21,10 @@ import lk.ijse.AutoCareCenter.bo.BOFactory;
 import lk.ijse.AutoCareCenter.bo.custom.MaterialBO;
 import lk.ijse.AutoCareCenter.bo.custom.MaterialDetailBO;
 import lk.ijse.AutoCareCenter.model.MaterialDetailsDTO;
-import lk.ijse.AutoCareCenter.model.MaterialsDTO;
+import lk.ijse.AutoCareCenter.model.SupplierDTO;
 import lk.ijse.AutoCareCenter.model.tm.MaterialsTm;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +38,10 @@ public class NutAndBoltFormController {
     private TableColumn<?, ?> colCode, colDescription, colUnitPrice, colQtyOnHand, colSupId, colBrand, colDate, colStatus;
 
     @FXML
-    private JFXComboBox<String> cmbSupId;
+    private JFXComboBox<SupplierDTO> cmbSupId;
 
     @FXML
-    private JFXTextField txtDescription, txtUnitPrice, txtQtyOnHand, txtBrand;
+    private JFXTextField txtDescription, txtUnitPrice, txtQtyOnHand, txtBrand, txtSearchDescription;
 
     @FXML
     private Label lblId;
@@ -50,21 +49,26 @@ public class NutAndBoltFormController {
     @FXML
     private AnchorPane root;
 
+    private EventHandler<KeyEvent> keyHandler;
+
     private final MaterialDetailBO materialDetailBO =
             (MaterialDetailBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.MATERIALDETAILS);
+
     private final MaterialBO materialBO =
             (MaterialBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.MATERIAL);
 
     private Integer index;
 
-    private EventHandler<KeyEvent> keyHandler;
-
     public void initialize() {
         setCellValueFactory();
         loadNextId();
         loadAllNutBoltMaterials();
-        getSupplierIds();
+        loadSuppliers();
         setupKeyListeners();
+
+        Platform.runLater(() ->
+                lblId.getScene().getWindow().setOnHidden(event -> onClose())
+        );
     }
 
     private void setCellValueFactory() {
@@ -81,30 +85,8 @@ public class NutAndBoltFormController {
     private void loadNextId() {
         try {
             String currentId = materialDetailBO.currentId();
-            String nextId = nextId(currentId);
+            String nextId = currentId != null ? "M" + (Integer.parseInt(currentId.split("M")[1]) + 1) : "M1";
             lblId.setText(nextId);
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private String nextId(String currentId) {
-        if (currentId != null) {
-            String[] split = currentId.split("M");
-            int id = Integer.parseInt(split[1]);
-            id++;
-            return String.format("M%d", id);
-        }
-        return "M1";
-    }
-
-    private void setUi(String fileName) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/" + fileName));
-        Pane Newroot = fxmlLoader.load();
-        try {
-            root.getChildren().clear();
-            root.getChildren().setAll(Newroot);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -112,7 +94,6 @@ public class NutAndBoltFormController {
 
     private void loadAllNutBoltMaterials() {
         tblMaterial.getItems().clear();
-
         try {
             ArrayList<MaterialDetailsDTO> all = materialDetailBO.loadAllByCategory("Nut & Bolt");
             for (MaterialDetailsDTO dto : all) {
@@ -128,8 +109,8 @@ public class NutAndBoltFormController {
                         dto.getStatus()
                 ));
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -139,105 +120,97 @@ public class NutAndBoltFormController {
         if (index <= -1) return;
 
         MaterialsTm tm = tblMaterial.getItems().get(index);
+
         lblId.setText(tm.getCode());
         txtDescription.setText(tm.getDescription());
         txtUnitPrice.setText(String.valueOf(tm.getUnitPrice()));
         txtQtyOnHand.setText(String.valueOf(tm.getQtyOnHand()));
-        cmbSupId.setValue(tm.getSupId());
         txtBrand.setText(tm.getBrand());
+
+        for (SupplierDTO s : cmbSupId.getItems()) {
+            if (s.getId().equals(tm.getSupId())) {
+                cmbSupId.setValue(s);
+                break;
+            }
+        }
     }
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        String code = lblId.getText();
-        String supId = cmbSupId.getValue();
-        String description = txtDescription.getText();
-        String category = "Nut & Bolt";
-        String brand = txtBrand.getText();
-        double unitPrice = Double.parseDouble(txtUnitPrice.getText());
-        int qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
-        String addedDate = LocalDate.now().toString();
-        String status = "Active";
+        if (!isValid()) return;
 
-        System.out.println("unit " + unitPrice);
-
-        MaterialsDTO materialsDTO = new MaterialsDTO(code);
-        MaterialDetailsDTO detailsDTO = new MaterialDetailsDTO(code, supId, description, unitPrice, qtyOnHand, category, brand, addedDate, status);
+        MaterialDetailsDTO dto = new MaterialDetailsDTO(
+                lblId.getText(),
+                cmbSupId.getValue() != null ? cmbSupId.getValue().getId() : null,
+                txtDescription.getText(),
+                Double.parseDouble(txtUnitPrice.getText()),
+                Integer.parseInt(txtQtyOnHand.getText()),
+                "Nut & Bolt",
+                txtBrand.getText(),
+                LocalDate.now().toString(),
+                "Active"
+        );
 
         try {
-            boolean isDetailSaved = materialDetailBO.save(detailsDTO);
-            if (isDetailSaved) {
-                new Alert(Alert.AlertType.INFORMATION, "Nut & Bolt item saved successfully!").show();
+            if (materialDetailBO.save(dto)) {
+                new Alert(Alert.AlertType.INFORMATION, "Nut & Bolt Saved!").show();
                 loadAllNutBoltMaterials();
                 clearFields();
                 loadNextId();
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        String code = lblId.getText();
-        String supId = cmbSupId.getValue();
-        String description = txtDescription.getText();
-        String brand = txtBrand.getText();
-        double unitPrice = Double.parseDouble(txtUnitPrice.getText());
-        int qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
+        if (!isValid()) return;
 
-        MaterialDetailsDTO detailsDTO = new MaterialDetailsDTO(code, supId, description, unitPrice, qtyOnHand, "Nut & Bolt", brand, LocalDate.now().toString(), "Active");
+        MaterialDetailsDTO dto = new MaterialDetailsDTO(
+                lblId.getText(),
+                cmbSupId.getValue() != null ? cmbSupId.getValue().getId() : null,
+                txtDescription.getText(),
+                Double.parseDouble(txtUnitPrice.getText()),
+                Integer.parseInt(txtQtyOnHand.getText()),
+                "Nut & Bolt",
+                txtBrand.getText(),
+                LocalDate.now().toString(),
+                "Active"
+        );
 
-        if (isValid()) {
-            try {
-                boolean isUpdated = materialDetailBO.update(detailsDTO);
-                if (isUpdated) {
-                    new Alert(Alert.AlertType.INFORMATION, "Nut & Bolt item updated!").show();
-                    loadAllNutBoltMaterials();
-                    clearFields();
-                    loadNextId();
-                }
-            } catch (SQLException | ClassNotFoundException e) {
-                new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        try {
+            if (materialDetailBO.update(dto)) {
+                new Alert(Alert.AlertType.INFORMATION, "Updated!").show();
+                loadAllNutBoltMaterials();
+                clearFields();
+                loadNextId();
             }
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String code = lblId.getText();
-
-        // Check if a code is selected
-        if (code == null || code.isEmpty()) {
-            new Alert(Alert.AlertType.WARNING, "Please select an item to delete!").show();
+        if (code.isEmpty()) {
+            new Alert(Alert.AlertType.WARNING, "Select to delete!").show();
             return;
         }
 
-        // Confirmation alert
-        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmAlert.setTitle("Confirm Delete");
-        confirmAlert.setHeaderText(null);
-        confirmAlert.setContentText("Are you sure you want to delete this Nut & Bolt item?");
-
-        // Wait for user choice
-        ButtonType result = confirmAlert.showAndWait().orElse(ButtonType.CANCEL);
-
-        if (result == ButtonType.OK) {
+        Alert c = new Alert(Alert.AlertType.CONFIRMATION, "Delete this Nut & Bolt?", ButtonType.OK, ButtonType.CANCEL);
+        if (c.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
             try {
-                boolean isDeleted = materialDetailBO.delete(code);
-                if (isDeleted) {
-                    new Alert(Alert.AlertType.INFORMATION, "Nut & Bolt item deleted successfully!").show();
+                if (materialDetailBO.delete(code)) {
+                    new Alert(Alert.AlertType.INFORMATION, "Deleted!").show();
                     loadAllNutBoltMaterials();
                     clearFields();
                     loadNextId();
-                } else {
-                    new Alert(Alert.AlertType.WARNING, "Delete failed. Item may not exist!").show();
                 }
-            } catch (SQLException | ClassNotFoundException e) {
+            } catch (Exception e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
-        } else {
-            new Alert(Alert.AlertType.INFORMATION, "Delete cancelled.").show();
         }
     }
 
@@ -255,35 +228,40 @@ public class NutAndBoltFormController {
         cmbSupId.setValue(null);
     }
 
-    @FXML
-    void codeSearchOnAction(ActionEvent event) {
-        System.out.println("Code search button clicked!");
-    }
-
-    private void getSupplierIds() {
-        ObservableList<String> obList = FXCollections.observableArrayList();
+    private void loadSuppliers() {
         try {
-            List<String> idList = materialBO.getSupplierIds();
-            obList.addAll(idList);
-            cmbSupId.setItems(obList);
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            List<SupplierDTO> list = materialBO.getAllSuppliers();
+            ObservableList<SupplierDTO> ob = FXCollections.observableArrayList(list);
+
+            cmbSupId.setItems(ob);
+            cmbSupId.setCellFactory(param -> new ListCell<>() {
+                @Override
+                protected void updateItem(SupplierDTO item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? null : item.getName());
+                }
+            });
+
+            cmbSupId.setButtonCell(new ListCell<>() {
+                @Override
+                protected void updateItem(SupplierDTO item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? null : item.getName());
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public boolean isValid() {
-        return Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, txtUnitPrice)
-                && Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, txtQtyOnHand);
-    }
     private void setupKeyListeners() {
         Platform.runLater(() -> {
             keyHandler = event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     btnSaveOnAction(new ActionEvent());
-                    event.consume();
                 } else if (event.getCode() == KeyCode.DELETE) {
                     btnDeleteOnAction(new ActionEvent());
-                    event.consume();
                 }
             };
             lblId.getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyHandler);
@@ -291,23 +269,56 @@ public class NutAndBoltFormController {
     }
 
     @FXML
-    void txtPriceOnKeyReleased(KeyEvent event) {
-        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, txtUnitPrice);
+    void txtDescriptionOnKeyReleased(KeyEvent event) {
+        String searchText = txtSearchDescription.getText().trim().toLowerCase();
+
+        if (searchText.isEmpty()) {
+            loadAllNutBoltMaterials();
+            return;
+        }
+
+        ObservableList<MaterialsTm> filteredList = FXCollections.observableArrayList();
+        for (MaterialsTm tm : tblMaterial.getItems()) {
+            if (tm.getDescription().toLowerCase().contains(searchText)) {
+                filteredList.add(tm);
+            }
+        }
+        tblMaterial.setItems(filteredList);
     }
 
     @FXML
-    void txtQtyOnKeyReleased(KeyEvent event) {
-        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, txtQtyOnHand);
+    void btnSearchOnAction(ActionEvent event) {
+        txtDescriptionOnKeyReleased(null);
     }
 
-    public void txtIDOnKeyReleased(KeyEvent keyEvent) {}
+    @FXML
+    void btnResetOnAction(ActionEvent event) {
+        txtSearchDescription.clear();
+        loadAllNutBoltMaterials();
+    }
 
-    public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
+    @FXML
+    void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         if (keyHandler != null && lblId.getScene() != null) {
             lblId.getScene().removeEventFilter(KeyEvent.KEY_PRESSED, keyHandler);
         }
         setUi("oils_form.fxml");
     }
 
+    private void setUi(String fileName) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/" + fileName));
+        Pane newRoot = fxmlLoader.load();
+        root.getChildren().clear();
+        root.getChildren().setAll(newRoot);
+    }
 
+    public void onClose() {
+        if (keyHandler != null && lblId.getScene() != null) {
+            lblId.getScene().removeEventFilter(KeyEvent.KEY_PRESSED, keyHandler);
+        }
+    }
+    private boolean isValid() {
+        return Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, txtUnitPrice)
+                && Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.UNITPRICE, txtQtyOnHand);
+    }
 }

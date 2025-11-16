@@ -25,43 +25,19 @@
          </image>
       </ImageView>
 
-      <!-- Form background -->
-      <Rectangle arcHeight="15.0" arcWidth="15.0" fill="white" height="174.0" layoutX="60.0" layoutY="119.0" opacity="0.12" width="900.0" />
-
-      <!-- Form Fields -->
-      <Label layoutX="190.0" layoutY="140.0" styleClass="form-label" text="Material Code" />
-      <JFXTextField fx:id="txtCode" layoutX="190.0" layoutY="165.0" prefWidth="200.0" styleClass="form-field" />
-
-      <Label fx:id="lblId" layoutX="190.0" layoutY="164.0" prefHeight="26.0" prefWidth="150.0" styleClass="form-label" />
-
-      <Label layoutX="440.0" layoutY="140.0" styleClass="form-label" text="Description" />
-      <JFXTextField fx:id="txtDescription" layoutX="440.0" layoutY="165.0" prefWidth="200.0" styleClass="form-field" />
-
-      <Label layoutX="690.0" layoutY="140.0" styleClass="form-label" text="Supplier ID" />
-      <JFXComboBox fx:id="cmbSupId" layoutX="690.0" layoutY="165.0" prefWidth="150.0" styleClass="form-field" />
-
-      <Label layoutX="190.0" layoutY="220.0" styleClass="form-label" text="Unit Price" />
-      <JFXTextField fx:id="txtUnitPrice" layoutX="190.0" layoutY="245.0" onKeyReleased="#txtPriceOnKeyReleased" prefWidth="200.0" styleClass="form-field" />
-
-      <Label layoutX="440.0" layoutY="220.0" styleClass="form-label" text="Qty On Hand" />
-      <JFXTextField fx:id="txtQtyOnHand" layoutX="440.0" layoutY="245.0" onKeyReleased="#txtQtyOnKeyReleased" prefWidth="200.0" styleClass="form-field" />
-
-      <Label layoutX="690.0" layoutY="220.0" styleClass="form-label" text="Bolt Type" />
-      <JFXTextField fx:id="txtBrand" layoutX="690.0" layoutY="245.0" prefWidth="150.0" styleClass="form-field" />
-
       <!-- Buttons -->
-      <JFXButton fx:id="btnDelete" layoutX="290.0" layoutY="305.0" onAction="#btnDeleteOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #e74c3c; -fx-background-radius: 8;" text="Delete" textFill="white">
+      <JFXButton fx:id="btnDelete" layoutX="290.0" layoutY="314.0" onAction="#btnDeleteOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #e74c3c; -fx-background-radius: 8;" text="Delete" textFill="white">
          <cursor><Cursor fx:constant="HAND" /></cursor>
       </JFXButton>
 
-      <JFXButton fx:id="btnClear" layoutX="395.0" layoutY="305.0" onAction="#btnClearOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #7f8c8d; -fx-background-radius: 8;" text="Clear" textFill="white" />
+      <JFXButton fx:id="btnClear" layoutX="395.0" layoutY="314.0" onAction="#btnClearOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #7f8c8d; -fx-background-radius: 8;" text="Clear" textFill="white" />
 
-      <JFXButton fx:id="btnUpdate" layoutX="500.0" layoutY="305.0" onAction="#btnUpdateOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #f39c12; -fx-background-radius: 8;" text="Update" textFill="white" />
+      <JFXButton fx:id="btnUpdate" layoutX="500.0" layoutY="314.0" onAction="#btnUpdateOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #f39c12; -fx-background-radius: 8;" text="Update" textFill="white" />
 
-      <JFXButton fx:id="btnSave" layoutX="605.0" layoutY="305.0" onAction="#btnSaveOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #2980b9; -fx-background-radius: 8;" text="Save" textFill="white" />
+      <JFXButton fx:id="btnSave" layoutX="605.0" layoutY="314.0" onAction="#btnSaveOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #2980b9; -fx-background-radius: 8;" text="Save" textFill="white" />
 
       <!-- Table -->
-      <TableView fx:id="tblMaterial" layoutX="64.0" layoutY="351.0" onMouseClicked="#getMaterials" prefHeight="330.0" prefWidth="900.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+      <TableView fx:id="tblMaterial" layoutX="51.0" layoutY="360.0" onMouseClicked="#getMaterials" prefHeight="330.0" prefWidth="924.0" style="-fx-background-color: white; -fx-background-radius: 10;">
          <columns>
             <TableColumn fx:id="colCode" prefWidth="100.0" text="Code" />
             <TableColumn fx:id="colDescription" prefWidth="150.0" text="Description" />
@@ -75,6 +51,35 @@
       </TableView>
 
       <JFXButton fx:id="btnBack" buttonType="RAISED" contentDisplay="LEFT" layoutX="30.0" layoutY="16.0" onAction="#btnBackOnAction" prefHeight="40.0" prefWidth="100.0" styleClass="back-button" text="← Back" />
+      <Rectangle arcHeight="15" arcWidth="15" fill="white" height="148.0" layoutX="70.0" layoutY="149.0" opacity="0.12" width="900" />
+
+      <Label layoutX="703.0" layoutY="230.0" styleClass="form-label" text="Bolt Type" />
+      <Label layoutX="200.0" layoutY="150.0" styleClass="form-label" text="Material Code" />
+      <Label layoutX="455.0" layoutY="150.0" styleClass="form-label" text="Description" />
+      <JFXTextField fx:id="txtDescription" layoutX="450.0" layoutY="174.0" prefWidth="200" styleClass="form-field" />
+      <Label layoutX="698.0" layoutY="150.0" styleClass="form-label" text="Supplier ID" />
+      <JFXComboBox fx:id="cmbSupId" layoutX="698.0" layoutY="173.0" prefWidth="170" styleClass="form-field" />
+      <Label layoutX="200.0" layoutY="230.0" styleClass="form-label" text="Unit Price" />
+      <JFXTextField fx:id="txtUnitPrice" layoutX="200.0" layoutY="255.0" prefWidth="200" styleClass="form-field" />
+      <Label layoutX="450.0" layoutY="230.0" styleClass="form-label" text="Qty On Hand" />
+      <JFXTextField fx:id="txtQtyOnHand" layoutX="450.0" layoutY="255.0" prefWidth="200" styleClass="form-field" />
+      <JFXTextField fx:id="txtBrand" layoutX="698.0" layoutY="255.0" prefWidth="170" styleClass="form-field" />
+      <Rectangle arcHeight="15" arcWidth="15" fill="white" height="53.0" layoutX="68.0" layoutY="79.0" opacity="0.12" width="900.0" />
+      <Label layoutX="88.0" layoutY="95.0" styleClass="form-label" text="Search by Description" />
+      <JFXTextField fx:id="txtSearchDescription" layoutX="258.0" layoutY="90.0" onKeyReleased="#txtDescriptionOnKeyReleased" prefWidth="300" promptText="Type description here..." styleClass="form-field" />
+      <JFXButton fx:id="btnSearch" layoutX="582.0" layoutY="89.0" onAction="#btnSearchOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #2980b9; -fx-background-radius: 8;" text="Search" textFill="white">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <JFXButton fx:id="btnReset" layoutX="683.0" layoutY="89.0" onAction="#btnResetOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #7f8c8d; -fx-background-radius: 8;" text="Reset" textFill="white">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <Label fx:id="lblId" layoutX="209.0" layoutY="176.0" prefHeight="26.0" prefWidth="150.0" styleClass="form-label" />
+      <JFXTextField fx:id="txtCode" layoutX="200.0" layoutY="175.0" prefWidth="200" styleClass="form-field" />
+      <Label fx:id="lblId1" layoutX="209.0" layoutY="176.0" prefHeight="26.0" prefWidth="150.0" styleClass="form-label" />
 
    </children>
 </AnchorPane>
