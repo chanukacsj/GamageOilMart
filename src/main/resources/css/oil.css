@@ -2,6 +2,9 @@
 .root {
     -fx-background-color: linear-gradient(to bottom right, #1e3c72, #2a5298);
 }
+.recAn{
+    -fx-background-color: linear-gradient(to bottom right, #1e3c72, #2a5298);
+}
 
 /* 🔹 Header Bar */
 .header {
