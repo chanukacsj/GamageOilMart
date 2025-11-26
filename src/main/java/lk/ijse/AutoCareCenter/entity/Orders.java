@@ -11,7 +11,5 @@ import java.sql.Date;
 @Data
 public class Orders {
     private String orderId;
-    private String cusId;
     private Date date;
-    private String bId;
 }

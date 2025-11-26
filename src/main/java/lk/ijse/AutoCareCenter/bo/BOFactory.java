@@ -5,21 +5,20 @@ import lk.ijse.AutoCareCenter.bo.custom.impl.*;
 public class BOFactory {
     private static BOFactory boFactory;
 
-    private BOFactory(){
+    private BOFactory() {
 
     }
 
-    public static BOFactory getBoFactory(){
-        return (boFactory==null)? boFactory=new BOFactory() : boFactory;
+    public static BOFactory getBoFactory() {
+        return (boFactory == null) ? boFactory = new BOFactory() : boFactory;
     }
 
-    public enum BOTypes{
-        CUSTOMER,VEHICLE,BOOKING,EMPLOYEE,SUPPLIER,MATERIAL,MATERIALDETAILS,PO,SALARY,REPAIR
+    public enum BOTypes {
+        CUSTOMER, VEHICLE, BOOKING, EMPLOYEE, SUPPLIER, MATERIAL, MATERIALDETAILS, PO, SALARY, REPAIR
     }
-    public SuperBO getBO(BOTypes types){
-        switch (types){
-            case CUSTOMER:
-                return new CustomerBOImpl();
+
+    public SuperBO getBO(BOTypes types) {
+        switch (types) {
             case VEHICLE:
                 return new VehicleBOImpl();
             case BOOKING:
@@ -34,10 +33,8 @@ public class BOFactory {
                 return new PurchaseOrderBOImpl();
             case SALARY:
                 return new SalaryBOImpl();
-            case REPAIR:
-                return new RepairBOImpl();
-                case MATERIALDETAILS:
-                    return new MaterialDetailBOImpl();
+            case MATERIALDETAILS:
+                return new MaterialDetailBOImpl();
             default:
                 return null;
         }

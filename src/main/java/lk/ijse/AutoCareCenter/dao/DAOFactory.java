@@ -22,16 +22,12 @@ public class DAOFactory {
 
     public SuperDAO getDAO(DAOTypes daoTypes) {
         switch (daoTypes) {
-            case CUSTOMER:
-                return new CustomerDAOImpl();
             case VEHICLE:
                 return new VehicleDAOImpl();
             case SUPPLIER:
                 return new SupplierDAOImpl();
             case SALARY:
                 return new SalaryDAOImpl();
-            case REPAIR:
-                return new RepairDAOImpl();
             case MATERIAL:
                 return new MaterialDAOImpl();
             case MATERIALDETAIL:

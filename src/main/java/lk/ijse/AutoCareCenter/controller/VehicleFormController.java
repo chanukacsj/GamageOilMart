@@ -13,13 +13,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import lk.ijse.AutoCareCenter.Util.Regex;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
-import lk.ijse.AutoCareCenter.bo.custom.CustomerBO;
 import lk.ijse.AutoCareCenter.bo.custom.VehicleBO;
-import lk.ijse.AutoCareCenter.dao.custom.Impl.CustomerDAOImpl;
 import lk.ijse.AutoCareCenter.dao.custom.Impl.VehicleDAOImpl;
-import lk.ijse.AutoCareCenter.entity.Customer;
 import lk.ijse.AutoCareCenter.entity.Vehicle;
-import lk.ijse.AutoCareCenter.model.CustomerDTO;
 import lk.ijse.AutoCareCenter.model.VehicleDTO;
 
 import lk.ijse.AutoCareCenter.model.tm.VehicleTm;
@@ -65,7 +61,6 @@ public class VehicleFormController {
     Integer index;
     public void initialize() {
         setCellValueFactory();
-        getCustomerIds();
         loadAllVehicles();
         loadNextId();
     }
@@ -224,42 +219,6 @@ public class VehicleFormController {
         }
     }
 
-    @FXML
-    private void getCustomerIds() {
-
-        ObservableList<String> obList = FXCollections.observableArrayList();
-        try {
-
-
-            List<String> idList = vehicleBO.getCustomerIds();
-
-            for (String id : idList) {
-                obList.add(id);
-            }
-            CmbCusId.setItems(obList);
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @FXML
-    public void cmbCustomerOnAction(ActionEvent actionEvent) {
-
-        String cusId = CmbCusId.getValue();
-
-        try {
-            Customer customerDTO = vehicleBO.searchByCustomerId(cusId);
-
-            lblCustomerName.setText(customerDTO.getName());
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     private void clearFields() {
 

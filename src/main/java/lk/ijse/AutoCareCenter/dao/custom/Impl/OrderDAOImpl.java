@@ -42,13 +42,11 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public boolean save(Orders DTO) throws SQLException, ClassNotFoundException {
-        // SQLite does not require explicit column list if order matches table definition
+        System.out.println("save order");
         return SqlUtil.execute(
-                "INSERT INTO orders (orderId, cusId, date, bId) VALUES (?,?,?,?)",
+                "INSERT INTO orders (orderId,date) VALUES (?,?)",
                 DTO.getOrderId(),
-                DTO.getCusId(),
-                DTO.getDate(),
-                DTO.getBId()
+                DTO.getDate()
         );
     }
 
@@ -60,10 +58,8 @@ public class OrderDAOImpl implements OrderDAO {
     @Override
     public boolean update(Orders DTO) throws SQLException, ClassNotFoundException {
         return SqlUtil.execute(
-                "UPDATE orders SET cusId = ?, date = ?, bId = ? WHERE orderId = ?",
-                DTO.getCusId(),
+                "UPDATE orders SET date = ? WHERE orderId = ?",
                 DTO.getDate(),
-                DTO.getBId(),
                 DTO.getOrderId()
         );
     }

@@ -67,7 +67,10 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
 
     @Override
     public MaterialDetails searchById(String code) throws SQLException, ClassNotFoundException {
-        ResultSet rst = SqlUtil.execute("SELECT * FROM material_details WHERE code = ?", code);
+        ResultSet rst = SqlUtil.execute(
+                "SELECT * FROM material_details WHERE code = ?", code
+        );
+
         if (rst.next()) {
             return new MaterialDetails(
                     rst.getString("code"),
@@ -83,6 +86,7 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
         }
         return null;
     }
+
 
     @Override
     public boolean delete(String code) throws SQLException, ClassNotFoundException {
@@ -149,5 +153,16 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
             e.printStackTrace();
         }
         return list;
+    }
+
+
+    @Override
+    public List<String> getCodes() throws SQLException, ClassNotFoundException {
+        List<String> codes = new ArrayList<>();
+        ResultSet rst = SqlUtil.execute("SELECT code FROM material_details");
+        while (rst.next()) {
+            codes.add(rst.getString("code"));
+        }
+        return codes;
     }
 }

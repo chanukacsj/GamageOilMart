@@ -16,7 +16,6 @@ import javafx.scene.layout.Pane;
 import lk.ijse.AutoCareCenter.Util.Regex;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
 import lk.ijse.AutoCareCenter.bo.SuperBO;
-import lk.ijse.AutoCareCenter.bo.custom.CustomerBO;
 import lk.ijse.AutoCareCenter.bo.custom.MaterialBO;
 import lk.ijse.AutoCareCenter.bo.custom.MaterialDetailBO;
 import lk.ijse.AutoCareCenter.bo.custom.SupplierBO;

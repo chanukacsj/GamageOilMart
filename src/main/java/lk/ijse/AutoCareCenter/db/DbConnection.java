@@ -48,6 +48,25 @@ public class DbConnection {
                 "FOREIGN KEY (supId) REFERENCES suppliers(supId))";
         connection.prepareStatement(materialDetailTable).executeUpdate();
 
+        // ✅ Orders table
+        String ordersTable = "CREATE TABLE IF NOT EXISTS orders (" +
+                "orderId TEXT PRIMARY KEY, " +
+                "date TEXT NOT NULL)";
+        connection.prepareStatement(ordersTable).executeUpdate();
+
+// ✅ Order Details table
+        String orderDetailsTable = "CREATE TABLE IF NOT EXISTS order_details (" +
+                "orderId TEXT NOT NULL, " +
+                "code TEXT NOT NULL, " +
+                "qty INTEGER NOT NULL, " +
+                "unitPrice REAL NOT NULL, " +
+                "service_charge REAL NOT NULL, " +
+                "total REAL NOT NULL, " +
+                "FOREIGN KEY (orderId) REFERENCES orders(orderId), " +
+                "FOREIGN KEY (code) REFERENCES material_details(code))";
+        connection.prepareStatement(orderDetailsTable).executeUpdate();
+
+
         System.out.println("✅ Tables created (if not exists)");
     }
 

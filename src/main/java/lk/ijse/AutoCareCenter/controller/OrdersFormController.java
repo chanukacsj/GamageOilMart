@@ -16,10 +16,8 @@ import lk.ijse.AutoCareCenter.Util.Regex;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
 import lk.ijse.AutoCareCenter.bo.custom.*;
 import lk.ijse.AutoCareCenter.db.DbConnection;
-import lk.ijse.AutoCareCenter.entity.Customer;
 import lk.ijse.AutoCareCenter.entity.MaterialDetails;
 import lk.ijse.AutoCareCenter.model.*;
-import lk.ijse.AutoCareCenter.model.tm.CustomerTm;
 import lk.ijse.AutoCareCenter.model.tm.OrdersTm;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -38,12 +36,6 @@ public class OrdersFormController {
     private TableColumn<?, ?> colCharge;
     @FXML
     private JFXTextField txtServiceCharge;
-
-
-    @FXML
-    private JFXComboBox<String> cmbBookingId;
-    @FXML
-    private JFXComboBox<String> cmbCustomerId;
 
     @FXML
     private JFXComboBox<String> cmbMaterialCode;
@@ -103,9 +95,7 @@ public class OrdersFormController {
         setCellValueFactory();
         loadNextOrderId();
         setDate();
-        getCustomerIds();
         getMaterialsIds();
-        getBooking();
     }
 
     private void setCellValueFactory() {
@@ -155,20 +145,43 @@ public class OrdersFormController {
         JFXButton btnRemove = new JFXButton("remove");
         btnRemove.setCursor(Cursor.HAND);
 
-        btnRemove.setOnAction((e) -> {
-            ButtonType yes = new ButtonType("yes", ButtonBar.ButtonData.OK_DONE);
-            ButtonType no = new ButtonType("no", ButtonBar.ButtonData.CANCEL_CLOSE);
+        btnRemove.setOnAction(e -> {
 
-            Optional<ButtonType> type = new Alert(Alert.AlertType.INFORMATION, "Are you sure to remove?", yes, no).showAndWait();
+            ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
+            ButtonType no = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-            if (type.orElse(no) == yes) {
+            Optional<ButtonType> result = new Alert(
+                    Alert.AlertType.CONFIRMATION,
+                    "Are you sure to remove?",
+                    yes, no
+            ).showAndWait();
+
+            if (result.orElse(no).equals(yes)) {
+
+                // 1. Get index safely
                 int selectedIndex = tblOrderCart.getSelectionModel().getSelectedIndex();
-                ordersList.remove(selectedIndex);
+                System.out.println("Selected index = " + selectedIndex);
 
-                tblOrderCart.refresh();
-                calculateNetTotal();
+                if (selectedIndex >= 0) {
+                    // 2. Get selected object
+                    OrdersTm selectedItem = ordersList.get(selectedIndex);
+                    System.out.println("Removing: " + selectedItem);
+
+                    // 3. Remove from list
+                    ordersList.remove(selectedIndex);
+
+                    // 4. Refresh UI
+                    tblOrderCart.getItems().setAll(ordersList);
+                    tblOrderCart.refresh();
+
+                    // 5. Recalculate total
+                    calculateNetTotal();
+                } else {
+                    System.out.println("No item selected!");
+                }
             }
         });
+
         for (int i = 0; i < tblOrderCart.getItems().size(); i++) {
             if (code.equals(colItemCode.getCellData(i))) {
                 qty += ordersList.get(i).getQty();
@@ -207,13 +220,11 @@ public class OrdersFormController {
     @FXML
     void btnPlaceOrderOnAction(ActionEvent event) {
         String orderId = lblOrderId.getText();
-        String cusId = cmbCustomerId.getValue();
         Date date = Date.valueOf(LocalDate.now());
-        String bId = cmbBookingId.getValue();
 
         boolean b = false;
         try {
-            b = saveOrder(orderId, cusId, date, bId,
+            b = saveOrder(orderId, date,
                     tblOrderCart.getItems().stream().map(tm -> new OrderDetailsDTO(orderId, tm.getCode(), tm.getQty(), tm.getUnitPrice(), tm.getService_charge(), tm.getTotal())).collect(Collectors.toList()));
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -229,31 +240,15 @@ public class OrdersFormController {
     }
 
 
-    public boolean saveOrder(String orderId, String cusId, Date date, String bId, List<OrderDetailsDTO> orderDetails) throws SQLException, ClassNotFoundException {
-        OrdersDTO orderDTO = new OrdersDTO(orderId, cusId, date, bId, orderDetails);
+    public boolean saveOrder(String orderId, Date date, List<OrderDetailsDTO> orderDetails) throws SQLException, ClassNotFoundException {
+        OrdersDTO orderDTO = new OrdersDTO(orderId, date, orderDetails);
         return purchaseOrderBO.saveOrder(orderDTO);
-    }
-
-
-    @FXML
-    void cmbCustomerOnAction(ActionEvent event) {
-        String cusId = cmbCustomerId.getValue();
-
-        try {
-            Customer customerDTO = purchaseOrderBO.searchById(cusId);
-            LblCustomerName.setText(customerDTO.getName());
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
     @FXML
     void cmbmaterialOnAction(ActionEvent event) {
         String code = cmbMaterialCode.getValue();
+        System.out.println("code = " + code);
         try {
             MaterialDetails materials = purchaseOrderBO.searchByMaterialId(code);
             if (materials != null) {
@@ -281,25 +276,6 @@ public class OrdersFormController {
         lblOrderDate.setText(String.valueOf(now));
     }
 
-    private void getCustomerIds() {
-
-        ObservableList<String> obList = FXCollections.observableArrayList();
-
-        try {
-            List<String> idList = purchaseOrderBO.getIds();
-
-            for (String id : idList) {
-                obList.add(id);
-            }
-            cmbCustomerId.setItems(obList);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void getMaterialsIds() {
 
         ObservableList<String> obList = FXCollections.observableArrayList();
@@ -320,28 +296,6 @@ public class OrdersFormController {
         }
     }
 
-    private void getBooking() {
-
-        ObservableList<String> obList = FXCollections.observableArrayList();
-
-        try {
-            List<String> idList = purchaseOrderBO.getBookingIds();
-
-            for (String id : idList) {
-                obList.add(id);
-            }
-            cmbBookingId.setItems(obList);
-
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void cmbBookingOnAction(ActionEvent actionEvent) {
-    }
 
     public boolean isValid() {
         if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.SERVICECHARGE, txtServiceCharge)) return false;
@@ -374,7 +328,6 @@ public class OrdersFormController {
         data.put("orderId", lblOrderId.getText());
         data.put("nettotal", lastTot);
         data.put("ServiceCharge", txtServiceCharge.getText());
-        data.put("Name", LblCustomerName.getText());
 
         JasperPrint jasperPrint =
                 JasperFillManager.fillReport(

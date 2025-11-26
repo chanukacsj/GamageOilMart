@@ -3,7 +3,6 @@ package lk.ijse.AutoCareCenter.bo.custom;
 import lk.ijse.AutoCareCenter.bo.SuperBO;
 import lk.ijse.AutoCareCenter.dao.SqlUtil;
 import lk.ijse.AutoCareCenter.entity.Booking;
-import lk.ijse.AutoCareCenter.entity.Customer;
 import lk.ijse.AutoCareCenter.model.BookingDTO;
 
 import java.sql.ResultSet;
@@ -25,10 +24,6 @@ public interface BookingBO extends SuperBO {
     public List<String> getIds() throws SQLException, ClassNotFoundException;
 
     public  String currentId() throws SQLException, ClassNotFoundException;
-
-    public Customer searchByCusId(String id) throws SQLException, ClassNotFoundException;
-
-    public List<String> getCusIds() throws SQLException, ClassNotFoundException;
 
     public List<String> getBookingIds() throws SQLException, ClassNotFoundException ;
 }

@@ -2,7 +2,6 @@ package lk.ijse.AutoCareCenter.bo.custom;
 
 import lk.ijse.AutoCareCenter.bo.SuperBO;
 import lk.ijse.AutoCareCenter.dao.SqlUtil;
-import lk.ijse.AutoCareCenter.entity.Customer;
 import lk.ijse.AutoCareCenter.entity.Vehicle;
 import lk.ijse.AutoCareCenter.model.VehicleDTO;
 
@@ -25,9 +24,5 @@ public interface VehicleBO extends SuperBO {
     public List<String> getIds() throws SQLException, ClassNotFoundException;
 
     public String currentId() throws SQLException, ClassNotFoundException;
-
-    public List<String> getCustomerIds() throws SQLException, ClassNotFoundException;
-
-    public Customer searchByCustomerId(String id) throws SQLException, ClassNotFoundException;
 
 }

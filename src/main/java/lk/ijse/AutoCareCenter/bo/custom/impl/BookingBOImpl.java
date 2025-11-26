@@ -4,10 +4,8 @@ import lk.ijse.AutoCareCenter.bo.custom.BookingBO;
 import lk.ijse.AutoCareCenter.dao.DAOFactory;
 import lk.ijse.AutoCareCenter.dao.SqlUtil;
 import lk.ijse.AutoCareCenter.dao.custom.BookingDAO;
-import lk.ijse.AutoCareCenter.dao.custom.CustomerDAO;
 import lk.ijse.AutoCareCenter.dao.custom.VehicleDAO;
 import lk.ijse.AutoCareCenter.entity.Booking;
-import lk.ijse.AutoCareCenter.entity.Customer;
 import lk.ijse.AutoCareCenter.model.BookingDTO;
 
 import java.sql.ResultSet;
@@ -18,7 +16,6 @@ import java.util.List;
 public class BookingBOImpl implements BookingBO {
 
     BookingDAO bookingDAO = (BookingDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.BOOKING);
-    CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
     VehicleDAO vehicleDAO = (VehicleDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.VEHICLE);
     public ArrayList<BookingDTO> loadAllBooking() throws SQLException, ClassNotFoundException {
 
@@ -57,17 +54,6 @@ public class BookingBOImpl implements BookingBO {
     public String currentId() throws SQLException, ClassNotFoundException {
         return bookingDAO.currentId();
     }
-
-    @Override
-    public Customer searchByCusId(String id) throws SQLException, ClassNotFoundException {
-        return customerDAO.searchById(id);
-    }
-
-    @Override
-    public List<String> getCusIds() throws SQLException, ClassNotFoundException {
-        return customerDAO.getIds();
-    }
-
     @Override
     public List<String> getBookingIds() throws SQLException, ClassNotFoundException {
         return vehicleDAO.getIds();

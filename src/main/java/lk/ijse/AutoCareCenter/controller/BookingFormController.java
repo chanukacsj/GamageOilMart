@@ -14,15 +14,11 @@ import javafx.scene.layout.AnchorPane;
 import lk.ijse.AutoCareCenter.Util.Regex;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
 import lk.ijse.AutoCareCenter.bo.custom.BookingBO;
-import lk.ijse.AutoCareCenter.bo.custom.CustomerBO;
 import lk.ijse.AutoCareCenter.bo.custom.VehicleBO;
 import lk.ijse.AutoCareCenter.dao.custom.Impl.BookingDAOImpl;
-import lk.ijse.AutoCareCenter.dao.custom.Impl.CustomerDAOImpl;
 import lk.ijse.AutoCareCenter.dao.custom.Impl.VehicleDAOImpl;
 import lk.ijse.AutoCareCenter.entity.Booking;
-import lk.ijse.AutoCareCenter.entity.Customer;
 import lk.ijse.AutoCareCenter.model.BookingDTO;
-import lk.ijse.AutoCareCenter.model.CustomerDTO;
 import lk.ijse.AutoCareCenter.model.tm.BookingTm;
 
 import java.sql.SQLException;
@@ -84,7 +80,6 @@ public class BookingFormController {
     public void initialize() {
         setCellValueFactory();
         loadNextId();
-        getCustomerIds();
         getVehicleIds();
         loadAllBooking();
 
@@ -235,27 +230,6 @@ public class BookingFormController {
     }
 
     @FXML
-    private void getCustomerIds() {
-
-        ObservableList<String> obList = FXCollections.observableArrayList();
-
-        try {
-
-
-            List<String> idList = bookingBO.getCusIds();
-
-            for (String id : idList) {
-                obList.add(id);
-            }
-            CmbCusId.setItems(obList);
-        }catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @FXML
     private void getVehicleIds() {
 
         ObservableList<String> obList = FXCollections.observableArrayList();
@@ -274,22 +248,7 @@ public class BookingFormController {
         }
     }
 
-    @FXML
-    void CmbCustomerOnAction(ActionEvent event) {
 
-
-        String cusId = CmbCusId.getValue();
-
-        try {
-            Customer customerDTO = bookingBO.searchByCusId(cusId);
-
-            lblCustomerName.setText(customerDTO.getName());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 
     public void loadAllBooking() {

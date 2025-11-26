@@ -18,7 +18,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import lk.ijse.AutoCareCenter.dao.custom.Impl.*;
 import lk.ijse.AutoCareCenter.db.DbConnection;
-import lk.ijse.AutoCareCenter.entity.Repair;
 import lk.ijse.AutoCareCenter.model.RepairDTO;
 import lk.ijse.AutoCareCenter.model.tm.RepairTm;
 import javafx.util.Duration;
@@ -78,7 +77,6 @@ public class DashboardFormController {
     private int materialCount;
     private int ordersCount;
 
-    RepairDAOImpl repairDAO = new RepairDAOImpl();
     BookingDAOImpl bookingDAO = new BookingDAOImpl();
 
 
@@ -154,19 +152,7 @@ public class DashboardFormController {
         return orderCount;
     }
 
-    private int getCustomerCount() {
-        CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-        int CustomerCount = 0;
-        try {
-            CustomerCount = customerDAO.getCustomerCount();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
 
-        return CustomerCount;
-    }
 
     private int getBookingCount() throws SQLException {
 

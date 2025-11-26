@@ -1,0 +1,34 @@
+.primary-btn {
+    -fx-background-color: linear-gradient(to right, #2980b9, #3498db);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 10 0;
+}
+
+.primary-btn:hover {
+    -fx-background-color: #1e6fa8;
+}
+
+/* Green button */
+.success-btn {
+    -fx-background-color: linear-gradient(to right, #27ae60, #2ecc71);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
+
+.success-btn:hover {
+    -fx-background-color: #239b56;
+}
+
+/* Grey */
+.secondary-btn {
+    -fx-background-color: #636e72;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+}
+
+.secondary-btn:hover {
+    -fx-background-color: #2d3436;
+}

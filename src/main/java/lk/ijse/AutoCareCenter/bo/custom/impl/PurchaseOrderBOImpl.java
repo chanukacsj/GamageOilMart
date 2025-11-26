@@ -4,7 +4,6 @@ import lk.ijse.AutoCareCenter.bo.custom.PurchaseOrderBO;
 import lk.ijse.AutoCareCenter.dao.DAOFactory;
 import lk.ijse.AutoCareCenter.dao.custom.*;
 import lk.ijse.AutoCareCenter.db.DbConnection;
-import lk.ijse.AutoCareCenter.entity.Customer;
 import lk.ijse.AutoCareCenter.entity.MaterialDetails;
 import lk.ijse.AutoCareCenter.entity.OrderDetails;
 import lk.ijse.AutoCareCenter.entity.Orders;
@@ -20,7 +19,6 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
     OrderDetailDAO orderDetailDAO = (OrderDetailDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDERDETAILS);
 
     MaterialDetailDAO materialDetailDAO = (MaterialDetailDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.MATERIALDETAIL);
-    CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
 
     MaterialDAO materialDAO = (MaterialDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.MATERIAL);
 
@@ -54,7 +52,7 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
 
             connection.setAutoCommit(false);
             //Save the Order to the order table
-            boolean b2 = orderDAO.save(new Orders(dto.getOrderId(), dto.getCusId(), dto.getDate(), dto.getBId()));
+            boolean b2 = orderDAO.save(new Orders(dto.getOrderId(), dto.getDate()));
 
 
             if (!b2) {
@@ -114,11 +112,6 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
     }
 
     @Override
-    public List<String> getCustomerIds() throws SQLException, ClassNotFoundException {
-        return null;
-    }
-
-    @Override
     public List<String> getMaterialsIds() throws SQLException, ClassNotFoundException {
         return null;
     }
@@ -129,13 +122,8 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
     }
 
     @Override
-    public Customer searchById(String id) throws SQLException, ClassNotFoundException {
-        return customerDAO.searchById(id);
-    }
-
-    @Override
     public List<String> getIds() throws SQLException, ClassNotFoundException {
-        return customerDAO.getIds();
+        return List.of();
     }
 
     @Override
@@ -145,7 +133,7 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
 
     @Override
     public List<String> getCodes() throws SQLException, ClassNotFoundException {
-        return materialDAO.getCodes();
+        return materialDetailDAO.getCodes();
     }
 
     @Override

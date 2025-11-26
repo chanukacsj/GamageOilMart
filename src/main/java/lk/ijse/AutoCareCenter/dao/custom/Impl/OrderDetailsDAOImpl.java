@@ -14,7 +14,7 @@ public class OrderDetailsDAOImpl implements OrderDetailDAO {
 
     public boolean save(OrderDetails details) throws SQLException, ClassNotFoundException {
         return SqlUtil.execute(
-                "INSERT INTO order_details (orderId, code, qty, unit_price, service_charge, total) VALUES (?, ?, ?, ?, ?, ?)",
+                "INSERT INTO order_details (orderId, code, qty, unitPrice, service_charge, total) VALUES (?, ?, ?, ?, ?, ?)",
                 details.getOrderId(),
                 details.getCode(),
                 details.getQty(),

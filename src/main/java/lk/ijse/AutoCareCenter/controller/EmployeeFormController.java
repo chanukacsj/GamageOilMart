@@ -11,7 +11,6 @@ import javafx.scene.layout.AnchorPane;
 
 import lk.ijse.AutoCareCenter.Util.Regex;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
-import lk.ijse.AutoCareCenter.bo.custom.CustomerBO;
 import lk.ijse.AutoCareCenter.bo.custom.EmployeeBO;
 import lk.ijse.AutoCareCenter.dao.custom.Impl.EmployeeDAOImpl;
 import lk.ijse.AutoCareCenter.entity.Employee;

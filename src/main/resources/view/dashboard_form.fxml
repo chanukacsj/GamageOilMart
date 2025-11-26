@@ -15,7 +15,7 @@
    <children>
 
       <!-- ===== LEFT SIDEBAR ===== -->
-      <Pane prefHeight="740.0" prefWidth="220.0" styleClass="sidebar" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Pane prefHeight="700.0" prefWidth="220.0" styleClass="sidebar" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
 
             <!-- LOGO -->
@@ -28,7 +28,6 @@
             <!-- NAV BUTTONS -->
             <VBox alignment="TOP_CENTER" layoutX="18.0" layoutY="149.0" prefHeight="350.0" prefWidth="180.0" spacing="25.0">
                <JFXButton onAction="#btnHomeOnAction" styleClass="nav-btn" text="🏠 Home" />
-               <JFXButton onAction="#btnCustomerOnAction" styleClass="nav-btn" text="👥 Customer" />
                <JFXButton onAction="#btnMaterialsOnAction" styleClass="nav-btn" text="📦 Products" />
                <JFXButton onAction="#btnSupplierOnAction" styleClass="nav-btn" text="🏭 Supplier" />
                <JFXButton onAction="#btnOrdersOnAction" styleClass="nav-btn" text="💳 Payment" />

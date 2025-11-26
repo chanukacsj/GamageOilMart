@@ -2,7 +2,6 @@ package lk.ijse.AutoCareCenter.bo.custom;
 
 import lk.ijse.AutoCareCenter.bo.SuperBO;
 import lk.ijse.AutoCareCenter.dao.SqlUtil;
-import lk.ijse.AutoCareCenter.entity.Customer;
 import lk.ijse.AutoCareCenter.entity.MaterialDetails;
 import lk.ijse.AutoCareCenter.entity.Materials;
 import lk.ijse.AutoCareCenter.model.MaterialDetailsDTO;
@@ -25,13 +24,9 @@ public interface PurchaseOrderBO extends SuperBO {
 
     public MaterialDetailsDTO findItem(String code) throws SQLException, ClassNotFoundException;
 
-    public List<String> getCustomerIds() throws SQLException, ClassNotFoundException;
-
     public List<String> getMaterialsIds() throws SQLException, ClassNotFoundException;
 
     public List<String> getBooking() throws SQLException, ClassNotFoundException;
-
-    public Customer searchById(String id) throws SQLException, ClassNotFoundException;
 
     public List<String> getIds() throws SQLException, ClassNotFoundException;
 
