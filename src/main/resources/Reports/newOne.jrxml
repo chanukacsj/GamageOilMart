@@ -17,7 +17,7 @@
 	<parameter name="nettotal" class="java.lang.String"/>
 	<parameter name="ServiceCharge" class="java.lang.String"/>
 	<queryString language="SQL">
-		<![CDATA[select * from order_details a inner join materials b on a.code = b.code inner join material_details md on b.code = md.code where a.orderId = $P{orderId}]]>
+		<![CDATA[select * from order_details a inner join material_details md on a.code = md.code where a.orderId = $P{orderId}]]>
 	</queryString>
 	<field name="orderId" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="orderId"/>
@@ -34,9 +34,9 @@
 		<property name="com.jaspersoft.studio.field.label" value="qty"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="order_details"/>
 	</field>
-	<field name="unit_price" class="java.lang.Double">
-		<property name="com.jaspersoft.studio.field.name" value="unit_price"/>
-		<property name="com.jaspersoft.studio.field.label" value="unit_price"/>
+	<field name="unitPrice" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="unitPrice"/>
+		<property name="com.jaspersoft.studio.field.label" value="unitPrice"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="order_details"/>
 	</field>
 	<field name="service_charge" class="java.lang.Double">
@@ -59,24 +59,19 @@
 		<property name="com.jaspersoft.studio.field.label" value="code"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="material_details"/>
 	</field>
-	<field name="supId" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="supId"/>
-		<property name="com.jaspersoft.studio.field.label" value="supId"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="material_details"/>
-	</field>
 	<field name="description" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="description"/>
 		<property name="com.jaspersoft.studio.field.label" value="description"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="material_details"/>
 	</field>
 	<field name="COLUMN_11" class="java.lang.Double">
-		<property name="com.jaspersoft.studio.field.name" value="unit_price"/>
-		<property name="com.jaspersoft.studio.field.label" value="unit_price"/>
+		<property name="com.jaspersoft.studio.field.name" value="unitPrice"/>
+		<property name="com.jaspersoft.studio.field.label" value="unitPrice"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="material_details"/>
 	</field>
-	<field name="qty_on_hand" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="qty_on_hand"/>
-		<property name="com.jaspersoft.studio.field.label" value="qty_on_hand"/>
+	<field name="qtyOnHand" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="qtyOnHand"/>
+		<property name="com.jaspersoft.studio.field.label" value="qtyOnHand"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="material_details"/>
 	</field>
 	<background>
@@ -93,21 +88,21 @@
 				<textElement textAlignment="Center" rotation="None" markup="html">
 					<font fontName="Arial Black" size="14" isBold="false" isItalic="true" isUnderline="false"/>
 				</textElement>
-				<text><![CDATA[Auto Care Center - Bengamuwa]]></text>
+				<text><![CDATA[Gamage Oil Mart]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="163" y="24" width="54" height="14" uuid="bf5961ed-7528-419b-a557-dbc44d63a1c5"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[041 - 7890456]]></text>
+				<text><![CDATA[041 - 1212123]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="162" y="35" width="54" height="14" uuid="4a30f272-246a-42ed-8cee-33c1ff92faa4"/>
+				<reportElement x="166" y="35" width="54" height="14" uuid="4a30f272-246a-42ed-8cee-33c1ff92faa4"/>
 				<textElement>
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[Bengamuwa,Matara]]></text>
+				<text><![CDATA[Urawa,Rotumba]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -152,11 +147,11 @@
 				<textFieldExpression><![CDATA[$P{Name}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="321" y="-15" width="100" height="20" uuid="18d9094f-51d8-4f55-913e-e3bcc1bb778f"/>
+				<reportElement x="311" y="-15" width="100" height="20" uuid="18d9094f-51d8-4f55-913e-e3bcc1bb778f"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField pattern="HH:mm">
-				<reportElement x="267" y="-15" width="100" height="20" uuid="ceb78767-9e20-4b19-a5bf-27c2fc0a78f5"/>
+				<reportElement x="252" y="-15" width="100" height="20" uuid="ceb78767-9e20-4b19-a5bf-27c2fc0a78f5"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
@@ -242,7 +237,7 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3be14cb7-d2b0-4e95-b29a-1d9f5948e730"/>
 				</reportElement>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{unit_price}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{unitPrice}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="232" y="0" width="40" height="20" uuid="64117729-ec92-4b2a-a952-e239edf76182">
