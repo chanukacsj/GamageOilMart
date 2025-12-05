@@ -54,5 +54,10 @@ public class MaterialDetailBOImpl implements MaterialDetailBO {
         return materialDetailDAO.delete(code);
     }
 
+    @Override
+    public String getDescriptionByCode(String code) throws Exception {
+        return materialDetailDAO.getDescriptionByCode(code);
+    }
+
 
 }

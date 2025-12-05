@@ -7,11 +7,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import lk.ijse.AutoCareCenter.Util.Regex;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
 import lk.ijse.AutoCareCenter.bo.custom.*;
@@ -25,6 +28,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -102,6 +106,7 @@ public class OrdersFormController {
         colItemCode.setCellValueFactory(new PropertyValueFactory<>("code"));
         colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
+        colCharge.setCellValueFactory(new PropertyValueFactory<>("service_charge"));
         colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
         colAction.setCellValueFactory(new PropertyValueFactory<>("btnRemove"));
@@ -112,7 +117,9 @@ public class OrdersFormController {
     private void loadNextOrderId() {
         try {
             String currentId = purchaseOrderBO.currentId();
+            System.out.println("currentId = " + currentId);
             String nextId = nextId(currentId);
+            System.out.println("nextId = " + nextId);
 
             lblOrderId.setText(nextId);
         } catch (SQLException e) {
@@ -140,7 +147,8 @@ public class OrdersFormController {
         int qty = Integer.parseInt(txtQty.getText());
         double unitPrice = Double.parseDouble(lblUnitPrice.getText());
         double service_charge = Double.parseDouble(txtServiceCharge.getText());
-        double total = (qty * unitPrice);
+        double totals = (qty * unitPrice);
+        double total = totals + service_charge;
         JFXButton btnRemove = new JFXButton("remove");
         btnRemove.setCursor(Cursor.HAND);
 
@@ -157,23 +165,18 @@ public class OrdersFormController {
 
             if (result.orElse(no).equals(yes)) {
 
-                // 1. Get index safely
                 int selectedIndex = tblOrderCart.getSelectionModel().getSelectedIndex();
                 System.out.println("Selected index = " + selectedIndex);
 
                 if (selectedIndex >= 0) {
-                    // 2. Get selected object
                     OrdersTm selectedItem = ordersList.get(selectedIndex);
                     System.out.println("Removing: " + selectedItem);
 
-                    // 3. Remove from list
                     ordersList.remove(selectedIndex);
 
-                    // 4. Refresh UI
                     tblOrderCart.getItems().setAll(ordersList);
                     tblOrderCart.refresh();
 
-                    // 5. Recalculate total
                     calculateNetTotal();
                 } else {
                     System.out.println("No item selected!");
@@ -197,7 +200,7 @@ public class OrdersFormController {
             }
         }
         OrdersTm ordersTm = new OrdersTm(code, description, qty, unitPrice, service_charge, total, btnRemove);
-
+        System.out.println("total = " + total);
         ordersList.add(ordersTm);
 
         tblOrderCart.setItems(ordersList);
@@ -212,15 +215,21 @@ public class OrdersFormController {
             netTotal += (double) colTotal.getCellData(i);
         }
         double ServiceCharge = Double.parseDouble(txtServiceCharge.getText());
-        lblNetTotal.setText(String.valueOf(netTotal + ServiceCharge));
+        lblNetTotal.setText(String.valueOf(netTotal));
     }
 
 
     @FXML
     void btnPlaceOrderOnAction(ActionEvent event) {
+
+        if (tblOrderCart.getItems().isEmpty()) {
+            new Alert(Alert.AlertType.WARNING,
+                    "Cart is empty! Please add items before placing an order.").show();
+            return;
+        }
         String orderId = lblOrderId.getText();
         Date date = Date.valueOf(LocalDate.now());
-
+        System.out.println(netTotal+"net total");
         boolean b = false;
         try {
             b = saveOrder(orderId, date,
@@ -232,12 +241,11 @@ public class OrdersFormController {
         }
 
         if (b) {
-            new Alert(Alert.AlertType.CONFIRMATION, "order placed!").show();
+            new Alert(Alert.AlertType.INFORMATION, "Order placed!").show();
         } else {
             new Alert(Alert.AlertType.WARNING, "order not placed!").show();
         }
     }
-
 
     public boolean saveOrder(String orderId, Date date, List<OrderDetailsDTO> orderDetails) throws SQLException, ClassNotFoundException {
         OrdersDTO orderDTO = new OrdersDTO(orderId, date, orderDetails);
@@ -316,7 +324,7 @@ public class OrdersFormController {
 
     public void btnPrintBillOnAction(ActionEvent actionEvent) throws JRException, SQLException {
         double ServiceCharge = Double.parseDouble(txtServiceCharge.getText());
-        String lastTot = String.valueOf(netTotal + ServiceCharge);
+        String lastTot = String.valueOf(netTotal);
 
         JasperDesign jasperDesign =
                 JRXmlLoader.load("src/main/resources/Reports/newOne.jrxml");
@@ -335,5 +343,26 @@ public class OrdersFormController {
                         DbConnection.getInstance().getConnection());
 
         JasperViewer.viewReport(jasperPrint, false);
+    }
+    @FXML
+    void btnViewPaymentsOnAction(ActionEvent event) {
+
+        try {
+            AnchorPane pane = FXMLLoader.load(
+                    getClass().getResource("/view/PaymentViewForm.fxml")
+            );
+
+            Scene scene = new Scene(pane);
+
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Payment History");
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load PaymentViewForm.fxml", e);
+        }
+
     }
 }

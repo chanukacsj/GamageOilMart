@@ -6,6 +6,7 @@ import lk.ijse.AutoCareCenter.entity.OrderDetails;
 import lk.ijse.AutoCareCenter.model.OrderDetailsDTO;
 import lk.ijse.AutoCareCenter.model.OrdersDTO;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,12 @@ public class OrderDetailsDAOImpl implements OrderDetailDAO {
 
     @Override
     public ArrayList<OrderDetails> loadAll() throws SQLException, ClassNotFoundException {
-        return null;
+        ArrayList<OrderDetails> all = new ArrayList<>();
+        ResultSet rst = SqlUtil.execute("SELECT * FROM order_details");
+        while (rst.next()) {
+            all.add(new OrderDetails(rst.getString("orderId"), rst.getString("code"), rst.getInt("qty"), rst.getDouble("unitPrice"), rst.getDouble("service_charge"), rst.getDouble("total")));
+        }
+        return all;
     }
 
     @Override

@@ -1,4 +1,5 @@
-package lk.ijse.AutoCareCenter.model.tm;
+package lk.ijse.AutoCareCenter.entity;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PaymentTm {
+public class Payment {
     private String id;
     private String OrderId;
     private String code;

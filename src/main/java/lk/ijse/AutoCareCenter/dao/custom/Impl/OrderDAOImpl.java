@@ -13,13 +13,16 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public String currentId() throws SQLException, ClassNotFoundException {
-        // SQLite uses LIMIT 1 and ORDER BY for latest record
-        ResultSet rst = SqlUtil.execute("SELECT orderId FROM orders ORDER BY orderId DESC LIMIT 1");
+        ResultSet rst = SqlUtil.execute(
+                "SELECT orderId FROM orders ORDER BY orderId DESC LIMIT 1"
+        );
+
         if (rst.next()) {
-            return rst.getString("orderId");
+            return rst.getString(1); // or rst.getString("orderId")
         }
         return null;
     }
+
 
     @Override
     public boolean exist(String orderId) throws SQLException, ClassNotFoundException {

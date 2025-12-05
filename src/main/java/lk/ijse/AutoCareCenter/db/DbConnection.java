@@ -66,9 +66,25 @@ public class DbConnection {
                 "FOREIGN KEY (code) REFERENCES material_details(code))";
         connection.prepareStatement(orderDetailsTable).executeUpdate();
 
+        // ✅ Payment table
+        String paymentTable = "CREATE TABLE IF NOT EXISTS payment (" +
+                "id TEXT PRIMARY KEY, " +
+                "orderId TEXT NOT NULL, " +
+                "code TEXT NOT NULL, " +
+                "qty INTEGER NOT NULL, " +
+                "unitPrice REAL NOT NULL, " +
+                "service_charge REAL NOT NULL, " +
+                "total REAL NOT NULL, " +
+                "description TEXT, " +
+                "FOREIGN KEY (orderId) REFERENCES orders(orderId), " +
+                "FOREIGN KEY (code) REFERENCES material_details(code))";
+
+        connection.prepareStatement(paymentTable).executeUpdate();
+
 
         System.out.println("✅ Tables created (if not exists)");
     }
+
 
     public static DbConnection getInstance() throws SQLException {
         if (dbConnection == null) {

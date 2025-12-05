@@ -165,4 +165,11 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
         }
         return codes;
     }
+    @Override
+    public String getDescriptionByCode(String code) throws Exception {
+        System.out.println("code = " + code);
+        ResultSet rst = SqlUtil.execute("SELECT description FROM material_details WHERE code=?", code);
+        return rst.next() ? rst.getString("description") : null;
+    }
+
 }

@@ -12,4 +12,7 @@ public interface MaterialDetailDAO extends CurdDAO<MaterialDetails> {
     ArrayList<MaterialDetailsDTO> loadAllByCategory(String category) ;
 
     List<String> getCodes() throws SQLException, ClassNotFoundException;
-}
+
+    public String getDescriptionByCode(String code) throws Exception ;
+
+    }

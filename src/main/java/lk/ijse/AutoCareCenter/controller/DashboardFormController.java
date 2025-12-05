@@ -268,4 +268,7 @@ public class DashboardFormController {
         stage.setTitle("Login Form");
     }
 
+    public void btnAllPayOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("AllPay.fxml");
+    }
 }

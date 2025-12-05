@@ -1,20 +1,19 @@
 package lk.ijse.AutoCareCenter.bo.custom;
 
 import lk.ijse.AutoCareCenter.bo.SuperBO;
-import lk.ijse.AutoCareCenter.dao.SqlUtil;
 import lk.ijse.AutoCareCenter.entity.MaterialDetails;
-import lk.ijse.AutoCareCenter.entity.Materials;
+import lk.ijse.AutoCareCenter.entity.OrderDetails;
+import lk.ijse.AutoCareCenter.entity.Payment;
 import lk.ijse.AutoCareCenter.model.MaterialDetailsDTO;
-import lk.ijse.AutoCareCenter.model.MaterialsDTO;
-import lk.ijse.AutoCareCenter.model.OrderDetailsDTO;
 import lk.ijse.AutoCareCenter.model.OrdersDTO;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface PurchaseOrderBO extends SuperBO {
 
+    String getDescriptionByCode(String code) throws Exception;
 
     boolean exist(String orderId) throws SQLException, ClassNotFoundException;
 
@@ -35,4 +34,7 @@ public interface PurchaseOrderBO extends SuperBO {
     public List<String> getCodes() throws SQLException, ClassNotFoundException;
 
     public List<String> getBookingIds() throws SQLException, ClassNotFoundException;
+
+    public ArrayList<Payment> loadAll() throws SQLException, ClassNotFoundException;
+
 }

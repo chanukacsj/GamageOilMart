@@ -7,10 +7,12 @@ import lk.ijse.AutoCareCenter.db.DbConnection;
 import lk.ijse.AutoCareCenter.entity.MaterialDetails;
 import lk.ijse.AutoCareCenter.entity.OrderDetails;
 import lk.ijse.AutoCareCenter.entity.Orders;
+import lk.ijse.AutoCareCenter.entity.Payment;
 import lk.ijse.AutoCareCenter.model.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PurchaseOrderBOImpl implements PurchaseOrderBO {
@@ -24,7 +26,7 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
 
     BookingDAO bookingDAO = (BookingDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.BOOKING);
 
-
+    PaymentDAO paymentDAO = (PaymentDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.PAYMENT);
     @Override
     public boolean exist(String orderId) throws SQLException, ClassNotFoundException {
 
@@ -80,6 +82,24 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
                 boolean b = materialDetailDAO.update(new MaterialDetails(materialDetails.getCode(), materialDetails.getSupId(), materialDetails.getDescription(), materialDetails.getUnitPrice(), materialDetails.getQtyOnHand(), materialDetails.getCategory(), materialDetails.getBrand(), materialDetails.getAddedDate(), materialDetails.getStatus()));
 
                 if (!b) {
+                    connection.rollback();
+                    connection.setAutoCommit(true);
+                    return false;
+                }
+                // 🌟 ADD PAYMENT SAVE HERE (INSIDE LOOP)
+                Payment payment = new Payment(
+                        "P" + System.nanoTime(),   // auto id create (or use DAO method)
+                        dto.getOrderId(),
+                        d.getCode(),
+                        d.getQty(),
+                        d.getUnitPrice(),
+                        d.getService_charge(),
+                        d.getTotal(),
+                        "ORDER PAYMENT"   // DESCRIPTION
+                );
+
+                boolean b4 = paymentDAO.save(payment);
+                if (!b4) {
                     connection.rollback();
                     connection.setAutoCommit(true);
                     return false;
@@ -140,5 +160,16 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
     public List<String> getBookingIds() throws SQLException, ClassNotFoundException {
         return bookingDAO.getIds();
     }
+
+    @Override
+    public ArrayList<Payment> loadAll() throws SQLException, ClassNotFoundException {
+        return paymentDAO.loadAll();
+    }
+
+    @Override
+    public String getDescriptionByCode(String code) throws Exception {
+        return materialDetailDAO.getDescriptionByCode(code);
+    }
+
 
 }
