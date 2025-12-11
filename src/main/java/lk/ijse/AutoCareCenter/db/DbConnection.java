@@ -76,11 +76,33 @@ public class DbConnection {
                 "service_charge REAL NOT NULL, " +
                 "total REAL NOT NULL, " +
                 "description TEXT, " +
+                "date TEXT," +
                 "FOREIGN KEY (orderId) REFERENCES orders(orderId), " +
                 "FOREIGN KEY (code) REFERENCES material_details(code))";
 
         connection.prepareStatement(paymentTable).executeUpdate();
 
+        // ✅ Loan table
+        String loanTable = "CREATE TABLE IF NOT EXISTS loan (" +
+                "loanId TEXT PRIMARY KEY, " +
+                "orderId TEXT NOT NULL, " +
+                "customerName TEXT NOT NULL, " +
+                "phone TEXT NOT NULL, " +
+                "total REAL NOT NULL, " +
+                "paid REAL NOT NULL, " +
+                "remaining REAL NOT NULL, " +
+                "nextDue TEXT, " +
+                "status TEXT, " +
+                "date TEXT)";
+        connection.prepareStatement(loanTable).executeUpdate();
+        // ✅ Loan Payment table
+        String loanPaymentTable = "CREATE TABLE IF NOT EXISTS loan_payment (" +
+                "paymentId TEXT PRIMARY KEY, " +
+                "loanId TEXT NOT NULL, " +
+                "amount REAL NOT NULL, " +
+                "date TEXT NOT NULL, " +
+                "FOREIGN KEY (loanId) REFERENCES loan(loanId))";
+        connection.prepareStatement(loanPaymentTable).executeUpdate();
 
         System.out.println("✅ Tables created (if not exists)");
     }

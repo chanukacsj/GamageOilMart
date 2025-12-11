@@ -12,6 +12,9 @@ import lk.ijse.AutoCareCenter.model.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,16 +89,18 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
                     connection.setAutoCommit(true);
                     return false;
                 }
-                // 🌟 ADD PAYMENT SAVE HERE (INSIDE LOOP)
+                String date = LocalDateTime.now()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 Payment payment = new Payment(
-                        "P" + System.nanoTime(),   // auto id create (or use DAO method)
+                        "P" + System.nanoTime(),
                         dto.getOrderId(),
                         d.getCode(),
                         d.getQty(),
                         d.getUnitPrice(),
                         d.getService_charge(),
                         d.getTotal(),
-                        "ORDER PAYMENT"   // DESCRIPTION
+                        "ORDER PAYMENT",
+                        date
                 );
 
                 boolean b4 = paymentDAO.save(payment);

@@ -1,6 +1,7 @@
 package lk.ijse.AutoCareCenter.controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ import lk.ijse.AutoCareCenter.entity.Employee;
 import lk.ijse.AutoCareCenter.entity.OrderDetails;
 import lk.ijse.AutoCareCenter.entity.Payment;
 import lk.ijse.AutoCareCenter.model.OrderDetailsDTO;
+import lk.ijse.AutoCareCenter.model.tm.MaterialsTm;
 import lk.ijse.AutoCareCenter.model.tm.OrdersTm;
 import lk.ijse.AutoCareCenter.model.tm.PaymentTm;
 
@@ -28,6 +30,9 @@ public class PaymentViewController {
 
     @FXML
     private TableColumn<?, ?> ColDescription;
+
+    @FXML
+    private TableColumn<?, ?> ColDate;
 
     @FXML
     private TableColumn<?, ?> ColId;
@@ -54,6 +59,9 @@ public class PaymentViewController {
     private AnchorPane root;
 
     @FXML
+    private JFXTextField txtSearchDescription;
+
+    @FXML
     private TableView<PaymentTm> tblPayments;
 
     PurchaseOrderBO purchaseOrderBO = (PurchaseOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PO);
@@ -67,9 +75,11 @@ public class PaymentViewController {
         colTotal.setCellValueFactory(new PropertyValueFactory<>("Total"));
         colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
         ColOrderId.setCellValueFactory(new PropertyValueFactory<>("OrderId"));
+        ColDate.setCellValueFactory(new PropertyValueFactory<>("date"));
 
         loadAllPayments();
     }
+
     private void loadAllPayments() {
         try {
             List<Payment> list = purchaseOrderBO.loadAll();
@@ -87,7 +97,8 @@ public class PaymentViewController {
                         dto.getUnitPrice(),
                         dto.getService_charge(),
                         dto.getTotal(),
-                        dto.getDescription()
+                        dto.getDescription(),
+                        dto.getDate()
                 ));
             }
 
@@ -111,11 +122,47 @@ public class PaymentViewController {
     }
 
     public void txtDescriptionOnKeyReleased(KeyEvent keyEvent) {
+        String searchText = txtSearchDescription.getText().trim().toLowerCase();
+
+        if (searchText.isEmpty()) {
+            loadAllPayments();
+            return;
+        }
+
+        ObservableList<PaymentTm> filteredList = FXCollections.observableArrayList();
+        for (PaymentTm tm : tblPayments.getItems()) {
+            if (tm.getCode().toLowerCase().contains(searchText)) {
+                filteredList.add(tm);
+            }
+        }
+        tblPayments.setItems(filteredList);
     }
 
     public void btnSearchOnAction(ActionEvent actionEvent) {
+        String searchText = txtSearchDescription.getText().trim().toLowerCase();
+
+        if (searchText.isEmpty()) {
+            loadAllPayments();
+            return;
+        }
+
+        ObservableList<PaymentTm> filteredList = FXCollections.observableArrayList();
+
+        for (PaymentTm tm : tblPayments.getItems()) {
+            if (tm.getCode().toLowerCase().contains(searchText)) {
+                filteredList.add(tm);
+            }
+        }
+
+        tblPayments.setItems(filteredList);
+
+        if (filteredList.isEmpty()) {
+            new Alert(Alert.AlertType.INFORMATION, "No results found for '" + searchText + "'").show();
+        }
     }
 
     public void btnResetOnAction(ActionEvent actionEvent) {
+        txtSearchDescription.clear();
+        loadAllPayments();
     }
 }

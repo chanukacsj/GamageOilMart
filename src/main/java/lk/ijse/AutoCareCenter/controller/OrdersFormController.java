@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -93,6 +94,7 @@ public class OrdersFormController {
     private TextField txtQty;
     private ObservableList<OrdersTm> ordersList = FXCollections.observableArrayList();
     private double netTotal = 0;
+    private String currentOrderId;
     PurchaseOrderBO purchaseOrderBO = (PurchaseOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PO);
 
     public void initialize() {
@@ -139,14 +141,20 @@ public class OrdersFormController {
     }
 
 
-
     @FXML
     void btnPlaceCartOnAction(ActionEvent event) {
         String code = cmbMaterialCode.getValue();
         String description = lblDescription.getText();
         int qty = Integer.parseInt(txtQty.getText());
         double unitPrice = Double.parseDouble(lblUnitPrice.getText());
-        double service_charge = Double.parseDouble(txtServiceCharge.getText());
+        double service_charge = 0;
+        if (!txtServiceCharge.getText().isEmpty()) {
+            try {
+                service_charge = Double.parseDouble(txtServiceCharge.getText());
+            } catch (NumberFormatException e) {
+                service_charge = 0; // fallback if invalid input
+            }
+        }
         double totals = (qty * unitPrice);
         double total = totals + service_charge;
         JFXButton btnRemove = new JFXButton("remove");
@@ -214,7 +222,7 @@ public class OrdersFormController {
         for (int i = 0; i < tblOrderCart.getItems().size(); i++) {
             netTotal += (double) colTotal.getCellData(i);
         }
-        double ServiceCharge = Double.parseDouble(txtServiceCharge.getText());
+//        double ServiceCharge = Double.parseDouble(txtServiceCharge.getText());
         lblNetTotal.setText(String.valueOf(netTotal));
     }
 
@@ -229,7 +237,7 @@ public class OrdersFormController {
         }
         String orderId = lblOrderId.getText();
         Date date = Date.valueOf(LocalDate.now());
-        System.out.println(netTotal+"net total");
+        System.out.println(netTotal + "net total");
         boolean b = false;
         try {
             b = saveOrder(orderId, date,
@@ -344,6 +352,7 @@ public class OrdersFormController {
 
         JasperViewer.viewReport(jasperPrint, false);
     }
+
     @FXML
     void btnViewPaymentsOnAction(ActionEvent event) {
 
@@ -365,4 +374,39 @@ public class OrdersFormController {
         }
 
     }
+
+    @FXML
+    private void openLoanPayment() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoanPaymentForm.fxml"));
+            Parent root = loader.load();
+
+            LoanPaymentController controller = loader.getController();
+
+            // General info
+            controller.setOrderId(lblOrderId.getText());
+            controller.setNetTotal(Double.parseDouble(lblNetTotal.getText()));
+            double serviceCharge = txtServiceCharge.getText().isEmpty() ? 0.0 :
+                    Double.parseDouble(txtServiceCharge.getText());
+            controller.setServiceCharge(serviceCharge);
+
+            controller.setUnitPrice(Double.parseDouble(lblUnitPrice.getText()));
+            controller.setDescription(lblDescription.getText());
+
+            // 1️⃣ Full cart
+            controller.setOrdersList(new ArrayList<>(ordersList));
+
+            // 2️⃣ Optionally: Only selected items
+            // ObservableList<OrdersTm> selectedItems = tblOrderCart.getSelectionModel().getSelectedItems();
+            // controller.setOrdersList(new ArrayList<>(selectedItems));
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

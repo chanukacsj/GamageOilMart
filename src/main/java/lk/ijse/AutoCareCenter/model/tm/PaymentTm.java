@@ -16,4 +16,5 @@ public class PaymentTm {
     private double service_charge;
     private double Total;
     private String description;
+    private String date;
 }

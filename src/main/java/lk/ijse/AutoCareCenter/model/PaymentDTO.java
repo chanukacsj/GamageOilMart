@@ -16,4 +16,5 @@ public class PaymentDTO {
     private double service_charge;
     private double Total;
     private String description;
+    private String date;
 }

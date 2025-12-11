@@ -271,4 +271,8 @@ public class DashboardFormController {
     public void btnAllPayOnAction(ActionEvent actionEvent) throws IOException {
         setUi("AllPay.fxml");
     }
+
+    public void btnLoanOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("LoanPaymentForm.fxml");
+    }
 }

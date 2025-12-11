@@ -70,13 +70,7 @@
       <JFXButton fx:id="btnPlaceOrder" layoutX="705" layoutY="490" onAction="#btnPlaceOrderOnAction" prefWidth="160" styleClass="success-btn" text="Place Order" />
 
       <JFXButton fx:id="btnPrint" layoutX="525" layoutY="490" onAction="#btnPrintBillOnAction" prefWidth="160" styleClass="secondary-btn" text="Print Bill" />
-      <JFXButton fx:id="btnViewPayments"
-                 layoutX="350"
-                 layoutY="490"
-                 onAction="#btnViewPaymentsOnAction"
-                 prefWidth="160"
-                 styleClass="secondary-btn"
-                 text="View Payments" />
+      <JFXButton fx:id="btnViewPayments" layoutX="350" layoutY="490" onAction="#openLoanPayment" prefWidth="160" styleClass="secondary-btn" text="View Payments" />
 
    </AnchorPane>
 

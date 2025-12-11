@@ -1,10 +1,5 @@
 package lk.ijse.AutoCareCenter.dao;
-
 import lk.ijse.AutoCareCenter.dao.custom.Impl.*;
-
-import static com.lowagie.text.pdf.PdfName.ORDER;
-import static com.lowagie.text.pdf.PdfName.ca;
-
 public class DAOFactory {
 
     private static DAOFactory daoFactory;
@@ -17,7 +12,7 @@ public class DAOFactory {
     }
 
     public enum DAOTypes {
-        EMPLOYEE, CUSTOMER, VEHICLE, SUPPLIER, SALARY, REPAIR, MATERIAL, ORDER, ORDERDETAILS, MATERIALDETAIL, BOOKING, PAYMENT
+        EMPLOYEE, CUSTOMER, VEHICLE, SUPPLIER, SALARY, REPAIR, MATERIAL, ORDER, ORDERDETAILS, MATERIALDETAIL, BOOKING, LOAN, LOANPAYMENT, PAYMENT
     }
 
     public SuperDAO getDAO(DAOTypes daoTypes) {
@@ -42,6 +37,10 @@ public class DAOFactory {
                 return new EmployeeDAOImpl();
             case PAYMENT:
                 return new PaymentDAOImpl();
+            case LOAN:
+                return new LoanDAOImpl();
+                case LOANPAYMENT:
+                return new LoanPaymentDAOImpl();
             default:
                 return null;
         }

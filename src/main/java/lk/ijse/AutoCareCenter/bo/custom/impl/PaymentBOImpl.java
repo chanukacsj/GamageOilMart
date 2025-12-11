@@ -19,7 +19,7 @@ public class PaymentBOImpl implements PaymentBO {
         ArrayList<Payment> all = paymentDAO.loadAll();
         ArrayList<PaymentDTO> allPayment = new ArrayList<>();
         for (Payment m : all) {
-            allPayment.add(new PaymentDTO(m.getId(), m.getOrderId(), m.getCode(), m.getQty(), m.getUnitPrice(), m.getService_charge(), m.getTotal(), m.getDescription()));
+            allPayment.add(new PaymentDTO(m.getId(), m.getOrderId(), m.getCode(), m.getQty(), m.getUnitPrice(), m.getService_charge(), m.getTotal(), m.getDescription(), m.getDate()));
         }
         return allPayment;
     }

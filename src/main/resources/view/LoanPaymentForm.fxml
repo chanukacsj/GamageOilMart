@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600" prefWidth="900"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lk.ijse.AutoCareCenter.controller.LoanPaymentController">
+
+    <children>
+        <!-- ScrollPane added -->
+        <ScrollPane fitToWidth="true" prefWidth="880" prefHeight="580" layoutX="10" layoutY="10"
+                    pannable="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+
+            <content>
+                <VBox spacing="15" prefWidth="860">
+                    <padding>
+                        <Insets bottom="10" left="10" right="10" top="10"/>
+                    </padding>
+
+                    <!-- Order & Loan IDs -->
+                    <HBox spacing="20">
+                        <Label fx:id="lblOrderId" style="-fx-font-weight:bold;" text="Order ID"/>
+                        <Label fx:id="lblLoanId" style="-fx-font-weight:bold;" text="Loan ID"/>
+                    </HBox>
+
+                    <!-- Customer Info -->
+                    <TitledPane expanded="true" text="Customer Information">
+                        <content>
+                            <GridPane hgap="20" vgap="15">
+                                <padding>
+                                    <Insets bottom="10" left="10" right="10" top="10"/>
+                                </padding>
+                                <Label text="Customer Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                <JFXTextField fx:id="txtCustomerName" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                                <Label text="Phone:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                <JFXTextField fx:id="txtPhone" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                            </GridPane>
+                        </content>
+                    </TitledPane>
+
+                    <!-- Material / Item Info -->
+                    <TitledPane expanded="true" text="Material / Item Details">
+                        <content>
+                            <GridPane hgap="20" vgap="15">
+                                <padding><Insets bottom="10" left="10" right="10" top="10"/></padding>
+
+                                <Label text="Material Code:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                <JFXComboBox fx:id="cmbMaterialCode" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                                <Label text="Description:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                <Label fx:id="lblDescription" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                                <Label text="Qty:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                <JFXTextField fx:id="txtQty" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                                <Label text="Unit Price:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                                <Label fx:id="lblUnitPrice" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                                <Label text="Service Charge:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                                <JFXTextField fx:id="txtServiceCharge" text="0" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                            </GridPane>
+                        </content>
+                    </TitledPane>
+
+                    <!-- Payment Summary -->
+                    <TitledPane expanded="true" text="Payment Summary">
+                        <content>
+                            <GridPane hgap="20" vgap="15">
+                                <padding><Insets bottom="10" left="10" right="10" top="10"/></padding>
+
+                                <Label text="Total Amount:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                <Label fx:id="lblTotal" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                                <Label text="Down Payment:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                <JFXTextField fx:id="txtDownPayment" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                                <Label text="Balance:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                <Label fx:id="lblBalance" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                            </GridPane>
+                        </content>
+                    </TitledPane>
+
+                    <!-- Buttons -->
+                    <HBox spacing="20">
+                        <JFXButton fx:id="btnSaveLoan" onAction="#btnSaveLoanOnAction"
+                                   style="-fx-background-color:#1e88e5; -fx-text-fill:white;" text="Save Loan"/>
+                        <JFXButton fx:id="btnClear"
+                                   style="-fx-background-color:#e53935; -fx-text-fill:white;" text="Clear"/>
+                    </HBox>
+
+                    <!-- Loan Payment -->
+                    <TitledPane expanded="true" text="Loan Payment">
+                        <content>
+                            <HBox spacing="20">
+                                <Label text="Pay Amount:"/>
+                                <JFXTextField fx:id="txtPayAmount"/>
+                                <JFXButton fx:id="btnPay" onAction="#openPaymentWindow"
+                                           style="-fx-background-color:#43a047; -fx-text-fill:white;" text="Pay"/>
+                            </HBox>
+                        </content>
+                    </TitledPane>
+
+                    <!-- Orders Table -->
+                    <TableView fx:id="tblOrderCart" prefHeight="200">
+                        <columns>
+                            <TableColumn fx:id="colItemCode" text="Code"/>
+                            <TableColumn fx:id="colDescription" text="Description"/>
+                            <TableColumn fx:id="colQty" text="Qty"/>
+                            <TableColumn fx:id="colUnitPrice" text="Unit Price"/>
+                            <TableColumn fx:id="colCharge" text="Charge"/>
+                            <TableColumn fx:id="colTotal" text="Total"/>
+                            <TableColumn fx:id="colAction" text="Action"/>
+                        </columns>
+                    </TableView>
+
+                    <!-- All Loans -->
+                    <TitledPane expanded="true" text="All Loans">
+                        <content>
+                            <TableView fx:id="tblLoans" prefHeight="220">
+                                <columns>
+                                    <TableColumn fx:id="colLoanId" text="Loan ID"/>
+                                    <TableColumn fx:id="colOrderId" text="Order ID"/>
+                                    <TableColumn fx:id="colCustName" text="Customer"/>
+                                    <TableColumn fx:id="colPhone" text="Phone"/>
+                                    <TableColumn fx:id="colTotalAmount" text="Total"/>
+                                    <TableColumn fx:id="colPaidAmount" text="Paid"/>
+                                    <TableColumn fx:id="colRemainingAmount" text="Remaining"/>
+                                    <TableColumn fx:id="colNextDue" text="Next Due"/>
+                                    <TableColumn fx:id="colStatus" text="Status"/>
+                                    <TableColumn fx:id="colActions" text="Action"/>
+                                </columns>
+                            </TableView>
+                        </content>
+                    </TitledPane>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
+</AnchorPane>

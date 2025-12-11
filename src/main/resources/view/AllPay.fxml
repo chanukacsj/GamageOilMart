@@ -48,12 +48,13 @@
       <columns>
          <TableColumn fx:id="ColId" prefWidth="90" text="ID" />
          <TableColumn fx:id="ColDescription" prefWidth="160" text="Description" />
-         <TableColumn fx:id="colQty" prefWidth="100" text="Qty" />
-         <TableColumn fx:id="colUnitPrice" prefWidth="120" text="Unit Price" />
-         <TableColumn fx:id="colCharge" prefWidth="100" text="Charge" />
-         <TableColumn fx:id="colTotal" prefWidth="120" text="Total" />
-         <TableColumn fx:id="colCode" prefWidth="120" text="Code" />
-         <TableColumn fx:id="ColOrderId" prefWidth="120" text="OrderID" />
+         <TableColumn fx:id="colQty" prefWidth="64.0" text="Qty" />
+         <TableColumn fx:id="colUnitPrice" prefWidth="109.5999755859375" text="Unit Price" />
+         <TableColumn fx:id="colCharge" prefWidth="99.19998168945312" text="Charge" />
+         <TableColumn fx:id="colTotal" prefWidth="88.0" text="Total" />
+         <TableColumn fx:id="colCode" prefWidth="80.79998779296875" text="Code" />
+         <TableColumn fx:id="ColOrderId" prefWidth="76.0" text="OrderID" />
+         <TableColumn fx:id="ColDate" prefWidth="164.800048828125" text="Date" />
       </columns>
    </TableView>
 </AnchorPane>

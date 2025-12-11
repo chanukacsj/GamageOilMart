@@ -14,14 +14,14 @@ public class OrderDAOImpl implements OrderDAO {
     @Override
     public String currentId() throws SQLException, ClassNotFoundException {
         ResultSet rst = SqlUtil.execute(
-                "SELECT orderId FROM orders ORDER BY orderId DESC LIMIT 1"
+                "SELECT orderId FROM orders ORDER BY CAST(SUBSTR(orderId, 2) AS INTEGER) DESC LIMIT 1"
         );
-
         if (rst.next()) {
-            return rst.getString(1); // or rst.getString("orderId")
+            return rst.getString("orderId");
         }
         return null;
     }
+
 
 
     @Override

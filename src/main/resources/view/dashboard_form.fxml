@@ -32,6 +32,7 @@
                <JFXButton onAction="#btnSupplierOnAction" styleClass="nav-btn" text="🏭 Supplier" />
                <JFXButton onAction="#btnOrdersOnAction" styleClass="nav-btn" text="💳 Payment" />
                <JFXButton onAction="#btnAllPayOnAction" styleClass="nav-btn" text="💳 All Payments" />
+               <JFXButton onAction="#btnLoanOnAction" styleClass="nav-btn" text="💳 Loan Payments" />
             </VBox>
 
             <!-- LOGOUT -->
