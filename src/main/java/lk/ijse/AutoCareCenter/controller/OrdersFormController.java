@@ -171,26 +171,22 @@ public class OrdersFormController {
                     yes, no
             ).showAndWait();
 
-            if (result.orElse(no).equals(yes)) {
+            if (result.orElse(no) == yes) {
 
-                int selectedIndex = tblOrderCart.getSelectionModel().getSelectedIndex();
-                System.out.println("Selected index = " + selectedIndex);
+                OrdersTm tm = tblOrderCart.getItems()
+                        .stream()
+                        .filter(item -> item.getBtnRemove() == btnRemove)
+                        .findFirst()
+                        .orElse(null);
 
-                if (selectedIndex >= 0) {
-                    OrdersTm selectedItem = ordersList.get(selectedIndex);
-                    System.out.println("Removing: " + selectedItem);
-
-                    ordersList.remove(selectedIndex);
-
-                    tblOrderCart.getItems().setAll(ordersList);
+                if (tm != null) {
+                    ordersList.remove(tm);
                     tblOrderCart.refresh();
-
                     calculateNetTotal();
-                } else {
-                    System.out.println("No item selected!");
                 }
             }
         });
+
 
         for (int i = 0; i < tblOrderCart.getItems().size(); i++) {
             if (code.equals(colItemCode.getCellData(i))) {
