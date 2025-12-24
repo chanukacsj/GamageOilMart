@@ -14,7 +14,6 @@ public class OrdersTm {
     private String description;
     private int qty;
     private double unitPrice;
-    private double service_charge;
     private double total;
     private JFXButton btnRemove;
 

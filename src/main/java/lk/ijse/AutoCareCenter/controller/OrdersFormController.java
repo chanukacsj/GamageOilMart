@@ -96,19 +96,24 @@ public class OrdersFormController {
     private double netTotal = 0;
     private String currentOrderId;
     PurchaseOrderBO purchaseOrderBO = (PurchaseOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PO);
-
+    double serviceCharge = 0.0;
     public void initialize() {
         setCellValueFactory();
         loadNextOrderId();
         setDate();
         getMaterialsIds();
+        txtServiceCharge.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.matches("\\d*(\\.\\d*)?")) {
+                calculateNetTotal();
+            }
+        });
+
     }
 
     private void setCellValueFactory() {
         colItemCode.setCellValueFactory(new PropertyValueFactory<>("code"));
         colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
-        colCharge.setCellValueFactory(new PropertyValueFactory<>("service_charge"));
         colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
         colAction.setCellValueFactory(new PropertyValueFactory<>("btnRemove"));
@@ -147,16 +152,8 @@ public class OrdersFormController {
         String description = lblDescription.getText();
         int qty = Integer.parseInt(txtQty.getText());
         double unitPrice = Double.parseDouble(lblUnitPrice.getText());
-        double service_charge = 0;
-        if (!txtServiceCharge.getText().isEmpty()) {
-            try {
-                service_charge = Double.parseDouble(txtServiceCharge.getText());
-            } catch (NumberFormatException e) {
-                service_charge = 0; // fallback if invalid input
-            }
-        }
         double totals = (qty * unitPrice);
-        double total = totals + service_charge;
+        double total = totals;
         JFXButton btnRemove = new JFXButton("remove");
         btnRemove.setCursor(Cursor.HAND);
 
@@ -191,11 +188,10 @@ public class OrdersFormController {
         for (int i = 0; i < tblOrderCart.getItems().size(); i++) {
             if (code.equals(colItemCode.getCellData(i))) {
                 qty += ordersList.get(i).getQty();
-                total = unitPrice * qty + service_charge;
+                total = unitPrice * qty ;
 
                 ordersList.get(i).setQty(qty);
                 ordersList.get(i).setTotal(total);
-                ordersList.get(i).setService_charge(service_charge);
 
                 tblOrderCart.refresh();
                 calculateNetTotal();
@@ -203,7 +199,7 @@ public class OrdersFormController {
                 return;
             }
         }
-        OrdersTm ordersTm = new OrdersTm(code, description, qty, unitPrice, service_charge, total, btnRemove);
+        OrdersTm ordersTm = new OrdersTm(code, description, qty, unitPrice, total, btnRemove);
         System.out.println("total = " + total);
         ordersList.add(ordersTm);
 
@@ -215,12 +211,25 @@ public class OrdersFormController {
 
     private void calculateNetTotal() {
         netTotal = 0;
+
         for (int i = 0; i < tblOrderCart.getItems().size(); i++) {
             netTotal += (double) colTotal.getCellData(i);
         }
-//        double ServiceCharge = Double.parseDouble(txtServiceCharge.getText());
-        lblNetTotal.setText(String.valueOf(netTotal));
+
+        if (txtServiceCharge.getText() == null || txtServiceCharge.getText().isEmpty()) {
+            serviceCharge = 0;
+        } else {
+            try {
+                serviceCharge = Double.parseDouble(txtServiceCharge.getText());
+            } catch (NumberFormatException e) {
+                serviceCharge = 0;
+            }
+        }
+
+        double total = netTotal + serviceCharge;
+        lblNetTotal.setText(String.format("%.2f", total));
     }
+
 
 
     @FXML
@@ -237,7 +246,7 @@ public class OrdersFormController {
         boolean b = false;
         try {
             b = saveOrder(orderId, date,
-                    tblOrderCart.getItems().stream().map(tm -> new OrderDetailsDTO(orderId, tm.getCode(), tm.getQty(), tm.getUnitPrice(), tm.getService_charge(), tm.getTotal())).collect(Collectors.toList()));
+                    tblOrderCart.getItems().stream().map(tm -> new OrderDetailsDTO(orderId, tm.getCode(), tm.getQty(), tm.getUnitPrice(),serviceCharge,tm.getTotal())).collect(Collectors.toList()));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
@@ -327,7 +336,6 @@ public class OrdersFormController {
     }
 
     public void btnPrintBillOnAction(ActionEvent actionEvent) throws JRException, SQLException {
-        double ServiceCharge = Double.parseDouble(txtServiceCharge.getText());
         String lastTot = String.valueOf(netTotal);
 
         JasperDesign jasperDesign =
@@ -337,8 +345,8 @@ public class OrdersFormController {
 
         Map<String, Object> data = new HashMap<>();
         data.put("orderId", lblOrderId.getText());
-        data.put("nettotal", lastTot);
-        data.put("ServiceCharge", txtServiceCharge.getText());
+        data.put("nettotal", lblNetTotal.getText());
+        data.put("ServiceCharge",txtServiceCharge.getText());
 
         JasperPrint jasperPrint =
                 JasperFillManager.fillReport(
@@ -347,28 +355,6 @@ public class OrdersFormController {
                         DbConnection.getInstance().getConnection());
 
         JasperViewer.viewReport(jasperPrint, false);
-    }
-
-    @FXML
-    void btnViewPaymentsOnAction(ActionEvent event) {
-
-        try {
-            AnchorPane pane = FXMLLoader.load(
-                    getClass().getResource("/view/PaymentViewForm.fxml")
-            );
-
-            Scene scene = new Scene(pane);
-
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("Payment History");
-            stage.centerOnScreen();
-            stage.show();
-
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load PaymentViewForm.fxml", e);
-        }
-
     }
 
     @FXML
@@ -405,4 +391,6 @@ public class OrdersFormController {
         }
     }
 
+    public void ServiceChargeOnAction(ActionEvent actionEvent) {
+    }
 }

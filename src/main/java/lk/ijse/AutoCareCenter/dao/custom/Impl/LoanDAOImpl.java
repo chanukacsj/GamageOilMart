@@ -90,11 +90,11 @@ public class LoanDAOImpl implements LoanDAO {
     @Override
     public String currentId() throws SQLException, ClassNotFoundException {
         ResultSet rs = SqlUtil.execute(
-                "SELECT loanId FROM loan ORDER BY loanId DESC LIMIT 1"
+                "SELECT loanId FROM loan ORDER BY CAST(SUBSTR(loanId, 2) AS INTEGER) DESC LIMIT 1"
         );
 
         if (rs.next()) {
-            return rs.getString(1);  // or rs.getString("loanId")
+            return rs.getString("loanId");  // or rs.getString("loanId")
         }
         return null;
     }

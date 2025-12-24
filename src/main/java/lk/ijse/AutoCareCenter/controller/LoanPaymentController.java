@@ -244,6 +244,7 @@ public class LoanPaymentController {
     private void loadNextId() {
         try {
             String currentId = loanBO.currentId();
+            System.out.println(currentId);
             lblLoanId.setText(nextId(currentId));
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -262,7 +263,7 @@ public class LoanPaymentController {
         double totalAmount = tblOrderCart.getItems().stream()
                 .mapToDouble(OrdersTm::getTotal)
                 .sum();
-
+        totalAmount = totalAmount + Double.parseDouble(txtServiceCharge.getText());
         lblTotal.setText(String.valueOf(totalAmount));
 
         double downPayment = txtDownPayment.getText().isEmpty()
