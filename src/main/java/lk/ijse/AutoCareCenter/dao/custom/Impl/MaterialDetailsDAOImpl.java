@@ -37,9 +37,12 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
     @Override
     public boolean save(MaterialDetails entity) throws Exception {
         System.out.println(entity.getBarcode());
+
         String barcode = BarcodeGenerator.generateBarcode();
-        BarcodeUtil.generateBarcodeImage(barcode);
         entity.setBarcode(barcode);
+        BarcodeUtil.generateBarcodeImage(barcode);
+        BarcodeUtil.printBarcode(barcode);
+
         System.out.println(entity.getBarcode());
         return SqlUtil.execute(
                 "INSERT INTO material_details (code, supId, description, unitPrice, qtyOnHand, category, brand, addedDate, status, barcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
