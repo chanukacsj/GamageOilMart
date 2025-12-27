@@ -14,7 +14,7 @@ import java.util.List;
 public interface SupplierBO extends SuperBO {
     public ArrayList<SupplierDTO> loadAll() throws SQLException, ClassNotFoundException ;
 
-    public boolean save(SupplierDTO dto) throws SQLException, ClassNotFoundException ;
+    public boolean save(SupplierDTO dto) throws Exception;
 
     public boolean update(SupplierDTO dto) throws SQLException, ClassNotFoundException;
 

@@ -174,6 +174,8 @@ public class TyreFormController {
             }
         } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

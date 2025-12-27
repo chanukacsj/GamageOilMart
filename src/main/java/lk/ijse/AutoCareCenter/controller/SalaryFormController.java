@@ -168,6 +168,8 @@ public class SalaryFormController {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
             loadAllSalary();
             clearFields();

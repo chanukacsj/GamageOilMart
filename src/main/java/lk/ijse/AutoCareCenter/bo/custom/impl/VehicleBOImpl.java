@@ -31,7 +31,7 @@ public class VehicleBOImpl implements VehicleBO {
     }
 
     @Override
-    public boolean save(VehicleDTO vehicleDTO) throws SQLException, ClassNotFoundException {
+    public boolean save(VehicleDTO vehicleDTO) throws Exception {
         return vehicleDAO.save(new Vehicle(vehicleDTO.getId(), vehicleDTO.getType(), vehicleDTO.getNumber(), vehicleDTO.getCusId()));
     }
 

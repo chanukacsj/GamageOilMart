@@ -13,7 +13,7 @@ import java.util.List;
 public interface BookingBO extends SuperBO {
     public ArrayList<BookingDTO> loadAllBooking() throws SQLException, ClassNotFoundException;
 
-    public boolean save(BookingDTO bookingDTO) throws SQLException, ClassNotFoundException;
+    public boolean save(BookingDTO bookingDTO) throws Exception;
 
     public boolean delete(String id) throws SQLException, ClassNotFoundException;
 

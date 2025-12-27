@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public interface MaterialDetailBO extends SuperBO {
     public ArrayList<MaterialDetailsDTO> loadAll() throws SQLException, ClassNotFoundException;
 
-    public boolean save(MaterialDetailsDTO materialDetailsDTO) throws SQLException, ClassNotFoundException;
+    public boolean save(MaterialDetailsDTO materialDetailsDTO) throws Exception;
 
     public boolean update(MaterialDetailsDTO materialDetailsDTO) throws SQLException, ClassNotFoundException;
 

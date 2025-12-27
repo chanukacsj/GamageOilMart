@@ -30,7 +30,7 @@ public class EmployeeBOImpl implements EmployeeBO {
     }
 
     @Override
-    public boolean save(EmployeeDTO employeeDTO) throws SQLException, ClassNotFoundException {
+    public boolean save(EmployeeDTO employeeDTO) throws Exception {
         return employeeDAO.save(new Employee(employeeDTO.getId(), employeeDTO.getName(), employeeDTO.getContact(), employeeDTO.getAddress()));
     }
 

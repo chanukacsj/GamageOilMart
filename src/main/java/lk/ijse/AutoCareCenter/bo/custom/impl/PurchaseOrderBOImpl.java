@@ -118,6 +118,8 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return false;
     }

@@ -45,6 +45,7 @@ public class DbConnection {
                 "qtyOnHand INTEGER NOT NULL, " +
                 "addedDate TEXT DEFAULT (datetime('now')), " +
                 "status TEXT DEFAULT 'Active', " +
+                "barcode TEXT UNIQUE,"+
                 "FOREIGN KEY (supId) REFERENCES suppliers(supId))";
         connection.prepareStatement(materialDetailTable).executeUpdate();
 

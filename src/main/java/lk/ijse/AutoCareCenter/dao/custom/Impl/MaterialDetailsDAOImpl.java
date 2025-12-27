@@ -1,5 +1,7 @@
 package lk.ijse.AutoCareCenter.dao.custom.Impl;
 
+import lk.ijse.AutoCareCenter.controller.BarcodeGenerator;
+import lk.ijse.AutoCareCenter.controller.BarcodeUtil;
 import lk.ijse.AutoCareCenter.dao.SqlUtil;
 import lk.ijse.AutoCareCenter.dao.custom.MaterialDetailDAO;
 import lk.ijse.AutoCareCenter.entity.MaterialDetails;
@@ -33,10 +35,14 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
     }
 
     @Override
-    public boolean save(MaterialDetails entity) throws SQLException, ClassNotFoundException {
-        // ✅ Fixed: 9 columns and 9 placeholders
+    public boolean save(MaterialDetails entity) throws Exception {
+        System.out.println(entity.getBarcode());
+        String barcode = BarcodeGenerator.generateBarcode();
+        BarcodeUtil.generateBarcodeImage(barcode);
+        entity.setBarcode(barcode);
+        System.out.println(entity.getBarcode());
         return SqlUtil.execute(
-                "INSERT INTO material_details (code, supId, description, unitPrice, qtyOnHand, category, brand, addedDate, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO material_details (code, supId, description, unitPrice, qtyOnHand, category, brand, addedDate, status, barcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 entity.getCode(),
                 entity.getSupId(),
                 entity.getDescription(),
@@ -45,7 +51,8 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
                 entity.getCategory(),
                 entity.getBrand(),
                 entity.getAddedDate(),
-                entity.getStatus()
+                entity.getStatus(),
+                entity.getBarcode()
         );
     }
 

@@ -13,7 +13,7 @@ public interface SalaryBO extends SuperBO {
 
     public ArrayList<SalaryDTO> loadAll() throws SQLException, ClassNotFoundException;
 
-    public boolean save(SalaryDTO salaryDTO) throws SQLException, ClassNotFoundException;
+    public boolean save(SalaryDTO salaryDTO) throws Exception;
 
     public boolean update(SalaryDTO salaryDTO) throws SQLException, ClassNotFoundException;
 

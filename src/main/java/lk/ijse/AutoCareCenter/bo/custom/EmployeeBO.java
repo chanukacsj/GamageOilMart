@@ -13,7 +13,7 @@ public interface EmployeeBO extends SuperBO {
 
     public boolean delete(String id) throws SQLException, ClassNotFoundException;
 
-    public boolean save(EmployeeDTO employeeDTO) throws SQLException, ClassNotFoundException;
+    public boolean save(EmployeeDTO employeeDTO) throws Exception;
 
     public boolean update(EmployeeDTO employeeDTO) throws SQLException, ClassNotFoundException;
 

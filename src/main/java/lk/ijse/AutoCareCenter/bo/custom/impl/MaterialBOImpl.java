@@ -17,7 +17,7 @@ public class MaterialBOImpl implements MaterialBO {
     MaterialDAO materialDAO = (MaterialDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.MATERIAL);
     SupplierDAO supplierDAO = (SupplierDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.SUPPLIER);
     @Override
-    public boolean save(MaterialsDTO materialsDTO) throws SQLException, ClassNotFoundException {
+    public boolean save(MaterialsDTO materialsDTO) throws Exception {
         return materialDAO.save(new Materials(materialsDTO.getCode()));
     }
 

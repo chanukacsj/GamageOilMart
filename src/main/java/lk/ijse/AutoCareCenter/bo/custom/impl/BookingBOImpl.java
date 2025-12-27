@@ -29,7 +29,7 @@ public class BookingBOImpl implements BookingBO {
     }
 
 
-    public boolean save(BookingDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean save(BookingDTO dto) throws Exception {
         return bookingDAO.save(new Booking(dto.getId(), dto.getDate(), dto.getDescription(), dto.getContact(), dto.getCusId(), dto.getVId(), dto.getTime()));
     }
 

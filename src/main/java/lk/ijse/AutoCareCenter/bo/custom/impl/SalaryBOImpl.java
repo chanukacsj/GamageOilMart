@@ -29,7 +29,7 @@ public class SalaryBOImpl implements SalaryBO {
     }
 
     @Override
-    public boolean save(SalaryDTO salaryDTO) throws SQLException, ClassNotFoundException {
+    public boolean save(SalaryDTO salaryDTO) throws Exception {
         return salaryDAO.save(new Salary(salaryDTO.getId(), salaryDTO.getAmount(), salaryDTO.getMonth(), salaryDTO.getEmpId()));
     }
 

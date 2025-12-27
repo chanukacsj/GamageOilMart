@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface MaterialBO extends SuperBO {
-    public boolean save(MaterialsDTO materialsDTO) throws SQLException, ClassNotFoundException;
+    public boolean save(MaterialsDTO materialsDTO) throws Exception;
 
     public boolean delete(String code) throws SQLException, ClassNotFoundException;
 

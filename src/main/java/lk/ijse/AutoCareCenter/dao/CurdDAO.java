@@ -10,7 +10,7 @@ import java.util.List;
 public interface CurdDAO <T> extends SuperDAO {
     public ArrayList<T> loadAll() throws SQLException, ClassNotFoundException;
 
-    public boolean save(T DTO) throws SQLException, ClassNotFoundException;
+    public boolean save(T DTO) throws Exception;
 
     public boolean delete(String id) throws SQLException, ClassNotFoundException;
 

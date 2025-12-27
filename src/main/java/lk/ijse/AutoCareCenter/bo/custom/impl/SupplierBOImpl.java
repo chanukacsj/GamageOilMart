@@ -28,7 +28,7 @@ public class SupplierBOImpl implements SupplierBO {
     }
 
     @Override
-    public boolean save(SupplierDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean save(SupplierDTO dto) throws Exception {
         return supplierDAO.save(new Supplier(dto.getId(), dto.getName(), dto.getContact(), dto.getAddress()));
     }
 

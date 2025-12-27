@@ -17,5 +17,19 @@ public class MaterialDetailsDTO {
     private String brand;
     private String addedDate;
     private String status;
+    private String barcode;
+
+    public MaterialDetailsDTO(String code, String supId, String description, double unitPrice, int qtyOnHand, String category, String brand, String addedDate, String status) {
+
+        this.code = code;
+        this.supId = supId;
+        this.description = description;
+        this.unitPrice = unitPrice;
+        this.qtyOnHand = qtyOnHand;
+        this.category = category;
+        this.brand = brand;
+        this.addedDate = addedDate;
+        this.status = status;
+    }
 
 }

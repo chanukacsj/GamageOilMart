@@ -25,8 +25,8 @@ public class MaterialDetailBOImpl implements MaterialDetailBO {
     }
 
     @Override
-    public boolean save(MaterialDetailsDTO materialDetailsDTO) throws SQLException, ClassNotFoundException {
-        return materialDetailDAO.save(new MaterialDetails(materialDetailsDTO.getCode(), materialDetailsDTO.getSupId(), materialDetailsDTO.getDescription(), materialDetailsDTO.getUnitPrice(), materialDetailsDTO.getQtyOnHand(), materialDetailsDTO.getCategory(), materialDetailsDTO.getBrand(), materialDetailsDTO.getAddedDate(), materialDetailsDTO.getStatus()));
+    public boolean save(MaterialDetailsDTO materialDetailsDTO) throws Exception {
+        return materialDetailDAO.save(new MaterialDetails(materialDetailsDTO.getCode(), materialDetailsDTO.getSupId(), materialDetailsDTO.getDescription(), materialDetailsDTO.getUnitPrice(), materialDetailsDTO.getQtyOnHand(), materialDetailsDTO.getCategory(), materialDetailsDTO.getBrand(), materialDetailsDTO.getAddedDate(), materialDetailsDTO.getStatus(),materialDetailsDTO.getBarcode()));
     }
 
     @Override
