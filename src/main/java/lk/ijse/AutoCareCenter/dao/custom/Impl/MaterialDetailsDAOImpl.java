@@ -41,7 +41,7 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
         String barcode = BarcodeGenerator.generateBarcode();
         entity.setBarcode(barcode);
         BarcodeUtil.generateBarcodeImage(barcode);
-        BarcodeUtil.printBarcode(barcode);
+       // BarcodeUtil.printBarcode(barcode);
 
         System.out.println(entity.getBarcode());
         return SqlUtil.execute(
@@ -156,7 +156,8 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
                         rs.getString("category"),
                         rs.getString("brand"),
                         rs.getString("addedDate"),
-                        rs.getString("status")
+                        rs.getString("status"),
+                        rs.getString("barcode")
                 ));
             }
         } catch (SQLException | ClassNotFoundException e) {
