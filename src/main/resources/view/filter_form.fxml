@@ -73,30 +73,29 @@
 
 
    <!-- Buttons (Same Alignment as Oil UI) -->
-   <JFXButton fx:id="btnDelete" layoutX="290.0" layoutY="305.0" onAction="#btnDeleteOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #e74c3c; -fx-background-radius: 8;" text="Delete" textFill="white">
+   <JFXButton fx:id="btnDelete" layoutX="279.0" layoutY="305.0" onAction="#btnDeleteOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #e74c3c; -fx-background-radius: 8;" text="Delete" textFill="white">
       <cursor><Cursor fx:constant="HAND" /></cursor>
    </JFXButton>
 
-   <JFXButton fx:id="btnClear" layoutX="395.0" layoutY="305.0" onAction="#btnClearOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #7f8c8d; -fx-background-radius: 8;" text="Clear" textFill="white" />
+   <JFXButton fx:id="btnClear" layoutX="384.0" layoutY="305.0" onAction="#btnClearOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #7f8c8d; -fx-background-radius: 8;" text="Clear" textFill="white" />
 
-   <JFXButton fx:id="btnUpdate" layoutX="500.0" layoutY="305.0" onAction="#btnUpdateOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #f39c12; -fx-background-radius: 8;" text="Update" textFill="white" />
+   <JFXButton fx:id="btnUpdate" layoutX="489.0" layoutY="305.0" onAction="#btnUpdateOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #f39c12; -fx-background-radius: 8;" text="Update" textFill="white" />
 
-   <JFXButton fx:id="btnSave" layoutX="605.0" layoutY="305.0" onAction="#btnSaveOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #2980b9; -fx-background-radius: 8;" text="Save" textFill="white" />
-
-
-   <!-- Table (Same as Oil UI) -->
-   <TableView fx:id="tblMaterial" layoutX="64.0" layoutY="351.0" onMouseClicked="#getMaterials" prefHeight="330.0" prefWidth="900.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+   <JFXButton fx:id="btnSave" layoutX="594.0" layoutY="305.0" onAction="#btnSaveOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #2980b9; -fx-background-radius: 8;" text="Save" textFill="white" />
+   <Label fx:id="lblId" layoutX="205.0" layoutY="167.0" prefHeight="26.0" prefWidth="150.0" styleClass="form-label" />
+   <TableView fx:id="tblMaterial" layoutX="24.0" layoutY="362.0" onMouseClicked="#getMaterials" prefHeight="330.0" prefWidth="972.0" style="-fx-background-color: white; -fx-background-radius: 10;">
       <columns>
          <TableColumn fx:id="colCode" prefWidth="100.0" text="Code" />
          <TableColumn fx:id="colDescription" prefWidth="150.0" text="Description" />
          <TableColumn fx:id="colUnitPrice" prefWidth="120.0" text="Unit Price" />
          <TableColumn fx:id="colQtyOnHand" prefWidth="120.0" text="Qty On Hand" />
-         <TableColumn fx:id="colSupId" prefWidth="120.0" text="Supplier ID" />
-         <TableColumn fx:id="colBrand" prefWidth="100.0" text="Brand" />
-         <TableColumn fx:id="colDate" prefWidth="96.8" text="Added Date" />
-         <TableColumn fx:id="colStatus" prefWidth="123.2" text="Status" />
+         <TableColumn fx:id="colSupId" prefWidth="99.19998168945312" text="Supplier ID" />
+         <TableColumn fx:id="colBrand" prefWidth="89.5999755859375" text="Brand" />
+         <TableColumn fx:id="colDate" prefWidth="96.0" text="Added Date" />
+         <TableColumn fx:id="colStatus" prefWidth="102.4000244140625" text="Status" />
+         <TableColumn fx:id="colBarcode" prefWidth="93.5999755859375" text="Barcode" />
       </columns>
    </TableView>
-   <Label fx:id="lblId" layoutX="205.0" layoutY="167.0" prefHeight="26.0" prefWidth="150.0" styleClass="form-label" />
+   <JFXButton layoutX="701.0" layoutY="307.0" onAction="#btnPrintBarcodeOnAction" prefHeight="32.0" prefWidth="100.0" style="-fx-background-color:#6a1b9a; -fx-text-fill:white;" text="Print Barcode" />
 
 </AnchorPane>

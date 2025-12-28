@@ -35,7 +35,7 @@ public class BatteryFormController {
     private TableView<MaterialsTm> tblMaterial;
 
     @FXML
-    private TableColumn<?, ?> colCode, colDescription, colUnitPrice, colQtyOnHand, colSupId, colBrand, colDate, colStatus;
+    private TableColumn<?, ?> colCode, colDescription, colUnitPrice, colQtyOnHand, colSupId, colBrand, colDate, colStatus, colBarcode;
 
     @FXML
     private JFXComboBox<SupplierDTO> cmbSupId;
@@ -80,6 +80,8 @@ public class BatteryFormController {
         colBrand.setCellValueFactory(new PropertyValueFactory<>("brand"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("addedDate"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colBarcode.setCellValueFactory(new PropertyValueFactory<>("barcode"));
+
     }
 
     private void loadNextId() {
@@ -106,7 +108,8 @@ public class BatteryFormController {
                         dto.getCategory(),
                         dto.getBrand(),
                         dto.getAddedDate(),
-                        dto.getStatus()
+                        dto.getStatus(),
+                        dto.getBarcode()
                 ));
             }
         } catch (Exception e) {
@@ -345,6 +348,29 @@ public class BatteryFormController {
     public void onClose() {
         if (keyHandler != null && lblId.getScene() != null) {
             lblId.getScene().removeEventFilter(KeyEvent.KEY_PRESSED, keyHandler);
+        }
+    }
+    @FXML
+    void btnPrintBarcodeOnAction(ActionEvent event) {
+
+        MaterialsTm selected =
+                tblMaterial.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            new Alert(Alert.AlertType.WARNING,
+                    "Please select an item first!").show();
+            return;
+        }
+
+        String barcode = selected.getBarcode();
+        System.out.println("barcode = " + barcode);
+        try {
+            BarcodeUtil.printBarcode(barcode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR,
+                    "Barcode print failed!").show();
         }
     }
 }

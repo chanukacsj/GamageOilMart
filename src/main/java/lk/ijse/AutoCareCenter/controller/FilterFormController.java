@@ -37,7 +37,7 @@ public class FilterFormController {
     private TableView<MaterialsTm> tblMaterial;
 
     @FXML
-    private TableColumn<?, ?> colCode, colDescription, colUnitPrice, colQtyOnHand, colSupId, colBrand, colDate, colStatus;
+    private TableColumn<?, ?> colCode, colDescription, colUnitPrice,colBarcode, colQtyOnHand, colSupId, colBrand, colDate, colStatus;
 
     @FXML
     private JFXComboBox<SupplierDTO> cmbSupId;
@@ -83,6 +83,7 @@ public class FilterFormController {
         colBrand.setCellValueFactory(new PropertyValueFactory<>("brand"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("addedDate"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colBarcode.setCellValueFactory(new PropertyValueFactory<>("barcode"));
     }
 
     private void loadNextId() {
@@ -118,7 +119,8 @@ public class FilterFormController {
                         dto.getCategory(),
                         dto.getBrand(),
                         dto.getAddedDate(),
-                        dto.getStatus()
+                        dto.getStatus(),
+                        dto.getBarcode()
                 ));
             }
         } catch (Exception e) {
@@ -344,6 +346,28 @@ public class FilterFormController {
             }
         }
         tblMaterial.setItems(filteredList);
+    }
+    @FXML
+    void btnPrintBarcodeOnAction(ActionEvent event) {
+
+        MaterialsTm selected =
+                tblMaterial.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            new Alert(Alert.AlertType.WARNING,
+                    "Please select an item first!").show();
+            return;
+        }
+
+        String barcode = selected.getBarcode();
+        try {
+            BarcodeUtil.printBarcode(barcode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR,
+                    "Barcode print failed!").show();
+        }
     }
 
 }
