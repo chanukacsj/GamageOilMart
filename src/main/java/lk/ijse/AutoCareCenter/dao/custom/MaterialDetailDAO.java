@@ -15,4 +15,5 @@ public interface MaterialDetailDAO extends CurdDAO<MaterialDetails> {
 
     public String getDescriptionByCode(String code) throws Exception ;
 
-    }
+    MaterialDetailsDTO findByBarcode(String barcode);
+}

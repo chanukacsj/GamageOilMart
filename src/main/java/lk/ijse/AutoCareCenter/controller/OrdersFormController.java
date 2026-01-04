@@ -3,6 +3,7 @@ package lk.ijse.AutoCareCenter.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -97,18 +98,30 @@ public class OrdersFormController {
     private String currentOrderId;
     PurchaseOrderBO purchaseOrderBO = (PurchaseOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PO);
     double serviceCharge = 0.0;
+    @FXML
+    private TextField txtBarcode;
+
+
+    MaterialDetailBO materialDetailBO =
+            (MaterialDetailBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.MATERIALDETAILS);
+
     public void initialize() {
         setCellValueFactory();
         loadNextOrderId();
         setDate();
         getMaterialsIds();
+
+//        txtBarcode.setOnAction(e -> {
+//            handleBarcodeScan();
+//        });
+        Platform.runLater(() -> txtBarcode.requestFocus());
         txtServiceCharge.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.matches("\\d*(\\.\\d*)?")) {
                 calculateNetTotal();
             }
         });
-
     }
+
 
     private void setCellValueFactory() {
         colItemCode.setCellValueFactory(new PropertyValueFactory<>("code"));
@@ -392,5 +405,90 @@ public class OrdersFormController {
     }
 
     public void ServiceChargeOnAction(ActionEvent actionEvent) {
+    }
+    private void handleBarcodeScan() {
+        String barcode = txtBarcode.getText().trim();
+
+        if (barcode.isEmpty()) return;
+
+        try {
+            // Find item by barcode
+            MaterialDetailsDTO dto = materialDetailBO.findByBarcode(barcode);
+
+            if (dto == null) {
+                java.awt.Toolkit.getDefaultToolkit().beep(); // beep on error
+                new Alert(Alert.AlertType.WARNING, "Item not found for barcode!").show();
+                txtBarcode.clear();
+                return;
+            }
+
+            String code = dto.getCode();
+
+            // Check if item already exists in cart
+            Optional<OrdersTm> existing = ordersList.stream()
+                    .filter(item -> item.getCode().equals(code))
+                    .findFirst();
+
+            if (existing.isPresent()) {
+                OrdersTm tm = existing.get();
+                if (tm.getQty() + 1 > dto.getQtyOnHand()) {
+                    java.awt.Toolkit.getDefaultToolkit().beep(); // beep on stock limit
+                    new Alert(Alert.AlertType.WARNING, "Cannot add more than available stock!").show();
+                } else {
+                    tm.setQty(tm.getQty() + 1); // increment qty
+                    tm.setTotal(tm.getQty() * tm.getUnitPrice()); // update total
+                }
+                tblOrderCart.refresh();
+            } else {
+                if (dto.getQtyOnHand() < 1) {
+                    java.awt.Toolkit.getDefaultToolkit().beep(); // beep on stock empty
+                    new Alert(Alert.AlertType.WARNING, "Item out of stock!").show();
+                    txtBarcode.clear();
+                    return;
+                }
+
+                // Add new item
+                JFXButton btnRemove = new JFXButton("remove");
+                btnRemove.setCursor(Cursor.HAND);
+                btnRemove.setOnAction(e -> {
+                    ordersList.removeIf(item -> item.getBtnRemove() == btnRemove);
+                    tblOrderCart.refresh();
+                    calculateNetTotal();
+                });
+
+                OrdersTm ordersTm = new OrdersTm(
+                        dto.getCode(),
+                        dto.getDescription(),
+                        1, // default qty 1
+                        dto.getUnitPrice(),
+                        dto.getUnitPrice(), // total = unitPrice * qty
+                        btnRemove
+                );
+                ordersList.add(ordersTm);
+            }
+
+            // Update UI labels
+            cmbMaterialCode.setValue(dto.getCode());
+            lblDescription.setText(dto.getDescription());
+            lblUnitPrice.setText(String.valueOf(dto.getUnitPrice()));
+            lblQtyOnHand.setText(String.valueOf(dto.getQtyOnHand()));
+
+            calculateNetTotal();
+
+            // Ready for next scan
+            txtBarcode.clear();
+            txtBarcode.requestFocus();
+
+            java.awt.Toolkit.getDefaultToolkit().beep(); // beep on successful scan
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            java.awt.Toolkit.getDefaultToolkit().beep(); // beep on exception
+        }
+    }
+
+
+    public void txtBarcodeOnAction(ActionEvent actionEvent) {
+        handleBarcodeScan();
     }
 }

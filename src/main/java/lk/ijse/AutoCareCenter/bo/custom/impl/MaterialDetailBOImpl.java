@@ -59,5 +59,10 @@ public class MaterialDetailBOImpl implements MaterialDetailBO {
         return materialDetailDAO.getDescriptionByCode(code);
     }
 
+    @Override
+    public MaterialDetailsDTO findByBarcode(String barcode) {
+        return materialDetailDAO.findByBarcode(barcode);
+    }
+
 
 }

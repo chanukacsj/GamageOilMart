@@ -13,6 +13,7 @@
 
    <!-- HEADER BAR -->
    <Rectangle fill="#1A237E" height="70" width="1020" />
+
    <Label layoutX="400" layoutY="15" style="-fx-font-size: 32px; -fx-text-fill: white; -fx-font-weight: bold;" text="Payment" />
 
    <!-- MAIN CARD -->
@@ -33,6 +34,9 @@
 
       <!-- ORDER DETAILS BLOCK -->
       <Label layoutX="30" layoutY="265" style="-fx-font-weight: bold;" text="Order ID:" />
+      <Label layoutX="31.0" layoutY="297.0" style="-fx-font-weight: bold;" text="Scan Barcode:" />
+   
+      <JFXTextField fx:id="txtBarcode" layoutX="115.0" layoutY="293.0" onAction="#txtBarcodeOnAction" prefWidth="180" promptText="Scan here &amp; press Enter" />
       <Label fx:id="lblOrderId" layoutX="140" layoutY="265" style="-fx-font-size: 15px; -fx-text-fill: #2C3E50;" />
 
       <Label layoutX="350" layoutY="265" style="-fx-font-weight: bold;" text="Order Date:" />

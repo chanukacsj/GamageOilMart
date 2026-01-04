@@ -41,7 +41,7 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
         String barcode = BarcodeGenerator.generateBarcode();
         entity.setBarcode(barcode);
         BarcodeUtil.generateBarcodeImage(barcode);
-       // BarcodeUtil.printBarcode(barcode);
+        // BarcodeUtil.printBarcode(barcode);
 
         System.out.println(entity.getBarcode());
         return SqlUtil.execute(
@@ -176,11 +176,44 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
         }
         return codes;
     }
+
     @Override
     public String getDescriptionByCode(String code) throws Exception {
         System.out.println("code = " + code);
         ResultSet rst = SqlUtil.execute("SELECT description FROM material_details WHERE code=?", code);
         return rst.next() ? rst.getString("description") : null;
     }
+
+    @Override
+    public MaterialDetailsDTO findByBarcode(String barcode) {
+
+        try {
+            ResultSet rst = SqlUtil.execute(
+                    "SELECT * FROM material_details WHERE barcode = ?",
+                    barcode
+            );
+
+            if (rst.next()) {
+                return new MaterialDetailsDTO(
+                        rst.getString("code"),
+                        rst.getString("supId"),
+                        rst.getString("description"),
+                        rst.getDouble("unitPrice"),
+                        rst.getInt("qtyOnHand"),
+                        rst.getString("category"),
+                        rst.getString("brand"),
+                        rst.getString("addedDate"),
+                        rst.getString("status"),
+                        rst.getString("barcode")
+                );
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
 }

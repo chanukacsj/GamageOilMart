@@ -23,4 +23,6 @@ public interface MaterialDetailBO extends SuperBO {
     public boolean delete(String code) throws SQLException, ClassNotFoundException;
 
     String getDescriptionByCode(String code) throws Exception;
+
+    MaterialDetailsDTO findByBarcode(String barcode);
 }
