@@ -105,6 +105,22 @@ public class DbConnection {
                 "FOREIGN KEY (loanId) REFERENCES loan(loanId))";
         connection.prepareStatement(loanPaymentTable).executeUpdate();
 
+        // ✅ Cheque Payment table
+        String chequePaymentTable =
+                "CREATE TABLE IF NOT EXISTS cheque_payment (" +
+                        "chequeId TEXT PRIMARY KEY, " +
+                        "paymentId TEXT NOT NULL, " +
+                        "customerName TEXT NOT NULL, " +
+                        "customerPhone TEXT NOT NULL, " +
+                        "chequeNo TEXT NOT NULL, " +
+                        "bankName TEXT NOT NULL, " +
+                        "branch TEXT NOT NULL, " +
+                        "chequeDate TEXT NOT NULL, " +
+                        "amount REAL NOT NULL, " +
+                        "status TEXT DEFAULT 'PENDING', " +
+                        "FOREIGN KEY (paymentId) REFERENCES payment(id))";
+        connection.prepareStatement(chequePaymentTable).executeUpdate();
+
         System.out.println("✅ Tables created (if not exists)");
     }
 

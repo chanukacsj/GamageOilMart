@@ -19,7 +19,7 @@ public interface PurchaseOrderBO extends SuperBO {
 
     public String currentId() throws SQLException, ClassNotFoundException;
 
-    public boolean saveOrder(OrdersDTO dto) throws SQLException, ClassNotFoundException;
+    public String saveOrder(OrdersDTO dto) throws SQLException, ClassNotFoundException;
 
     public MaterialDetailsDTO findItem(String code) throws SQLException, ClassNotFoundException;
 

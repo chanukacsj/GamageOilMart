@@ -30,6 +30,8 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
     BookingDAO bookingDAO = (BookingDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.BOOKING);
 
     PaymentDAO paymentDAO = (PaymentDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.PAYMENT);
+    String generatedPaymentId = null;
+
     @Override
     public boolean exist(String orderId) throws SQLException, ClassNotFoundException {
 
@@ -42,16 +44,14 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
     }
 
     @Override
-    public boolean saveOrder(OrdersDTO dto) throws SQLException, ClassNotFoundException {
+    public String saveOrder(OrdersDTO dto) throws SQLException, ClassNotFoundException {
         Connection connection = null;
         try {
             connection = DbConnection.getInstance().getConnection();
             boolean b1 = orderDAO.exist(dto.getOrderId());
-            System.out.println("awa1");
-
             /*if order id already exist*/
             if (b1) {
-                return false;
+                return null;
 
             }
 
@@ -64,7 +64,7 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
 
                 connection.rollback();
                 connection.setAutoCommit(true);
-                return false;
+                return null;
             }
 
             for (OrderDetailsDTO d : dto.getOrderDetails()) {
@@ -75,7 +75,7 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
                 if (!b3) {
                     connection.rollback();
                     connection.setAutoCommit(true);
-                    return false;
+                    return null;
                 }
                 //Search & Update Item
                 MaterialDetailsDTO materialDetails = findItem(d.getCode());
@@ -87,12 +87,14 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
                 if (!b) {
                     connection.rollback();
                     connection.setAutoCommit(true);
-                    return false;
+                    return null;
                 }
                 String date = LocalDateTime.now()
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                String paymentId = "P" + System.nanoTime();
+                generatedPaymentId = paymentId;
                 Payment payment = new Payment(
-                        "P" + System.nanoTime(),
+                        paymentId,
                         dto.getOrderId(),
                         d.getCode(),
                         d.getQty(),
@@ -107,12 +109,12 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
                 if (!b4) {
                     connection.rollback();
                     connection.setAutoCommit(true);
-                    return false;
+                    return null;
                 }
             }
             connection.commit();
             connection.setAutoCommit(true);
-            return true;
+            return generatedPaymentId;
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -121,7 +123,7 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return false;
+        return null;
     }
 
 

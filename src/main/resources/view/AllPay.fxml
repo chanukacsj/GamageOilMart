@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.Group?>
@@ -43,8 +44,15 @@
             </cursor>
          </JFXButton>
       </children>
+
+
    </Group>
-   <TableView fx:id="tblPayments" layoutX="42.0" layoutY="198.0" prefHeight="498.0" prefWidth="934.0" style="-fx-background-radius: 10; -fx-border-radius: 10;">
+   <Label fx:id="lblDailyIncome" layoutX="554.0" layoutY="661.0" text="0.00" />
+   <Label fx:id="lblMonthlyIncome" layoutX="364.0" layoutY="662.0" text="0.00" />
+   <Label fx:id="lblYearlyIncome" layoutX="152.0" layoutY="662.0" text="0.00" />
+
+   <JFXComboBox fx:id="cmbDateFilter" layoutX="809.0" layoutY="147.0" onAction="#cmbDateFilterOnAction" prefWidth="150" unFocusColor="WHITE" />
+   <TableView fx:id="tblPayments" layoutX="42.0" layoutY="198.0" prefHeight="437.0" prefWidth="934.0" style="-fx-background-radius: 10; -fx-border-radius: 10;">
       <columns>
          <TableColumn fx:id="ColId" prefWidth="90" text="ID" />
          <TableColumn fx:id="ColDescription" prefWidth="160" text="Description" />
@@ -57,4 +65,7 @@
          <TableColumn fx:id="ColDate" prefWidth="164.800048828125" text="Date" />
       </columns>
    </TableView>
+   <Label layoutX="42.0" layoutY="660.0" styleClass="form-label" text="Yearly Income =" />
+   <Label layoutX="239.0" layoutY="661.0" styleClass="form-label" text="Monthly Income =" />
+   <Label layoutX="451.0" layoutY="660.0" styleClass="form-label" text="Daily Income =" />
 </AnchorPane>

@@ -16,5 +16,14 @@ public class OrdersTm {
     private double unitPrice;
     private double total;
     private JFXButton btnRemove;
+    private double service_charge;
 
+    public OrdersTm(String code, String description, int qty, double unitPrice, double total, JFXButton btnRemove) {
+        this.code = code;
+        this.description = description;
+        this.qty = qty;
+        this.unitPrice = unitPrice;
+        this.total = total;
+        this.btnRemove = btnRemove;
+    }
 }

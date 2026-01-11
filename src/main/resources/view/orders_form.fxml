@@ -64,6 +64,14 @@
       <Label layoutX="670" layoutY="395" style="-fx-font-weight: bold;" text="Service Charge:" />
       <JFXTextField fx:id="txtServiceCharge" layoutX="780" layoutY="390" onAction="#ServiceChargeOnAction" prefWidth="80" />
 
+      <Label layoutX="30" layoutY="455" style="-fx-font-weight: bold;" text="Payment Method:" />
+
+      <JFXComboBox fx:id="cmbPaymentMethod"
+                   layoutX="150"
+                   layoutY="450"
+                   prefWidth="200"
+                   onAction="#cmbPaymentMethodOnAction"/>
+
       <!-- TOTAL -->
       <Label layoutX="30" layoutY="495" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Net Total:" />
       <Label fx:id="lblNetTotal" layoutX="140" layoutY="493" style="-fx-font-size: 24px; -fx-text-fill: #e74c3c; -fx-font-weight: bold;" />
@@ -77,5 +85,64 @@
       <JFXButton fx:id="btnViewPayments" layoutX="350" layoutY="490" onAction="#openLoanPayment" prefWidth="160" styleClass="secondary-btn" text="View Payments" />
 
    </AnchorPane>
+   <AnchorPane fx:id="chequePane"
+               layoutX="85"
+               layoutY="400"
+               prefWidth="850"
+               prefHeight="140"
+               visible="false"
+               style="-fx-background-color: #F5F6FA; -fx-background-radius: 12; -fx-padding: 15;">
+
+      <!-- Close Button -->
+      <JFXButton fx:id="btnChequeClose"
+                 layoutX="700"
+                 layoutY="110"
+                 text="Close"
+                 prefWidth="80"
+                 onAction="#btnChequeCloseOnAction"
+                 style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10;"/>
+
+
+
+      <Label layoutX="20" layoutY="10" style="-fx-font-weight: bold;" text="Cheque Details"/>
+
+      <!-- Cheque No -->
+      <Label layoutX="20" layoutY="45" text="Cheque No:"/>
+      <JFXTextField fx:id="txtChequeNo" layoutX="100" layoutY="40" prefWidth="150"/>
+
+      <!-- Bank -->
+      <Label layoutX="280" layoutY="45" text="Bank:"/>
+      <JFXTextField fx:id="txtBank" layoutX="330" layoutY="40" prefWidth="150"/>
+
+      <!-- Branch -->
+      <Label layoutX="520" layoutY="45" text="Branch:"/>
+      <JFXTextField fx:id="txtBranch" layoutX="580" layoutY="40" prefWidth="150"/>
+
+      <!-- Cheque Date -->
+      <Label layoutX="20" layoutY="85" text="Cheque Date:"/>
+      <JFXTextField fx:id="txtChequeDate"
+                    layoutX="100"
+                    layoutY="80"
+                    prefWidth="150"
+                    promptText="YYYY-MM-DD"/>
+
+      <!-- Customer Name -->
+      <Label layoutX="280" layoutY="85" text="Customer Name:"/>
+      <JFXTextField fx:id="txtCustomerName"
+                    layoutX="380"
+                    layoutY="80"
+                    prefWidth="200"
+                    promptText="Enter customer name"/>
+
+      <!-- Customer Phone -->
+      <Label layoutX="20" layoutY="125" text="Customer Phone:"/>
+      <JFXTextField fx:id="txtCustomerPhone"
+                    layoutX="140"
+                    layoutY="120"
+                    prefWidth="180"
+                    promptText="07XXXXXXXX"/>
+
+   </AnchorPane>
+
 
 </AnchorPane>

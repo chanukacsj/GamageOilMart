@@ -1,5 +1,7 @@
 package lk.ijse.AutoCareCenter.dao;
+
 import lk.ijse.AutoCareCenter.dao.custom.Impl.*;
+
 public class DAOFactory {
 
     private static DAOFactory daoFactory;
@@ -12,7 +14,7 @@ public class DAOFactory {
     }
 
     public enum DAOTypes {
-        EMPLOYEE, CUSTOMER, VEHICLE, SUPPLIER, SALARY, REPAIR, MATERIAL, ORDER, ORDERDETAILS, MATERIALDETAIL, BOOKING, LOAN, LOANPAYMENT, PAYMENT
+        EMPLOYEE, CUSTOMER, VEHICLE, SUPPLIER, SALARY, REPAIR, MATERIAL, ORDER, ORDERDETAILS, MATERIALDETAIL, BOOKING, LOAN, LOANPAYMENT, PAYMENT, CHEQUE
     }
 
     public SuperDAO getDAO(DAOTypes daoTypes) {
@@ -39,8 +41,10 @@ public class DAOFactory {
                 return new PaymentDAOImpl();
             case LOAN:
                 return new LoanDAOImpl();
-                case LOANPAYMENT:
+            case LOANPAYMENT:
                 return new LoanPaymentDAOImpl();
+            case CHEQUE:
+                return new ChequeDAOImpl();
             default:
                 return null;
         }

@@ -190,8 +190,8 @@ public class DashboardFormController {
         }
     }
 
-    public void btnCustomerOnAction() throws IOException {
-        setUi("customer_form.fxml");
+    public void btnAllCheque() throws IOException {
+        setUi("cheque_form.fxml");
     }
 
     public void btnOrdersOnAction() throws IOException {

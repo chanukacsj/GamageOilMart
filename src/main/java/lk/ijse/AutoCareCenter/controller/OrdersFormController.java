@@ -21,6 +21,7 @@ import lk.ijse.AutoCareCenter.Util.Regex;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
 import lk.ijse.AutoCareCenter.bo.custom.*;
 import lk.ijse.AutoCareCenter.db.DbConnection;
+import lk.ijse.AutoCareCenter.entity.ChequePayment;
 import lk.ijse.AutoCareCenter.entity.MaterialDetails;
 import lk.ijse.AutoCareCenter.model.*;
 import lk.ijse.AutoCareCenter.model.tm.OrdersTm;
@@ -30,7 +31,6 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 
-import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -40,11 +40,30 @@ import java.util.stream.Collectors;
 public class OrdersFormController {
     @FXML
     private TableColumn<?, ?> colCharge;
+
     @FXML
     private JFXTextField txtServiceCharge;
 
     @FXML
+    private JFXButton btnChequeClose;
+
+    @FXML
+    private JFXTextField txtCustomerName;
+
+    @FXML
+    private JFXTextField txtCustomerPhone;
+
+    @FXML
     private JFXComboBox<String> cmbMaterialCode;
+
+    @FXML
+    private JFXTextField txtBranch;
+
+    @FXML
+    private JFXTextField txtChequeDate;
+
+    @FXML
+    private JFXTextField txtChequeNo;
 
     @FXML
     private TableColumn<?, ?> colAction;
@@ -78,12 +97,20 @@ public class OrdersFormController {
     @FXML
     private Label lblOrderDate;
 
+    @FXML
+    private AnchorPane chequePane;
+
+    @FXML
+    private JFXComboBox<String> cmbPaymentMethod;
 
     @FXML
     private Label lblQtyOnHand;
 
     @FXML
     private Label lblUnitPrice;
+
+    @FXML
+    private JFXTextField txtBank;
 
     @FXML
     private AnchorPane pane;
@@ -97,6 +124,7 @@ public class OrdersFormController {
     private double netTotal = 0;
     private String currentOrderId;
     PurchaseOrderBO purchaseOrderBO = (PurchaseOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PO);
+    ChequeBO chequeBO = (ChequeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CHEQUE);
     double serviceCharge = 0.0;
     @FXML
     private TextField txtBarcode;
@@ -110,6 +138,13 @@ public class OrdersFormController {
         loadNextOrderId();
         setDate();
         getMaterialsIds();
+
+        cmbPaymentMethod.getItems().addAll(
+                "CASH",
+                "CHEQUE"
+        );
+
+        chequePane.setVisible(false);
 
 //        txtBarcode.setOnAction(e -> {
 //            handleBarcodeScan();
@@ -246,7 +281,7 @@ public class OrdersFormController {
 
 
     @FXML
-    void btnPlaceOrderOnAction(ActionEvent event) {
+    void btnPlaceOrderOnAction(ActionEvent event) throws Exception {
 
         if (tblOrderCart.getItems().isEmpty()) {
             new Alert(Alert.AlertType.WARNING,
@@ -256,24 +291,41 @@ public class OrdersFormController {
         String orderId = lblOrderId.getText();
         Date date = Date.valueOf(LocalDate.now());
         System.out.println(netTotal + "net total");
-        boolean b = false;
+        String paymentId;
         try {
-            b = saveOrder(orderId, date,
-                    tblOrderCart.getItems().stream().map(tm -> new OrderDetailsDTO(orderId, tm.getCode(), tm.getQty(), tm.getUnitPrice(),serviceCharge,tm.getTotal())).collect(Collectors.toList()));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            paymentId = saveOrder(
+                    orderId,
+                    date,
+                    tblOrderCart.getItems().stream()
+                            .map(tm -> new OrderDetailsDTO(
+                                    orderId,
+                                    tm.getCode(),
+                                    tm.getQty(),
+                                    tm.getUnitPrice(),
+                                    serviceCharge,
+                                    tm.getTotal()
+                            ))
+                            .collect(Collectors.toList())
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Order failed!").show();
+            return;
         }
-
-        if (b) {
-            new Alert(Alert.AlertType.INFORMATION, "Order placed!").show();
+        if (paymentId != null) {
+            if ("CHEQUE".equals(cmbPaymentMethod.getValue())) {
+                System.out.println("cheque" + paymentId);
+                saveChequePayment(paymentId);
+            }
+            new Alert(Alert.AlertType.INFORMATION, "Order placed successfully!").show();
+            loadNextOrderId();
+            tblOrderCart.getItems().clear();
         } else {
-            new Alert(Alert.AlertType.WARNING, "order not placed!").show();
+            new Alert(Alert.AlertType.WARNING, "Order not placed!").show();
         }
     }
 
-    public boolean saveOrder(String orderId, Date date, List<OrderDetailsDTO> orderDetails) throws SQLException, ClassNotFoundException {
+    public String saveOrder(String orderId, Date date, List<OrderDetailsDTO> orderDetails) throws SQLException, ClassNotFoundException {
         OrdersDTO orderDTO = new OrdersDTO(orderId, date, orderDetails);
         return purchaseOrderBO.saveOrder(orderDTO);
     }
@@ -491,4 +543,63 @@ public class OrdersFormController {
     public void txtBarcodeOnAction(ActionEvent actionEvent) {
         handleBarcodeScan();
     }
+    private void saveChequePayment(String paymentId) throws Exception {
+
+//        String chequeNo = txtChequeNo.getText();
+//        String bankName = txtBank.getText();
+//        String branch = txtBranch.getText();
+//        String chequeDate = txtChequeDate.getText();
+//        double amount = Double.parseDouble(lblNetTotal.getText());
+//        String customerName = txtCustomerName.getText();
+//        String customerPhone = txtCustomerPhone.getText();
+//        String status = "PENDING";
+        String chequeId = "C" + System.nanoTime();
+
+        ChequePayment chequePayment = new ChequePayment(
+                chequeId,
+                paymentId,
+                txtCustomerName.getText(),
+                txtCustomerPhone.getText(),
+                txtChequeNo.getText(),
+                txtBank.getText(),
+                txtBranch.getText(),
+                txtChequeDate.getText(),
+                Double.parseDouble(lblNetTotal.getText()),
+                "PENDING"
+        );
+
+        boolean saved = chequeBO.saveCheque(chequePayment);
+
+        if (saved) {
+            new Alert(Alert.AlertType.INFORMATION, "Cheque saved").show();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Cheque failed").show();
+        }
+    }
+    @FXML
+    private void btnChequeCloseOnAction(ActionEvent event) {
+        // Hide the cheque pane
+        chequePane.setVisible(false);
+
+        // Clear all fields
+        txtChequeNo.clear();
+        txtBank.clear();
+        txtBranch.clear();
+        txtChequeDate.clear();
+        txtCustomerName.clear();
+        txtCustomerPhone.clear();
+    }
+
+    @FXML
+    void cmbPaymentMethodOnAction(ActionEvent event) {
+
+        String method = (String) cmbPaymentMethod.getValue();
+
+        if ("CHEQUE".equals(method)) {
+            chequePane.setVisible(true);
+        } else {
+            chequePane.setVisible(false);
+        }
+    }
+
 }
