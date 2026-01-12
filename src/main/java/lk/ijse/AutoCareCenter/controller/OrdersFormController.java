@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -42,10 +43,22 @@ public class OrdersFormController {
     private TableColumn<?, ?> colCharge;
 
     @FXML
+    private JFXComboBox<String> cmbMaterialDesc;
+
+    @FXML
     private JFXTextField txtServiceCharge;
 
     @FXML
+    private JFXButton btnPlaceOrder;
+
+    @FXML
     private JFXButton btnChequeClose;
+
+    @FXML
+    private JFXTextField txtPaidAmount;
+
+    @FXML
+    private Label lblBalance;
 
     @FXML
     private JFXTextField txtCustomerName;
@@ -126,6 +139,9 @@ public class OrdersFormController {
     PurchaseOrderBO purchaseOrderBO = (PurchaseOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PO);
     ChequeBO chequeBO = (ChequeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CHEQUE);
     double serviceCharge = 0.0;
+    private Map<String, MaterialDetailsDTO> materialMap = new HashMap<>();
+
+
     @FXML
     private TextField txtBarcode;
 
@@ -138,7 +154,7 @@ public class OrdersFormController {
         loadNextOrderId();
         setDate();
         getMaterialsIds();
-
+        loadMaterialDescriptions();
         cmbPaymentMethod.getItems().addAll(
                 "CASH",
                 "CHEQUE"
@@ -155,6 +171,46 @@ public class OrdersFormController {
                 calculateNetTotal();
             }
         });
+
+        Platform.runLater(() -> {
+            setupArrowNavigation(txtBarcode, cmbMaterialDesc, null);
+            setupArrowNavigation(cmbMaterialDesc, txtQty, txtBarcode);
+            setupArrowNavigation(txtQty, txtServiceCharge, cmbMaterialDesc);
+            setupArrowNavigation(txtServiceCharge, txtPaidAmount, txtQty);
+            setupArrowNavigation(txtPaidAmount, btnPlaceOrder, txtServiceCharge);
+        });
+
+        txtQty.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                btnPlaceCartOnAction(new ActionEvent());
+                txtBarcode.requestFocus();
+                event.consume();
+            }
+        });
+
+
+        tblOrderCart.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+
+            if (event.getCode() == KeyCode.DELETE) {
+                OrdersTm selected = tblOrderCart.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    ordersList.remove(selected);
+                    calculateNetTotal();
+                }
+            }
+
+            if (event.getCode() == KeyCode.ESCAPE) {
+                txtBarcode.requestFocus();
+            }
+        });
+        txtQty.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                btnPlaceCartOnAction(new ActionEvent());
+                txtBarcode.requestFocus();
+            }
+        });
+
+
     }
 
 
@@ -184,6 +240,7 @@ public class OrdersFormController {
         }
     }
 
+
     private String nextId(String currentId) {
         if (currentId != null) {
             int id = Integer.parseInt(currentId.replace("O", ""));
@@ -204,6 +261,18 @@ public class OrdersFormController {
         double total = totals;
         JFXButton btnRemove = new JFXButton("remove");
         btnRemove.setCursor(Cursor.HAND);
+
+        if (cmbMaterialCode.getValue() == null) {
+            new Alert(Alert.AlertType.WARNING, "Select an item first!").show();
+            cmbMaterialCode.requestFocus();
+            return;
+        }
+
+        if (txtQty.getText().isEmpty()) {
+            new Alert(Alert.AlertType.WARNING, "Enter quantity!").show();
+            txtQty.requestFocus();
+            return;
+        }
 
         btnRemove.setOnAction(e -> {
 
@@ -317,9 +386,21 @@ public class OrdersFormController {
                 System.out.println("cheque" + paymentId);
                 saveChequePayment(paymentId);
             }
+            // 🧾 ASK TO PRINT BILL
+            Optional<ButtonType> result = new Alert(
+                    Alert.AlertType.CONFIRMATION,
+                    "Print bill now?",
+                    ButtonType.YES,
+                    ButtonType.NO
+            ).showAndWait();
+
+            if (result.orElse(ButtonType.NO) == ButtonType.YES) {
+                printBill(); // 🔥 AUTO PRINT
+            }
             new Alert(Alert.AlertType.INFORMATION, "Order placed successfully!").show();
             loadNextOrderId();
-            tblOrderCart.getItems().clear();
+           // tblOrderCart.getItems().clear();
+            clearForm();
         } else {
             new Alert(Alert.AlertType.WARNING, "Order not placed!").show();
         }
@@ -421,6 +502,39 @@ public class OrdersFormController {
 
         JasperViewer.viewReport(jasperPrint, false);
     }
+    private void printBill() {
+        try {
+            JasperDesign jasperDesign =
+                    JRXmlLoader.load("src/main/resources/Reports/newOne.jrxml");
+
+            JasperReport jasperReport =
+                    JasperCompileManager.compileReport(jasperDesign);
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("orderId", lblOrderId.getText());
+            data.put("nettotal", lblNetTotal.getText());
+            data.put("ServiceCharge",
+                    txtServiceCharge.getText().isEmpty() ? "0.00" : txtServiceCharge.getText());
+
+            JasperPrint jasperPrint =
+                    JasperFillManager.fillReport(
+                            jasperReport,
+                            data,
+                            DbConnection.getInstance().getConnection()
+                    );
+
+            // 🔥 AUTO VIEW
+            JasperViewer.viewReport(jasperPrint, false);
+
+            // 🔥 AUTO PRINT (optional – uncomment if needed)
+            // JasperPrintManager.printReport(jasperPrint, false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Bill print failed!").show();
+        }
+    }
+
 
     @FXML
     private void openLoanPayment() {
@@ -539,20 +653,12 @@ public class OrdersFormController {
         }
     }
 
-
     public void txtBarcodeOnAction(ActionEvent actionEvent) {
         handleBarcodeScan();
     }
+
     private void saveChequePayment(String paymentId) throws Exception {
 
-//        String chequeNo = txtChequeNo.getText();
-//        String bankName = txtBank.getText();
-//        String branch = txtBranch.getText();
-//        String chequeDate = txtChequeDate.getText();
-//        double amount = Double.parseDouble(lblNetTotal.getText());
-//        String customerName = txtCustomerName.getText();
-//        String customerPhone = txtCustomerPhone.getText();
-//        String status = "PENDING";
         String chequeId = "C" + System.nanoTime();
 
         ChequePayment chequePayment = new ChequePayment(
@@ -589,17 +695,152 @@ public class OrdersFormController {
         txtCustomerName.clear();
         txtCustomerPhone.clear();
     }
+    @FXML
+    void txtPaidAmountOnKeyReleased(KeyEvent event) {
 
+        try {
+            double netTotal = Double.parseDouble(lblNetTotal.getText());
+            double paidAmount = Double.parseDouble(txtPaidAmount.getText());
+
+            double balance = paidAmount - netTotal;
+
+            if (balance < 0) {
+                lblBalance.setText("0.00");
+                lblBalance.setTextFill(javafx.scene.paint.Color.RED);
+            } else {
+                lblBalance.setText(String.format("%.2f", balance));
+                lblBalance.setTextFill(javafx.scene.paint.Color.web("#27ae60"));
+            }
+
+        } catch (NumberFormatException e) {
+            lblBalance.setText("0.00");
+        }
+    }
     @FXML
     void cmbPaymentMethodOnAction(ActionEvent event) {
 
-        String method = (String) cmbPaymentMethod.getValue();
+        String method = cmbPaymentMethod.getValue();
 
         if ("CHEQUE".equals(method)) {
             chequePane.setVisible(true);
+            txtPaidAmount.setDisable(true); // cheque → exact amount
+            lblBalance.setText("0.00");
         } else {
             chequePane.setVisible(false);
+            txtPaidAmount.setDisable(false); // cash → balance needed
         }
     }
+    private void clearForm() {
+
+        // 🧹 Clear table
+        ordersList.clear();
+        tblOrderCart.refresh();
+
+        // 🧹 Clear totals
+        netTotal = 0;
+        serviceCharge = 0.0;
+        lblNetTotal.setText("0.00");
+        lblBalance.setText("0.00");
+
+        // 🧹 Clear inputs
+        txtQty.clear();
+        txtServiceCharge.clear();
+        txtPaidAmount.clear();
+        txtBarcode.clear();
+
+        // 🧹 Reset material selection
+        cmbMaterialCode.getSelectionModel().clearSelection();
+        lblDescription.setText("");
+        lblUnitPrice.setText("");
+        lblQtyOnHand.setText("");
+
+        // 🧹 Reset payment
+        cmbPaymentMethod.getSelectionModel().clearSelection();
+        chequePane.setVisible(false);
+
+        // 🧹 Clear cheque fields
+        txtChequeNo.clear();
+        txtBank.clear();
+        txtBranch.clear();
+        txtChequeDate.clear();
+        txtCustomerName.clear();
+        txtCustomerPhone.clear();
+
+        // 🧹 Focus back to barcode (POS style)
+        Platform.runLater(() -> txtBarcode.requestFocus());
+    }
+
+    private void loadMaterialDescriptions() {
+        ObservableList<String> descList = FXCollections.observableArrayList();
+
+        try {
+            List<MaterialDetailsDTO> list = materialDetailBO.loadAll();
+
+            for (MaterialDetailsDTO dto : list) {
+                descList.add(dto.getDescription());
+                materialMap.put(dto.getDescription(), dto);
+            }
+
+            cmbMaterialDesc.setItems(descList);
+            enableDescriptionFilter();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void enableDescriptionFilter() {
+        cmbMaterialDesc.getEditor().textProperty().addListener((obs, oldText, newText) -> {
+
+            if (newText == null) return;
+
+            List<String> filtered = materialMap.keySet().stream()
+                    .filter(desc -> desc.toLowerCase().contains(newText.toLowerCase()))
+                    .collect(Collectors.toList());
+
+            cmbMaterialDesc.setItems(FXCollections.observableArrayList(filtered));
+            cmbMaterialDesc.show();
+        });
+    }
+    @FXML
+    void cmbMaterialDescOnAction(ActionEvent event) {
+
+        String desc = cmbMaterialDesc.getValue();
+        if (desc == null) return;
+
+        MaterialDetailsDTO dto = materialMap.get(desc);
+        if (dto == null) return;
+
+        // 🔥 Auto load everything
+        cmbMaterialCode.setValue(dto.getCode());
+        lblDescription.setText(dto.getDescription());
+        lblUnitPrice.setText(String.valueOf(dto.getUnitPrice()));
+        lblQtyOnHand.setText(String.valueOf(dto.getQtyOnHand()));
+
+        txtQty.requestFocus();
+    }
+    private void setupArrowNavigation(Control current, Control next, Control previous) {
+
+        current.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+
+            switch (event.getCode()) {
+
+                case ENTER:
+                case DOWN:
+                    if (next != null) {
+                        next.requestFocus();
+                        event.consume();
+                    }
+                    break;
+
+                case UP:
+                    if (previous != null) {
+                        previous.requestFocus();
+                        event.consume();
+                    }
+                    break;
+            }
+        });
+    }
+
 
 }
