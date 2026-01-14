@@ -793,6 +793,14 @@ public class OrdersFormController {
 
             if (newText == null) return;
 
+            // 🔥 If empty → reload all descriptions
+            if (newText.trim().isEmpty()) {
+                cmbMaterialDesc.setItems(
+                        FXCollections.observableArrayList(materialMap.keySet())
+                );
+                return;
+            }
+
             List<String> filtered = materialMap.keySet().stream()
                     .filter(desc -> desc.toLowerCase().contains(newText.toLowerCase()))
                     .collect(Collectors.toList());
@@ -801,6 +809,7 @@ public class OrdersFormController {
             cmbMaterialDesc.show();
         });
     }
+
     @FXML
     void cmbMaterialDescOnAction(ActionEvent event) {
 
