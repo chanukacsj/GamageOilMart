@@ -1,6 +1,7 @@
 package lk.ijse.AutoCareCenter.controller;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.stage.Stage;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
@@ -126,7 +127,7 @@ public class OrdersFormController {
     private JFXTextField txtBank;
 
     @FXML
-    private AnchorPane pane;
+    private AnchorPane root;
 
     @FXML
     private TableView<OrdersTm> tblOrderCart;
@@ -165,6 +166,7 @@ public class OrdersFormController {
 //        txtBarcode.setOnAction(e -> {
 //            handleBarcodeScan();
 //        });
+
         Platform.runLater(() -> txtBarcode.requestFocus());
         txtServiceCharge.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.matches("\\d*(\\.\\d*)?")) {
@@ -250,32 +252,62 @@ public class OrdersFormController {
         return "O1";
     }
 
-
     @FXML
     void btnPlaceCartOnAction(ActionEvent event) {
+
         String code = cmbMaterialCode.getValue();
         String description = lblDescription.getText();
-        int qty = Integer.parseInt(txtQty.getText());
-        double unitPrice = Double.parseDouble(lblUnitPrice.getText());
-        double totals = (qty * unitPrice);
-        double total = totals;
-        JFXButton btnRemove = new JFXButton("remove");
-        btnRemove.setCursor(Cursor.HAND);
+        String qtyText = txtQty.getText();
+        String unitPriceText = lblUnitPrice.getText();
+        int qtyOnHand = Integer.parseInt(lblQtyOnHand.getText());
 
-        if (cmbMaterialCode.getValue() == null) {
+        if (code == null || code.isEmpty()) {
             new Alert(Alert.AlertType.WARNING, "Select an item first!").show();
             cmbMaterialCode.requestFocus();
             return;
         }
-
-        if (txtQty.getText().isEmpty()) {
+        if (description == null || description.isEmpty()) {
+            new Alert(Alert.AlertType.WARNING, "Description is missing!").show();
+            cmbMaterialCode.requestFocus();
+            return;
+        }
+        if (qtyText == null || qtyText.isEmpty()) {
             new Alert(Alert.AlertType.WARNING, "Enter quantity!").show();
             txtQty.requestFocus();
             return;
         }
+        if (!qtyText.matches("\\d+")) {
+            new Alert(Alert.AlertType.WARNING, "Quantity must be a number!").show();
+            txtQty.requestFocus();
+            return;
+        }
+        if (unitPriceText == null || unitPriceText.isEmpty()) {
+            new Alert(Alert.AlertType.WARNING, "Unit price is missing!").show();
+            cmbMaterialCode.requestFocus();
+            return;
+        }
+
+        int qty = Integer.parseInt(qtyText);
+        double unitPrice = Double.parseDouble(unitPriceText);
+
+        if (qtyOnHand <= 0) {
+            new Alert(Alert.AlertType.WARNING, "Item is out of stock!").show();
+            txtQty.clear();
+            return;
+        }
+
+        if (qty > qtyOnHand) {
+            new Alert(Alert.AlertType.WARNING, "Quantity exceeds available stock!").show();
+            txtQty.clear();
+            return;
+        }
+
+        double total = qty * unitPrice;
+
+        JFXButton btnRemove = new JFXButton("remove");
+        btnRemove.setCursor(Cursor.HAND);
 
         btnRemove.setOnAction(e -> {
-
             ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
             ButtonType no = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
 
@@ -286,7 +318,6 @@ public class OrdersFormController {
             ).showAndWait();
 
             if (result.orElse(no) == yes) {
-
                 OrdersTm tm = tblOrderCart.getItems()
                         .stream()
                         .filter(item -> item.getBtnRemove() == btnRemove)
@@ -301,14 +332,16 @@ public class OrdersFormController {
             }
         });
 
-
         for (int i = 0; i < tblOrderCart.getItems().size(); i++) {
             if (code.equals(colItemCode.getCellData(i))) {
-                qty += ordersList.get(i).getQty();
-                total = unitPrice * qty ;
-
-                ordersList.get(i).setQty(qty);
-                ordersList.get(i).setTotal(total);
+                int newQty = ordersList.get(i).getQty() + qty;
+                if (newQty > qtyOnHand) {
+                    new Alert(Alert.AlertType.WARNING, "Cannot add more than available stock!").show();
+                    txtQty.clear();
+                    return;
+                }
+                ordersList.get(i).setQty(newQty);
+                ordersList.get(i).setTotal(newQty * unitPrice);
 
                 tblOrderCart.refresh();
                 calculateNetTotal();
@@ -316,14 +349,14 @@ public class OrdersFormController {
                 return;
             }
         }
-        OrdersTm ordersTm = new OrdersTm(code, description, qty, unitPrice, total, btnRemove);
-        System.out.println("total = " + total);
-        ordersList.add(ordersTm);
 
+        OrdersTm ordersTm = new OrdersTm(code, description, qty, unitPrice, total, btnRemove);
+        ordersList.add(ordersTm);
         tblOrderCart.setItems(ordersList);
         txtQty.setText("");
         calculateNetTotal();
     }
+
 
 
     private void calculateNetTotal() {
@@ -346,7 +379,6 @@ public class OrdersFormController {
         double total = netTotal + serviceCharge;
         lblNetTotal.setText(String.format("%.2f", total));
     }
-
 
 
     @FXML
@@ -399,7 +431,7 @@ public class OrdersFormController {
             }
             new Alert(Alert.AlertType.INFORMATION, "Order placed successfully!").show();
             loadNextOrderId();
-           // tblOrderCart.getItems().clear();
+            // tblOrderCart.getItems().clear();
             clearForm();
         } else {
             new Alert(Alert.AlertType.WARNING, "Order not placed!").show();
@@ -492,7 +524,7 @@ public class OrdersFormController {
         Map<String, Object> data = new HashMap<>();
         data.put("orderId", lblOrderId.getText());
         data.put("nettotal", lblNetTotal.getText());
-        data.put("ServiceCharge",txtServiceCharge.getText());
+        data.put("ServiceCharge", txtServiceCharge.getText());
 
         JasperPrint jasperPrint =
                 JasperFillManager.fillReport(
@@ -502,6 +534,7 @@ public class OrdersFormController {
 
         JasperViewer.viewReport(jasperPrint, false);
     }
+
     private void printBill() {
         try {
             JasperDesign jasperDesign =
@@ -572,6 +605,7 @@ public class OrdersFormController {
 
     public void ServiceChargeOnAction(ActionEvent actionEvent) {
     }
+
     private void handleBarcodeScan() {
         String barcode = txtBarcode.getText().trim();
 
@@ -682,6 +716,7 @@ public class OrdersFormController {
             new Alert(Alert.AlertType.ERROR, "Cheque failed").show();
         }
     }
+
     @FXML
     private void btnChequeCloseOnAction(ActionEvent event) {
         // Hide the cheque pane
@@ -695,6 +730,7 @@ public class OrdersFormController {
         txtCustomerName.clear();
         txtCustomerPhone.clear();
     }
+
     @FXML
     void txtPaidAmountOnKeyReleased(KeyEvent event) {
 
@@ -716,6 +752,7 @@ public class OrdersFormController {
             lblBalance.setText("0.00");
         }
     }
+
     @FXML
     void cmbPaymentMethodOnAction(ActionEvent event) {
 
@@ -730,6 +767,7 @@ public class OrdersFormController {
             txtPaidAmount.setDisable(false); // cash → balance needed
         }
     }
+
     private void clearForm() {
 
         // 🧹 Clear table
@@ -788,23 +826,32 @@ public class OrdersFormController {
             e.printStackTrace();
         }
     }
+
+    //    private void enableDescriptionFilter() {
+//        cmbMaterialDesc.getEditor().textProperty().addListener((obs, oldText, newText) -> {
+//
+//            if (newText == null) return;
+//
+//            // 🔥 If empty → reload all descriptions
+//            if (newText.trim().isEmpty()) {
+//                cmbMaterialDesc.setItems(
+//                        FXCollections.observableArrayList(materialMap.keySet())
+//                );
+//                return;
+//            }
+//
+//            List<String> filtered = materialMap.keySet().stream()
+//                    .filter(desc -> desc.toLowerCase().contains(newText.toLowerCase()))
+//                    .collect(Collectors.toList());
+//
+//            cmbMaterialDesc.setItems(FXCollections.observableArrayList(filtered));
+//            cmbMaterialDesc.show();
+//        });
+//    }
     private void enableDescriptionFilter() {
         cmbMaterialDesc.getEditor().textProperty().addListener((obs, oldText, newText) -> {
-
             if (newText == null) return;
-
-            // 🔥 If empty → reload all descriptions
-            if (newText.trim().isEmpty()) {
-                cmbMaterialDesc.setItems(
-                        FXCollections.observableArrayList(materialMap.keySet())
-                );
-                return;
-            }
-
-            List<String> filtered = materialMap.keySet().stream()
-                    .filter(desc -> desc.toLowerCase().contains(newText.toLowerCase()))
-                    .collect(Collectors.toList());
-
+            List<String> filtered = materialMap.keySet().stream().filter(desc -> desc.toLowerCase().contains(newText.toLowerCase())).collect(Collectors.toList());
             cmbMaterialDesc.setItems(FXCollections.observableArrayList(filtered));
             cmbMaterialDesc.show();
         });
@@ -827,6 +874,7 @@ public class OrdersFormController {
 
         txtQty.requestFocus();
     }
+
     private void setupArrowNavigation(Control current, Control next, Control previous) {
 
         current.addEventFilter(KeyEvent.KEY_PRESSED, event -> {

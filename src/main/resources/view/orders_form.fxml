@@ -35,7 +35,7 @@
       <!-- ORDER DETAILS BLOCK -->
       <Label layoutX="30" layoutY="265" style="-fx-font-weight: bold;" text="Order ID:" />
       <Label layoutX="31.0" layoutY="297.0" style="-fx-font-weight: bold;" text="Scan Barcode:" />
-   
+
       <JFXTextField fx:id="txtBarcode" layoutX="115.0" layoutY="293.0" onAction="#txtBarcodeOnAction" prefWidth="180" promptText="Scan here &amp; press Enter" />
       <Label fx:id="lblOrderId" layoutX="140" layoutY="265" style="-fx-font-size: 15px; -fx-text-fill: #2C3E50;" />
 
@@ -80,15 +80,15 @@
 
       <JFXButton fx:id="btnPrint" layoutX="524.0" layoutY="551.0" onAction="#btnPrintBillOnAction" prefWidth="160" styleClass="secondary-btn" text="Print Bill" />
       <JFXButton fx:id="btnViewPayments" layoutX="349.0" layoutY="551.0" onAction="#openLoanPayment" prefWidth="160" styleClass="secondary-btn" text="View Payments" />
-   
+
       <!-- Paid Amount -->
       <Label layoutX="31.0" layoutY="505.0" style="-fx-font-weight: bold;" text="Paid Amount:" />
-   
+
       <JFXTextField fx:id="txtPaidAmount" layoutX="141.0" layoutY="500.0" onKeyReleased="#txtPaidAmountOnKeyReleased" prefWidth="150" promptText="Enter paid amount" />
-   
+
       <!-- Balance -->
       <Label layoutX="361.0" layoutY="499.0" style="-fx-font-weight: bold; -fx-font-size: 18px;" text="Balance:" />
-   
+
       <Label fx:id="lblBalance" layoutX="471.0" layoutY="497.0" style="-fx-font-size: 22px;               -fx-text-fill: #27ae60;               -fx-font-weight: bold;" text="0.00" />
 
    </AnchorPane>
