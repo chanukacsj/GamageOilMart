@@ -9,6 +9,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -35,6 +37,9 @@ import java.util.List;
 public class DashboardFormController {
     @FXML
     private TableColumn<?, ?> colDescription;
+
+    @FXML
+    private BarChart<String, Number> incomeChart;
 
     @FXML
     private TableColumn<?, ?> colEmployeeId;
@@ -84,6 +89,7 @@ public class DashboardFormController {
     public void initialize() {
        // setCellValueFactory();
       //  loadAllRepair();
+        loadMonthlyIncome();
         initClock();
 //        try {
 //            customerCount = getCustomerCount();
@@ -274,5 +280,111 @@ public class DashboardFormController {
 
     public void btnLoanOnAction(ActionEvent actionEvent) throws IOException {
         setUi("LoanPaymentForm.fxml");
+    }
+    private void loadMonthlyIncome() {
+        incomeChart.getData().clear();
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Monthly Income");
+
+        String sql =
+                "SELECT strftime('%Y-%m', date) AS month, SUM(total) AS income " +
+                        "FROM payment GROUP BY month ORDER BY month";
+
+        try {
+            ResultSet rst = DbConnection.getInstance()
+                    .getConnection()
+                    .prepareStatement(sql)
+                    .executeQuery();
+
+            while (rst.next()) {
+                String month = rst.getString("month");
+                double income = rst.getDouble("income");
+
+                series.getData().add(
+                        new XYChart.Data<>(month, income)
+                );
+            }
+
+            incomeChart.getData().add(series);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void daily() {
+        incomeChart.getData().clear();
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Monthly Income");
+
+        String sql =
+                "SELECT strftime('%Y-%m-%d', date) AS month, SUM(total) AS income " +
+                        "FROM payment GROUP BY month ORDER BY month";
+
+        try {
+            ResultSet rst = DbConnection.getInstance()
+                    .getConnection()
+                    .prepareStatement(sql)
+                    .executeQuery();
+
+            while (rst.next()) {
+                String month = rst.getString("month");
+                double income = rst.getDouble("income");
+
+                series.getData().add(
+                        new XYChart.Data<>(month, income)
+                );
+            }
+
+            incomeChart.getData().add(series);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void yearly() {
+        incomeChart.getData().clear();
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Monthly Income");
+
+        String sql =
+                "SELECT strftime('%Y', date) AS month, SUM(total) AS income " +
+                        "FROM payment GROUP BY month ORDER BY month";
+
+        try {
+            ResultSet rst = DbConnection.getInstance()
+                    .getConnection()
+                    .prepareStatement(sql)
+                    .executeQuery();
+
+            while (rst.next()) {
+                String month = rst.getString("month");
+                double income = rst.getDouble("income");
+
+                series.getData().add(
+                        new XYChart.Data<>(month, income)
+                );
+            }
+
+            incomeChart.getData().add(series);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    void loadMonthly() {
+        loadMonthlyIncome();
+    }
+
+
+    public void loadDaily(ActionEvent actionEvent) {
+        daily();
+    }
+
+    public void loadYearly(ActionEvent actionEvent) {
+        yearly();
     }
 }
