@@ -12,13 +12,19 @@ public class DbConnection {
     private DbConnection() throws SQLException {
 
         // ✅ Ensure database folder exists
-        File dbDir = new File("C:/Users/CHANUKA/Documents/intellig/GamageOilMart/database");
+        // 📍 EXE location
+        String basePath = System.getProperty("user.dir");
+
+// 📁 database folder (same place as exe)
+        File dbDir = new File(basePath + File.separator + "database");
         if (!dbDir.exists()) dbDir.mkdirs();
 
-        // ✅ Connect to SQLite DB
-        String url = "jdbc:sqlite:C:/Users/CHANUKA/Documents/intellig/GamageOilMart/database/OilMart.db";
+// 🗄 SQLite DB path
+        String dbPath = dbDir.getAbsolutePath() + File.separator + "OilMart.db";
+        String url = "jdbc:sqlite:" + dbPath;
+
         connection = DriverManager.getConnection(url);
-        System.out.println("✅ Connected to SQLite database successfully!");
+        System.out.println("✅ Connected to SQLite: " + dbPath);
 
         // ✅ Auto-create users table
         String usersTable = "CREATE TABLE IF NOT EXISTS users (" +
