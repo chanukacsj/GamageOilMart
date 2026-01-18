@@ -3,7 +3,6 @@ package lk.ijse.AutoCareCenter.bo.custom;
 import lk.ijse.AutoCareCenter.bo.SuperBO;
 import lk.ijse.AutoCareCenter.dao.SqlUtil;
 import lk.ijse.AutoCareCenter.entity.Supplier;
-import lk.ijse.AutoCareCenter.model.SalaryDTO;
 import lk.ijse.AutoCareCenter.model.SupplierDTO;
 
 import java.sql.ResultSet;

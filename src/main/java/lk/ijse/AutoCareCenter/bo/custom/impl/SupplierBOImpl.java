@@ -3,9 +3,7 @@ package lk.ijse.AutoCareCenter.bo.custom.impl;
 import lk.ijse.AutoCareCenter.bo.custom.SupplierBO;
 import lk.ijse.AutoCareCenter.dao.DAOFactory;
 import lk.ijse.AutoCareCenter.dao.custom.SupplierDAO;
-import lk.ijse.AutoCareCenter.entity.Booking;
 import lk.ijse.AutoCareCenter.entity.Supplier;
-import lk.ijse.AutoCareCenter.model.BookingDTO;
 import lk.ijse.AutoCareCenter.model.SupplierDTO;
 
 import java.sql.SQLException;

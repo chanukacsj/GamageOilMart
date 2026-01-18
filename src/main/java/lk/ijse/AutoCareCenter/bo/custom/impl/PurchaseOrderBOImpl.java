@@ -27,8 +27,6 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
 
     MaterialDAO materialDAO = (MaterialDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.MATERIAL);
 
-    BookingDAO bookingDAO = (BookingDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.BOOKING);
-
     PaymentDAO paymentDAO = (PaymentDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.PAYMENT);
     String generatedPaymentId = null;
 
@@ -167,7 +165,7 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
 
     @Override
     public List<String> getBookingIds() throws SQLException, ClassNotFoundException {
-        return bookingDAO.getIds();
+        return null;
     }
 
     @Override

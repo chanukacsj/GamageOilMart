@@ -14,17 +14,13 @@ public class DAOFactory {
     }
 
     public enum DAOTypes {
-        EMPLOYEE, CUSTOMER, VEHICLE, SUPPLIER, SALARY, REPAIR, MATERIAL, ORDER, ORDERDETAILS, MATERIALDETAIL, BOOKING, LOAN, LOANPAYMENT, PAYMENT, CHEQUE
+         SUPPLIER, MATERIAL, ORDER, ORDERDETAILS, MATERIALDETAIL, LOAN, LOANPAYMENT, PAYMENT, CHEQUE
     }
 
     public SuperDAO getDAO(DAOTypes daoTypes) {
         switch (daoTypes) {
-            case VEHICLE:
-                return new VehicleDAOImpl();
             case SUPPLIER:
                 return new SupplierDAOImpl();
-            case SALARY:
-                return new SalaryDAOImpl();
             case MATERIAL:
                 return new MaterialDAOImpl();
             case MATERIALDETAIL:
@@ -33,10 +29,6 @@ public class DAOFactory {
                 return new OrderDAOImpl();
             case ORDERDETAILS:
                 return new OrderDetailsDAOImpl();
-            case BOOKING:
-                return new BookingDAOImpl();
-            case EMPLOYEE:
-                return new EmployeeDAOImpl();
             case PAYMENT:
                 return new PaymentDAOImpl();
             case LOAN:
