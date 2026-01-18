@@ -1,6 +1,7 @@
 package lk.ijse.AutoCareCenter.controller;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.animation.PauseTransition;
 import javafx.stage.Stage;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
@@ -19,6 +20,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import lk.ijse.AutoCareCenter.Util.Regex;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
 import lk.ijse.AutoCareCenter.bo.custom.*;
@@ -45,6 +47,9 @@ public class OrdersFormController {
 
     @FXML
     private JFXComboBox<String> cmbMaterialDesc;
+
+    @FXML
+    private JFXComboBox<String> cmbUnit;
 
     @FXML
     private JFXTextField txtServiceCharge;
@@ -213,6 +218,12 @@ public class OrdersFormController {
         });
 
 
+        cmbUnit.setItems(FXCollections.observableArrayList("ML", "L"));
+        cmbUnit.setValue("ML"); // default
+
+        cmbUnit.setDisable(true); // default disable
+        cmbMaterialDesc.setEditable(true);
+
     }
 
 
@@ -259,7 +270,20 @@ public class OrdersFormController {
         String description = lblDescription.getText();
         String qtyText = txtQty.getText();
         String unitPriceText = lblUnitPrice.getText();
-        int qtyOnHand = Integer.parseInt(lblQtyOnHand.getText());
+        //   int qtyOnHand = Integer.parseInt(lblQtyOnHand.getText());
+        double inputQty = Double.parseDouble(qtyText);
+        double qtyOnHand = Double.parseDouble(lblQtyOnHand.getText());
+
+        String unit = cmbUnit.isDisabled() ? "PCS" : cmbUnit.getValue();
+
+        double finalQty = convertToBaseUnit(inputQty, unit);
+
+        if (finalQty > qtyOnHand) {
+            new Alert(Alert.AlertType.WARNING,
+                    "Quantity exceeds available stock!").show();
+            txtQty.clear();
+            return;
+        }
 
         if (code == null || code.isEmpty()) {
             new Alert(Alert.AlertType.WARNING, "Select an item first!").show();
@@ -301,8 +325,9 @@ public class OrdersFormController {
             txtQty.clear();
             return;
         }
+        double total = finalQty * unitPrice;
 
-        double total = qty * unitPrice;
+        //double total = qty * unitPrice;
 
         JFXButton btnRemove = new JFXButton("remove");
         btnRemove.setCursor(Cursor.HAND);
@@ -333,30 +358,43 @@ public class OrdersFormController {
         });
 
         for (int i = 0; i < tblOrderCart.getItems().size(); i++) {
+
             if (code.equals(colItemCode.getCellData(i))) {
-                int newQty = ordersList.get(i).getQty() + qty;
+
+                double existingQty = ordersList.get(i).getQty(); // base unit (ml)
+                double newQty = existingQty + finalQty;          // finalQty = converted qty
+
                 if (newQty > qtyOnHand) {
-                    new Alert(Alert.AlertType.WARNING, "Cannot add more than available stock!").show();
-                    txtQty.clear();
+                    new Alert(Alert.AlertType.WARNING,
+                            "Cannot add more than available stock!").show();
                     return;
                 }
-                ordersList.get(i).setQty(newQty);
+
+                ordersList.get(i).setQty((int) newQty);
                 ordersList.get(i).setTotal(newQty * unitPrice);
 
                 tblOrderCart.refresh();
                 calculateNetTotal();
-                txtQty.setText("");
+                txtQty.clear();
                 return;
             }
         }
 
-        OrdersTm ordersTm = new OrdersTm(code, description, qty, unitPrice, total, btnRemove);
+
+        OrdersTm ordersTm = new OrdersTm(
+                code,
+                description + " (" + inputQty + " " + unit + ")",
+                (int) finalQty,
+                unitPrice,
+                total,
+                btnRemove
+        );
+
         ordersList.add(ordersTm);
         tblOrderCart.setItems(ordersList);
         txtQty.setText("");
         calculateNetTotal();
     }
-
 
 
     private void calculateNetTotal() {
@@ -432,7 +470,11 @@ public class OrdersFormController {
             new Alert(Alert.AlertType.INFORMATION, "Order placed successfully!").show();
             loadNextOrderId();
             // tblOrderCart.getItems().clear();
-            clearForm();
+            //  clearForm();
+            PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+            pause.setOnFinished(e -> refreshPage());
+            pause.play();
+
         } else {
             new Alert(Alert.AlertType.WARNING, "Order not placed!").show();
         }
@@ -445,23 +487,34 @@ public class OrdersFormController {
 
     @FXML
     void cmbmaterialOnAction(ActionEvent event) {
+
         String code = cmbMaterialCode.getValue();
-        System.out.println("code = " + code);
+
         try {
             MaterialDetails materials = purchaseOrderBO.searchByMaterialId(code);
+
             if (materials != null) {
+
                 lblDescription.setText(materials.getDescription());
                 lblUnitPrice.setText(String.valueOf(materials.getUnitPrice()));
                 lblQtyOnHand.setText(String.valueOf(materials.getQtyOnHand()));
+
+                // 🔥 OIL or NOT
+                if ("OIL".equalsIgnoreCase(materials.getCategory())) {
+                    cmbUnit.setDisable(false);
+                } else {
+                    cmbUnit.setDisable(true);
+                    cmbUnit.setValue("PCS");
+                }
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         txtQty.requestFocus();
     }
+
 
     @FXML
     void txtQtyOnAction(ActionEvent event) {
@@ -849,13 +902,31 @@ public class OrdersFormController {
 //        });
 //    }
     private void enableDescriptionFilter() {
-        cmbMaterialDesc.getEditor().textProperty().addListener((obs, oldText, newText) -> {
-            if (newText == null) return;
-            List<String> filtered = materialMap.keySet().stream().filter(desc -> desc.toLowerCase().contains(newText.toLowerCase())).collect(Collectors.toList());
+
+        TextField editor = cmbMaterialDesc.getEditor();
+
+        editor.textProperty().addListener((obs, oldText, newText) -> {
+
+            if (newText == null || newText.isEmpty()) {
+                cmbMaterialDesc.hide();
+                cmbMaterialDesc.setItems(
+                        FXCollections.observableArrayList(materialMap.keySet())
+                );
+                return;
+            }
+
+            List<String> filtered = materialMap.keySet().stream()
+                    .filter(desc -> desc.toLowerCase().contains(newText.toLowerCase()))
+                    .collect(Collectors.toList());
+
             cmbMaterialDesc.setItems(FXCollections.observableArrayList(filtered));
-            cmbMaterialDesc.show();
+
+            if (!filtered.isEmpty()) {
+                cmbMaterialDesc.show();
+            }
         });
     }
+
 
     @FXML
     void cmbMaterialDescOnAction(ActionEvent event) {
@@ -866,14 +937,17 @@ public class OrdersFormController {
         MaterialDetailsDTO dto = materialMap.get(desc);
         if (dto == null) return;
 
-        // 🔥 Auto load everything
         cmbMaterialCode.setValue(dto.getCode());
         lblDescription.setText(dto.getDescription());
         lblUnitPrice.setText(String.valueOf(dto.getUnitPrice()));
         lblQtyOnHand.setText(String.valueOf(dto.getQtyOnHand()));
 
         txtQty.requestFocus();
+
+        cmbMaterialDesc.getEditor().clear();
     }
+
+
 
     private void setupArrowNavigation(Control current, Control next, Control previous) {
 
@@ -899,5 +973,29 @@ public class OrdersFormController {
         });
     }
 
+    private double convertToBaseUnit(double qty, String unit) {
+
+        if (unit == null) return qty;
+
+        switch (unit) {
+            case "L":
+                return qty * 1000;     // 1L = 1000ml
+            default: // ML
+                return qty;
+        }
+    }
+
+    private void refreshPage() {
+        try {
+            AnchorPane pane = FXMLLoader.load(
+                    getClass().getResource("/view/orders_form.fxml")
+            );
+
+            root.getChildren().setAll(pane);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

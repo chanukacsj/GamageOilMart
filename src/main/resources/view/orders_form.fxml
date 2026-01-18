@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane fx:id="root" prefHeight="700" prefWidth="1000" stylesheets="@../css/order.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.AutoCareCenter.controller.OrdersFormController">
+<AnchorPane fx:id="root" prefHeight="700.0" prefWidth="1000" stylesheets="@../css/order.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.AutoCareCenter.controller.OrdersFormController">
 
    <!-- HEADER BAR -->
    <Rectangle fill="#1A237E" height="70" width="1020" />
@@ -17,10 +17,10 @@
    <Label layoutX="400" layoutY="15" style="-fx-font-size: 32px; -fx-text-fill: white; -fx-font-weight: bold;" text="Payment" />
 
    <!-- MAIN CARD -->
-   <AnchorPane layoutX="60" layoutY="79.0" prefHeight="612.0" prefWidth="926.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 18;                        -fx-padding: 25;                        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 25, 0, 0, 6);">
+   <AnchorPane layoutX="37.0" layoutY="90.0" prefHeight="500.0" prefWidth="926.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 18;                        -fx-padding: 25;                        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 25, 0, 0, 6);">
 
       <!-- TABLE -->
-      <TableView fx:id="tblOrderCart" layoutX="25" layoutY="25" prefHeight="220" prefWidth="850" style="-fx-background-radius: 10; -fx-border-radius: 10;">
+      <TableView fx:id="tblOrderCart" layoutX="25.0" layoutY="25.0" prefHeight="220" prefWidth="850" style="-fx-background-radius: 10; -fx-border-radius: 10;">
          <columns>
             <TableColumn fx:id="colItemCode" prefWidth="90" text="Code" />
             <TableColumn fx:id="colDescription" prefWidth="160" text="Description" />
@@ -35,6 +35,7 @@
       <!-- ORDER DETAILS BLOCK -->
       <Label layoutX="30" layoutY="265" style="-fx-font-weight: bold;" text="Order ID:" />
       <Label layoutX="31.0" layoutY="297.0" style="-fx-font-weight: bold;" text="Scan Barcode:" />
+      <JFXComboBox fx:id="cmbUnit" layoutX="750.0" layoutY="297.0" prefWidth="100" />
 
       <JFXTextField fx:id="txtBarcode" layoutX="115.0" layoutY="293.0" onAction="#txtBarcodeOnAction" prefWidth="180" promptText="Scan here &amp; press Enter" />
       <Label fx:id="lblOrderId" layoutX="140" layoutY="265" style="-fx-font-size: 15px; -fx-text-fill: #2C3E50;" />
@@ -74,12 +75,12 @@
       <Label fx:id="lblNetTotal" layoutX="123.0" layoutY="546.0" prefHeight="35.0" prefWidth="113.0" style="-fx-font-size: 24px; -fx-text-fill: #e74c3c; -fx-font-weight: bold;" />
 
       <!-- ACTION BUTTONS (right aligned) -->
-      <JFXButton fx:id="btnAdd" layoutX="705" layoutY="265" onAction="#btnPlaceCartOnAction" prefWidth="160" styleClass="primary-btn" text="Add to Cart" />
+      <JFXButton fx:id="btnAdd" layoutX="730.0" layoutY="253.0" onAction="#btnPlaceCartOnAction" prefHeight="35.0" prefWidth="114.0" styleClass="primary-btn" text="Add to Cart" />
 
       <JFXButton fx:id="btnPlaceOrder" layoutX="704.0" layoutY="551.0" onAction="#btnPlaceOrderOnAction" prefWidth="160" styleClass="success-btn" text="Place Order" />
 
       <JFXButton fx:id="btnPrint" layoutX="524.0" layoutY="551.0" onAction="#btnPrintBillOnAction" prefWidth="160" styleClass="secondary-btn" text="Print Bill" />
-      <JFXButton fx:id="btnViewPayments" layoutX="349.0" layoutY="551.0" onAction="#openLoanPayment" prefWidth="160" styleClass="secondary-btn" text="View Payments" />
+      <JFXButton fx:id="btnViewPayments" layoutX="349.0" layoutY="551.0" onAction="#openLoanPayment" prefWidth="160" styleClass="secondary-btn" text="Get Loan" />
 
       <!-- Paid Amount -->
       <Label layoutX="31.0" layoutY="505.0" style="-fx-font-weight: bold;" text="Paid Amount:" />

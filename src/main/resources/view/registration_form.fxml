@@ -1,69 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="rootNode" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.AutoCareCenter.controller.RegistrationFormController">
-   <children>
-      <ImageView fitHeight="700.0" fitWidth="1200.0" layoutX="-1.0">
-         <image>
-            <Image url="@../asserts/v915-techi-014-g.jpg" />
-         </image>
-      </ImageView>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="603.0" layoutX="155.0" layoutY="61.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="890.0" />
-      <Label layoutX="187.0" layoutY="243.0" text="Name" />
-      <Label layoutX="188.0" layoutY="412.0" text="Password" />
-      <JFXButton buttonType="RAISED" layoutX="297.0" layoutY="523.0" onAction="#btnRegisterOnAction" prefHeight="26.0" prefWidth="114.0" style="-fx-background-color: #2ecc71; -fx-background-color: blue;" text="Register" textFill="WHITE">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </JFXButton>
-      <Label layoutX="187.0" layoutY="327.0" text="Email" />
-      <Hyperlink layoutX="285.0" layoutY="481.0" onAction="#LinkOnBackButton" text="Already have an account ?" />
-      <ImageView fitHeight="83.0" fitWidth="75.0" layoutX="317.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../asserts/people.png" />
-         </image>
-      </ImageView>
-      <Text layoutX="272.0" layoutY="216.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create Your Account">
-         <font>
-            <Font size="19.0" />
-         </font>
-      </Text>
-      <ImageView fitHeight="18.0" fitWidth="21.0" layoutX="493.0" layoutY="359.0">
-         <image>
-            <Image url="@../asserts/icons8-email-50.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="18.0" fitWidth="21.0" layoutX="490.0" layoutY="274.0">
-         <image>
-            <Image url="@../asserts/icons8-user-30.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="18.0" fitWidth="21.0" layoutX="490.0" layoutY="440.0">
-         <image>
-            <Image url="@../asserts/icons8-password-24.png" />
-         </image>
-      </ImageView>
-      <JFXTextField fx:id="txtUserName" layoutX="186.0" layoutY="269.0" onKeyReleased="#userNameKey" prefHeight="26.0" prefWidth="334.0" />
-      <JFXTextField layoutX="187.0" layoutY="353.0" prefHeight="26.0" prefWidth="334.0" />
-      <JFXTextField fx:id="txtPw" layoutX="186.0" layoutY="436.0" onKeyReleased="#passwordKey" prefHeight="26.0" prefWidth="334.0" />
-      <ImageView fitHeight="474.0" fitWidth="389.0" layoutX="600.0" layoutY="131.0">
-         <image>
-            <Image url="@../asserts/register.png" />
-         </image>
-      </ImageView>
-   </children>
+<AnchorPane fx:id="rootNode" prefHeight="700" prefWidth="1200" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.AutoCareCenter.controller.RegistrationFormController">
+
+   <!-- ===== LEFT PANEL ===== -->
+   <AnchorPane prefHeight="700" prefWidth="550" style="-fx-background-color: linear-gradient(to bottom,#141e30,#243b55);">
+      <children>
+         <ImageView fitHeight="325.0" fitWidth="360.0" layoutX="95.0" layoutY="188.0">
+            <image>
+               <Image url="@../asserts/Gemini_Generated_Image_45mldj45mldj45ml-removebg-preview.png" />
+            </image>
+         </ImageView>
+      </children>
+   </AnchorPane>
+
+   <!-- ===== RIGHT PANEL ===== -->
+   <AnchorPane layoutX="550" prefHeight="700" prefWidth="650" style="-fx-background-color:#f4f6fb;">
+
+      <!-- Card -->
+      <Rectangle arcHeight="30" arcWidth="30" fill="#f4f6fb" height="381.0" layoutX="160" layoutY="140" width="380">
+         <effect>
+            <DropShadow color="#00000030" radius="20" />
+         </effect>
+      </Rectangle>
+
+      <VBox layoutX="190" layoutY="170" prefWidth="320" spacing="18">
+
+         <Label text="Create Account">
+            <font>
+               <Font size="24" />
+            </font>
+         </Label>
+
+         <Label style="-fx-text-fill:#777;" text="Fill details to register" />
+
+         <JFXTextField fx:id="txtUserName" prefHeight="45" promptText="Full Name" />
+
+         <JFXPasswordField fx:id="txtPw" prefHeight="45" promptText="Password" />
+
+         <JFXButton onAction="#btnRegisterOnAction" prefHeight="45" prefWidth="320" style="-fx-background-color:#141e30;                               -fx-text-fill:white;                               -fx-font-size:14;                               -fx-font-weight:bold;                               -fx-background-radius:20;" text="REGISTER">
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+         </JFXButton>
+
+         <Hyperlink onAction="#LinkOnBackButton" style="-fx-text-fill:#141e30;" text="Already have an account? Login" />
+
+      </VBox>
+   </AnchorPane>
+
 </AnchorPane>

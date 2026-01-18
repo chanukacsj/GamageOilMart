@@ -13,144 +13,89 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="rootNode"
-            prefWidth="1200"
-            prefHeight="720"
-            stylesheets="@../css/dashboard.css"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="lk.ijse.AutoCareCenter.controller.DashboardFormController">
+<AnchorPane fx:id="rootNode" prefHeight="700" prefWidth="1240" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.AutoCareCenter.controller.DashboardFormController">
 
    <!-- ================= LEFT SIDEBAR ================= -->
-   <Pane prefWidth="220"
-         AnchorPane.topAnchor="0"
-         AnchorPane.bottomAnchor="0"
-         styleClass="sidebar">
+   <Pane prefWidth="220" styleClass="sidebar" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">
 
       <children>
          <!-- Logo -->
-         <ImageView fitWidth="120" fitHeight="90" layoutX="50" layoutY="20">
+         <ImageView fitHeight="90" fitWidth="120" layoutX="50" layoutY="20">
             <image>
                <Image url="@../asserts/Gemini_Generated_Image_45mldj45mldj45ml-removebg-preview.png" />
             </image>
          </ImageView>
 
          <!-- Menu -->
-         <VBox layoutX="20" layoutY="140" spacing="20" prefWidth="180">
-            <JFXButton text="🏠 Home" styleClass="nav-btn" onAction="#btnHomeOnAction"/>
-            <JFXButton text="📦 Products" styleClass="nav-btn" onAction="#btnMaterialsOnAction"/>
-            <JFXButton text="🏭 Supplier" styleClass="nav-btn" onAction="#btnSupplierOnAction"/>
-            <JFXButton text="💳 Payment" styleClass="nav-btn" onAction="#btnOrdersOnAction"/>
-            <JFXButton text="📊 All Payments" styleClass="nav-btn" onAction="#btnAllPayOnAction"/>
-            <JFXButton text="💰 Loan Payments" styleClass="nav-btn" onAction="#btnLoanOnAction"/>
-            <JFXButton text="🧾 Cheques" styleClass="nav-btn" onAction="#btnAllCheque"/>
+         <VBox layoutX="20" layoutY="140" prefWidth="180" spacing="20">
+            <JFXButton onAction="#btnHomeOnAction" styleClass="nav-btn" text="🏠 Home" />
+            <JFXButton onAction="#btnMaterialsOnAction" styleClass="nav-btn" text="📦 Products" />
+            <JFXButton onAction="#btnSupplierOnAction" styleClass="nav-btn" text="🏭 Supplier" />
+            <JFXButton onAction="#btnOrdersOnAction" styleClass="nav-btn" text="💳 Payment" />
+            <JFXButton onAction="#btnAllPayOnAction" styleClass="nav-btn" text="📊 All Payments" />
+            <JFXButton onAction="#btnLoanOnAction" styleClass="nav-btn" text="💰 Loan Payments" />
+            <JFXButton onAction="#btnAllCheque" styleClass="nav-btn" text="🧾 Cheques" />
          </VBox>
 
          <!-- Logout -->
-         <JFXButton text="🚪 Logout"
-                    layoutX="50"
-                    layoutY="660"
-                    prefWidth="120"
-                    styleClass="logout-btn"/>
+         <JFXButton layoutX="50.0" layoutY="634.0" onAction="#exit" prefWidth="120" styleClass="logout-btn" text="🚪 Logout" />
       </children>
    </Pane>
 
    <!-- ================= MAIN CONTENT ================= -->
-   <AnchorPane AnchorPane.leftAnchor="220"
-               fx:id="dashPane"
-               AnchorPane.rightAnchor="0"
-               AnchorPane.topAnchor="0"
-               AnchorPane.bottomAnchor="0"
-               styleClass="main-content">
+   <AnchorPane fx:id="dashPane" styleClass="main-content" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="220" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 
       <!-- TOP BAR -->
-      <Pane prefHeight="70"
-            AnchorPane.topAnchor="0"
-            AnchorPane.leftAnchor="0"
-            AnchorPane.rightAnchor="0"
-            styleClass="topbar">
+      <Pane prefHeight="70" styleClass="topbar" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 
          <children>
-            <Text text="Gamage Oil Mart - Admin"
-                  layoutX="30"
-                  layoutY="42"
-                  styleClass="topbar-title"/>
+            <Text layoutX="30" layoutY="42" styleClass="topbar-title" text="Gamage Oil Mart - Admin" />
 
-            <Label fx:id="lblTime"
-                   layoutX="820"
-                   layoutY="25"
-                   styleClass="topbar-time"/>
+            <Label fx:id="lblTime" layoutX="820" layoutY="25" styleClass="topbar-time" />
 
-            <ImageView fitWidth="40" fitHeight="40" layoutX="920" layoutY="15">
+            <ImageView fitHeight="40" fitWidth="40" layoutX="920" layoutY="15">
 
             </ImageView>
          </children>
       </Pane>
 
       <!-- CONTENT AREA -->
-      <AnchorPane AnchorPane.topAnchor="70"
-                  AnchorPane.bottomAnchor="0"
-                  AnchorPane.leftAnchor="0"
-                  AnchorPane.rightAnchor="0"
-                  styleClass="content-background">
+      <AnchorPane styleClass="content-background" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="70">
 
          <!-- Welcome -->
-         <Label text="Dashboard Overview"
-                layoutX="40"
-                layoutY="30"
-                styleClass="welcome-text"/>
+         <Label layoutX="40" layoutY="30" styleClass="welcome-text" text="Dashboard Overview" />
 
          <!-- ===== SUMMARY CARDS ===== -->
-         <Rectangle layoutX="40" layoutY="80" width="200" height="110" arcWidth="15" arcHeight="15" styleClass="card"/>
-         <Label text="Today Income" layoutX="60" layoutY="100" styleClass="card-title"/>
-         <Label fx:id="lblTodayIncome" text="Rs. 0.00" layoutX="60" layoutY="140" styleClass="card-value"/>
+         <Rectangle arcHeight="15" arcWidth="15" height="110" layoutX="40" layoutY="80" styleClass="card" width="200" />
+         <Label layoutX="60" layoutY="100" styleClass="card-title" text="Today Income" />
+         <Label fx:id="lblTodayIncome" layoutX="60" layoutY="140" styleClass="card-value" text="Rs. 0.00" />
 
-         <Rectangle layoutX="260" layoutY="80" width="200" height="110" arcWidth="15" arcHeight="15" styleClass="card"/>
-         <Label text="Monthly Income" layoutX="280" layoutY="100" styleClass="card-title"/>
-         <Label fx:id="lblMonthlyIncome" text="Rs. 0.00" layoutX="280" layoutY="140" styleClass="card-value"/>
+         <Rectangle arcHeight="15" arcWidth="15" height="110" layoutX="260" layoutY="80" styleClass="card" width="200" />
+         <Label layoutX="280" layoutY="100" styleClass="card-title" text="Monthly Income" />
+         <Label fx:id="lblMonthlyIncome" layoutX="280" layoutY="140" styleClass="card-value" text="Rs. 0.00" />
 
-         <Rectangle layoutX="480" layoutY="80" width="200" height="110" arcWidth="15" arcHeight="15" styleClass="card"/>
-         <Label text="Yearly Income" layoutX="500" layoutY="100" styleClass="card-title"/>
-         <Label fx:id="lblYearlyIncome" text="Rs. 0.00" layoutX="500" layoutY="140" styleClass="card-value"/>
+         <Rectangle arcHeight="15" arcWidth="15" height="110" layoutX="480" layoutY="80" styleClass="card" width="200" />
+         <Label layoutX="500" layoutY="100" styleClass="card-title" text="Yearly Income" />
+         <Label fx:id="lblYearlyIncome" layoutX="500" layoutY="140" styleClass="card-value" text="Rs. 0.00" />
 
          <!-- ===== CHART ===== -->
-         <BarChart fx:id="incomeChart"
-                   layoutX="40"
-                   layoutY="230"
-                   prefWidth="700"
-                   prefHeight="350"
-                   title="Income Summary">
+         <BarChart fx:id="incomeChart" layoutX="40" layoutY="230" prefHeight="350" prefWidth="700" title="Income Summary">
 
             <xAxis>
-               <CategoryAxis label="Period"/>
+               <CategoryAxis label="Period" />
             </xAxis>
 
             <yAxis>
-               <NumberAxis label="Income (Rs)"/>
+               <NumberAxis label="Income (Rs)" />
             </yAxis>
          </BarChart>
 
          <!-- CHART BUTTONS -->
-         <JFXButton text="Daily"
-                    layoutX="760"
-                    layoutY="260"
-                    prefWidth="140"
-                    styleClass="secondary-btn"
-                    onAction="#loadDaily"/>
+         <JFXButton layoutX="760" layoutY="260" onAction="#loadDaily" prefWidth="140" styleClass="secondary-btn" text="Daily" />
 
-         <JFXButton text="Monthly"
-                    layoutX="760"
-                    layoutY="320"
-                    prefWidth="140"
-                    styleClass="secondary-btn"
-                    onAction="#loadMonthly"/>
+         <JFXButton layoutX="760" layoutY="320" onAction="#loadMonthly" prefWidth="140" styleClass="secondary-btn" text="Monthly" />
 
-         <JFXButton text="Yearly"
-                    layoutX="760"
-                    layoutY="380"
-                    prefWidth="140"
-                    styleClass="secondary-btn"
-                    onAction="#loadYearly"/>
+         <JFXButton layoutX="760" layoutY="380" onAction="#loadYearly" prefWidth="140" styleClass="secondary-btn" text="Yearly" />
 
       </AnchorPane>
    </AnchorPane>

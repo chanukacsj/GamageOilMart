@@ -1,0 +1,8 @@
+.jfx-text-field, .jfx-password-field {
+    -fx-background-color: #f4f6fb;
+    -fx-background-radius: 20;
+    -fx-padding: 0 15 0 15;
+    -jfx-focus-color: #141e30;
+    -jfx-unfocus-color: #b0b0b0;
+    -fx-font-size: 13px;
+}
