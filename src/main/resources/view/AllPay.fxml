@@ -8,8 +8,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 
@@ -17,11 +15,6 @@
 
    <!-- Header -->
    <Rectangle fill="#1a237e" height="60.0" width="1020.0" />
-   <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="960.0" layoutY="15.0">
-      <image>
-         <Image url="@../asserts/people.png" />
-      </image>
-   </ImageView>
 
    <!-- Form Background -->
    <Rectangle arcHeight="15.0" arcWidth="15.0" fill="white" height="150.0" layoutX="60.0" layoutY="70.0" opacity="0.12" />
@@ -52,17 +45,18 @@
    <Label fx:id="lblYearlyIncome" layoutX="152.0" layoutY="662.0" text="0.00" />
 
    <JFXComboBox fx:id="cmbDateFilter" layoutX="809.0" layoutY="147.0" onAction="#cmbDateFilterOnAction" prefWidth="150" unFocusColor="WHITE" />
-   <TableView fx:id="tblPayments" layoutX="42.0" layoutY="198.0" prefHeight="437.0" prefWidth="934.0" style="-fx-background-radius: 10; -fx-border-radius: 10;">
+   <TableView fx:id="tblPayments" layoutX="44.0" layoutY="198.0" prefHeight="438.0" prefWidth="932.0" style="-fx-background-radius: 10; -fx-border-radius: 10;">
       <columns>
          <TableColumn fx:id="ColId" prefWidth="90" text="ID" />
          <TableColumn fx:id="ColDescription" prefWidth="160" text="Description" />
          <TableColumn fx:id="colQty" prefWidth="64.0" text="Qty" />
          <TableColumn fx:id="colUnitPrice" prefWidth="109.5999755859375" text="Unit Price" />
          <TableColumn fx:id="colCharge" prefWidth="99.19998168945312" text="Charge" />
-         <TableColumn fx:id="colTotal" prefWidth="88.0" text="Total" />
-         <TableColumn fx:id="colCode" prefWidth="80.79998779296875" text="Code" />
-         <TableColumn fx:id="ColOrderId" prefWidth="76.0" text="OrderID" />
-         <TableColumn fx:id="ColDate" prefWidth="164.800048828125" text="Date" />
+         <TableColumn fx:id="ColDiscount" prefWidth="88.0" text="Discount" />
+         <TableColumn fx:id="colTotal" prefWidth="75.20001220703125" text="Total" />
+         <TableColumn fx:id="colCode" prefWidth="68.79998779296875" text="Code" />
+         <TableColumn fx:id="ColOrderId" minWidth="0.0" prefWidth="93.5999755859375" text="Order ID" />
+         <TableColumn fx:id="ColDate" text="Date" />
       </columns>
    </TableView>
    <Label layoutX="42.0" layoutY="660.0" styleClass="form-label" text="Yearly Income =" />

@@ -15,4 +15,5 @@ public class OrderDetails {
     private double unitPrice;
     private double service_charge;
     private double Total;
+    private double discount;
 }

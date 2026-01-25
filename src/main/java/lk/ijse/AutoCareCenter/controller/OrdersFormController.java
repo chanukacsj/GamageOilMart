@@ -64,6 +64,12 @@ public class OrdersFormController {
     private JFXTextField txtPaidAmount;
 
     @FXML
+    private JFXTextField txtDiscount;
+
+    @FXML
+    private Label lblDiscountAmount;
+
+    @FXML
     private Label lblBalance;
 
     @FXML
@@ -145,6 +151,8 @@ public class OrdersFormController {
     PurchaseOrderBO purchaseOrderBO = (PurchaseOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PO);
     ChequeBO chequeBO = (ChequeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CHEQUE);
     double serviceCharge = 0.0;
+    double discountPercent = 0;
+
     private Map<String, MaterialDetailsDTO> materialMap = new HashMap<>();
 
 
@@ -187,35 +195,35 @@ public class OrdersFormController {
             setupArrowNavigation(txtPaidAmount, btnPlaceOrder, txtServiceCharge);
         });
 
-        txtQty.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                btnPlaceCartOnAction(new ActionEvent());
-                txtBarcode.requestFocus();
-                event.consume();
-            }
-        });
+//        txtQty.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+//            if (event.getCode() == KeyCode.ENTER) {
+//                btnPlaceCartOnAction(new ActionEvent());
+//                txtBarcode.requestFocus();
+//                event.consume();
+//            }
+//        });
 
 
-        tblOrderCart.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-
-            if (event.getCode() == KeyCode.DELETE) {
-                OrdersTm selected = tblOrderCart.getSelectionModel().getSelectedItem();
-                if (selected != null) {
-                    ordersList.remove(selected);
-                    calculateNetTotal();
-                }
-            }
-
-            if (event.getCode() == KeyCode.ESCAPE) {
-                txtBarcode.requestFocus();
-            }
-        });
-        txtQty.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                btnPlaceCartOnAction(new ActionEvent());
-                txtBarcode.requestFocus();
-            }
-        });
+//        tblOrderCart.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+//
+//            if (event.getCode() == KeyCode.DELETE) {
+//                OrdersTm selected = tblOrderCart.getSelectionModel().getSelectedItem();
+//                if (selected != null) {
+//                    ordersList.remove(selected);
+//                    calculateNetTotal();
+//                }
+//            }
+//
+//            if (event.getCode() == KeyCode.ESCAPE) {
+//                txtBarcode.requestFocus();
+//            }
+//        });
+//        txtQty.setOnKeyPressed(event -> {
+//            if (event.getCode() == KeyCode.ENTER) {
+//                btnPlaceCartOnAction(new ActionEvent());
+//                txtBarcode.requestFocus();
+//            }
+//        });
 
 
         cmbUnit.setItems(FXCollections.observableArrayList("ML", "L"));
@@ -223,6 +231,50 @@ public class OrdersFormController {
 
         cmbUnit.setDisable(true); // default disable
         cmbMaterialDesc.setEditable(true);
+
+        txtQty.setOnAction(event -> {
+            btnPlaceCartOnAction(new ActionEvent());
+            txtBarcode.requestFocus(); // next scan ready
+        });
+        root.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+
+            switch (e.getCode()) {
+
+                case ENTER:
+                    try {
+                        btnPlaceCartOnAction(new ActionEvent());
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    break;
+
+                case ESCAPE:
+                    clearForm();
+                    break;
+
+                case F2:
+                    cmbPaymentMethod.setValue("CASH");
+                    break;
+
+                case F3:
+                    cmbPaymentMethod.setValue("CHEQUE");
+                    break;
+                case SHIFT:
+                    try {
+                        btnPlaceOrderOnAction(new ActionEvent());
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    break;
+                case DELETE:
+                    OrdersTm selected = tblOrderCart.getSelectionModel().getSelectedItem();
+                    if (selected != null) {
+                        ordersList.remove(selected);
+                        calculateNetTotal();
+                    }
+                    break;
+            }
+        });
 
     }
 
@@ -378,6 +430,7 @@ public class OrdersFormController {
                 txtQty.clear();
                 return;
             }
+            java.awt.Toolkit.getDefaultToolkit().beep();
         }
 
 
@@ -414,8 +467,22 @@ public class OrdersFormController {
             }
         }
 
-        double total = netTotal + serviceCharge;
-        lblNetTotal.setText(String.format("%.2f", total));
+        double totalBeforeDiscount = netTotal + serviceCharge;
+
+        double discount = 0;
+        if (txtDiscount.getText() != null && !txtDiscount.getText().isEmpty()) {
+            try {
+                discount = Double.parseDouble(txtDiscount.getText()); // percentage
+            } catch (NumberFormatException e) {
+                discount = 0;
+            }
+        }
+
+        double discountAmount = totalBeforeDiscount * (discount / 100);
+        lblDiscountAmount.setText(String.format("%.2f", discountAmount));
+
+        double finalTotal = totalBeforeDiscount - discountAmount;
+        lblNetTotal.setText(String.format("%.2f", finalTotal));
     }
 
 
@@ -427,9 +494,25 @@ public class OrdersFormController {
                     "Cart is empty! Please add items before placing an order.").show();
             return;
         }
+
         String orderId = lblOrderId.getText();
         Date date = Date.valueOf(LocalDate.now());
-        System.out.println(netTotal + "net total");
+
+        if (txtDiscount.getText() != null && !txtDiscount.getText().isEmpty()) {
+            try {
+                discountPercent = Double.parseDouble(txtDiscount.getText());
+                if (discountPercent < 0 || discountPercent > 100) {
+                    new Alert(Alert.AlertType.WARNING, "Discount must be between 0% - 100%!").show();
+                    txtDiscount.requestFocus();
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                new Alert(Alert.AlertType.WARNING, "Invalid discount value!").show();
+                txtDiscount.requestFocus();
+                return;
+            }
+        }
+
         String paymentId;
         try {
             paymentId = saveOrder(
@@ -442,7 +525,8 @@ public class OrdersFormController {
                                     tm.getQty(),
                                     tm.getUnitPrice(),
                                     serviceCharge,
-                                    tm.getTotal()
+                                    tm.getTotal(),
+                                    discountPercent
                             ))
                             .collect(Collectors.toList())
             );
@@ -451,12 +535,12 @@ public class OrdersFormController {
             new Alert(Alert.AlertType.ERROR, "Order failed!").show();
             return;
         }
+
         if (paymentId != null) {
             if ("CHEQUE".equals(cmbPaymentMethod.getValue())) {
-                System.out.println("cheque" + paymentId);
                 saveChequePayment(paymentId);
             }
-            // 🧾 ASK TO PRINT BILL
+
             Optional<ButtonType> result = new Alert(
                     Alert.AlertType.CONFIRMATION,
                     "Print bill now?",
@@ -465,12 +549,12 @@ public class OrdersFormController {
             ).showAndWait();
 
             if (result.orElse(ButtonType.NO) == ButtonType.YES) {
-                printBill(); // 🔥 AUTO PRINT
+                printBill();
             }
+
             new Alert(Alert.AlertType.INFORMATION, "Order placed successfully!").show();
             loadNextOrderId();
-            // tblOrderCart.getItems().clear();
-            //  clearForm();
+
             PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
             pause.setOnFinished(e -> refreshPage());
             pause.play();
@@ -946,7 +1030,6 @@ public class OrdersFormController {
 
         cmbMaterialDesc.getEditor().clear();
     }
-
 
 
     private void setupArrowNavigation(Control current, Control next, Control previous) {

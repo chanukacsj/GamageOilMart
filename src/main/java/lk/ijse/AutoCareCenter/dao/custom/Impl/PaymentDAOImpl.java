@@ -24,7 +24,8 @@ public class PaymentDAOImpl implements PaymentDAO {
                     resultSet.getDouble("service_charge"),
                     resultSet.getDouble("total"),
                     resultSet.getString("description"),
-                    resultSet.getString("date")
+                    resultSet.getString("date"),
+                    resultSet.getDouble("discount")
             ));
 
         }
@@ -35,7 +36,7 @@ public class PaymentDAOImpl implements PaymentDAO {
     public boolean save(Payment DTO) throws SQLException, ClassNotFoundException {
         System.out.println("save payment "+DTO);
         return SqlUtil.execute(
-                "INSERT INTO payment (id,orderId,code,qty,unitPrice,service_charge,total,description,date) VALUES (?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO payment (id,orderId,code,qty,unitPrice,service_charge,total,description,date,discount) VALUES (?,?,?,?,?,?,?,?,?,?)",
                 DTO.getId(),
                 DTO.getOrderId(),
                 DTO.getCode(),
@@ -44,7 +45,8 @@ public class PaymentDAOImpl implements PaymentDAO {
                 DTO.getService_charge(),
                 DTO.getTotal(),
                 DTO.getDescription(),
-                DTO.getDate()
+                DTO.getDate(),
+                DTO.getDiscount()
         );
     }
 

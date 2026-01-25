@@ -67,7 +67,7 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
 
             for (OrderDetailsDTO d : dto.getOrderDetails()) {
 
-                OrderDetails orderDetails = new OrderDetails(d.getOrderId(), d.getCode(), d.getQty(), d.getUnitPrice(), d.getService_charge(), d.getTotal());
+                OrderDetails orderDetails = new OrderDetails(d.getOrderId(), d.getCode(), d.getQty(), d.getUnitPrice(), d.getService_charge(), d.getTotal(),d.getDiscount());
                 boolean b3 = orderDetailDAO.save(orderDetails);
                 System.out.println("save");
                 if (!b3) {
@@ -100,8 +100,9 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
                         d.getService_charge(),
                         d.getTotal(),
                         "ORDER PAYMENT",
-                        date
-                );
+                        date,
+                        d.getDiscount()
+                        );
 
                 boolean b4 = paymentDAO.save(payment);
                 if (!b4) {

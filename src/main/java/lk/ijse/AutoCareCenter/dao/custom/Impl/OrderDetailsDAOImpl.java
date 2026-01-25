@@ -15,13 +15,14 @@ public class OrderDetailsDAOImpl implements OrderDetailDAO {
 
     public boolean save(OrderDetails details) throws SQLException, ClassNotFoundException {
         return SqlUtil.execute(
-                "INSERT INTO order_details (orderId, code, qty, unitPrice, service_charge, total) VALUES (?, ?, ?, ?, ?, ?)",
+                "INSERT INTO order_details (orderId, code, qty, unitPrice, service_charge, total, discount) VALUES (?, ?, ?, ?, ?, ?,?)",
                 details.getOrderId(),
                 details.getCode(),
                 details.getQty(),
                 details.getUnitPrice(),
                 details.getService_charge(),
-                details.getTotal()
+                details.getTotal(),
+                details.getDiscount()
         );
     }
 
@@ -32,7 +33,7 @@ public class OrderDetailsDAOImpl implements OrderDetailDAO {
         ArrayList<OrderDetails> all = new ArrayList<>();
         ResultSet rst = SqlUtil.execute("SELECT * FROM order_details");
         while (rst.next()) {
-            all.add(new OrderDetails(rst.getString("orderId"), rst.getString("code"), rst.getInt("qty"), rst.getDouble("unitPrice"), rst.getDouble("service_charge"), rst.getDouble("total")));
+            all.add(new OrderDetails(rst.getString("orderId"), rst.getString("code"), rst.getInt("qty"), rst.getDouble("unitPrice"), rst.getDouble("service_charge"), rst.getDouble("total"), rst.getDouble("discount")));
         }
         return all;
     }

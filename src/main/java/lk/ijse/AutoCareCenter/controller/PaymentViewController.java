@@ -58,6 +58,9 @@ public class PaymentViewController {
     private TableColumn<?, ?> colCharge;
 
     @FXML
+    private TableColumn<?, ?> ColDiscount;
+
+    @FXML
     private TableColumn<?, ?> colCode;
 
     @FXML
@@ -95,6 +98,7 @@ public class PaymentViewController {
         colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
         ColOrderId.setCellValueFactory(new PropertyValueFactory<>("OrderId"));
         ColDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        ColDiscount.setCellValueFactory(new PropertyValueFactory<>("discount"));
 
         cmbDateFilter.setItems(FXCollections.observableArrayList(
                 "Today",
@@ -125,7 +129,8 @@ public class PaymentViewController {
                         dto.getService_charge(),
                         dto.getTotal(),
                         dto.getDescription(),
-                        dto.getDate()
+                        dto.getDate(),
+                        dto.getDiscount()
                 ));
             }
 
