@@ -10,7 +10,11 @@ public class DbConnection {
     private Connection connection;
 
     private DbConnection() throws SQLException {
-
+        try {
+            Class.forName("org.sqlite.JDBC");  // <<< ADD THIS
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         // ✅ Ensure database folder exists
         // 📍 EXE location
         String basePath = System.getProperty("user.dir");
@@ -69,9 +73,12 @@ public class DbConnection {
                 "unitPrice REAL NOT NULL, " +
                 "service_charge REAL NOT NULL, " +
                 "total REAL NOT NULL, " +
+                "discount REAL DEFAULT 0, " +
                 "FOREIGN KEY (orderId) REFERENCES orders(orderId), " +
                 "FOREIGN KEY (code) REFERENCES material_details(code))";
+
         connection.prepareStatement(orderDetailsTable).executeUpdate();
+
 
         // ✅ Payment table
         String paymentTable = "CREATE TABLE IF NOT EXISTS payment (" +
@@ -84,6 +91,7 @@ public class DbConnection {
                 "total REAL NOT NULL, " +
                 "description TEXT, " +
                 "date TEXT," +
+                "discount REAL DEFAULT 0, " +
                 "FOREIGN KEY (orderId) REFERENCES orders(orderId), " +
                 "FOREIGN KEY (code) REFERENCES material_details(code))";
 
