@@ -33,6 +33,16 @@ public class MaterialDAOImpl implements MaterialDAO {
     }
 
     @Override
+    public boolean updateQty(String code, int qty) throws SQLException, ClassNotFoundException {
+        return SqlUtil.execute(
+                "UPDATE material_details SET qtyOnHand = qtyOnHand - ? WHERE code = ? AND qtyOnHand >= ?",
+                qty,
+                code,
+                qty
+        );
+    }
+
+    @Override
     public int getMaterialCount() throws SQLException, ClassNotFoundException {
         ResultSet rst = SqlUtil.execute("SELECT COUNT(*) AS materials_count FROM materials");
         if (rst.next()) {

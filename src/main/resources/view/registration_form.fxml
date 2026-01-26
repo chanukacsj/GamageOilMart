@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootNode" prefHeight="700" prefWidth="1200" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.AutoCareCenter.controller.RegistrationFormController">
+<AnchorPane fx:id="rootNode" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.AutoCareCenter.controller.RegistrationFormController">
 
    <!-- ===== LEFT PANEL ===== -->
    <AnchorPane prefHeight="700" prefWidth="550" style="-fx-background-color: linear-gradient(to bottom,#141e30,#243b55);">
@@ -47,9 +47,16 @@
 
          <Label style="-fx-text-fill:#777;" text="Fill details to register" />
 
-         <JFXTextField fx:id="txtUserName" prefHeight="45" promptText="Full Name" />
+         <JFXTextField fx:id="txtUserName"
+                       prefHeight="45"
+                       promptText="Full Name"
+                       onKeyReleased="#userNameKey" />
 
-         <JFXPasswordField fx:id="txtPw" prefHeight="45" promptText="Password" />
+         <JFXPasswordField fx:id="txtPw"
+                           prefHeight="45"
+                           promptText="Password"
+                           onKeyReleased="#passwordKey" />
+
 
          <JFXButton onAction="#btnRegisterOnAction" prefHeight="45" prefWidth="320" style="-fx-background-color:#141e30;                               -fx-text-fill:white;                               -fx-font-size:14;                               -fx-font-weight:bold;                               -fx-background-radius:20;" text="REGISTER">
             <cursor>

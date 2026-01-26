@@ -2,6 +2,7 @@ package lk.ijse.AutoCareCenter.controller;
 
 
 
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,9 +23,11 @@ import java.sql.SQLException;
 public class RegistrationFormController {
 
     @FXML
-    private TextField txtPw;
+    private JFXPasswordField txtPw;
+
     @FXML
-    private TextField txtUserName;
+    private JFXTextField txtUserName;
+
     public AnchorPane rootNode;
 
     @FXML
@@ -82,16 +85,17 @@ public class RegistrationFormController {
     }
 
     public boolean isValid() {
-        if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.USERNAME, (JFXTextField) txtUserName)) return false;
-        if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.PASSWORD, (JFXTextField) txtPw)) return false;
+        if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.USERNAME, txtUserName)) return false;
+        if (!Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.PASSWORD, txtPw)) return false;
         return true;
     }
 
     public void userNameKey(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.USERNAME, (JFXTextField) txtUserName);
+        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.USERNAME, txtUserName);
     }
 
     public void passwordKey(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.PASSWORD, (JFXTextField) txtPw);
+        Regex.setTextColor(lk.ijse.AutoCareCenter.Util.TextField.PASSWORD, txtPw);
     }
+
 }

@@ -39,6 +39,8 @@
 
       <JFXTextField fx:id="txtBarcode" layoutX="115.0" layoutY="293.0" onAction="#txtBarcodeOnAction" prefWidth="180" promptText="Scan here &amp; press Enter" />
       <Label fx:id="lblOrderId" layoutX="140" layoutY="265" style="-fx-font-size: 15px; -fx-text-fill: #2C3E50;" />
+      <JFXTextField fx:id="txtDiscount" layoutX="689.0" layoutY="470.0" promptText="Discount (%)" />
+      <Label fx:id="lblDiscountAmount" layoutX="593.0" layoutY="474.0" text="0.00" />
 
       <Label layoutX="350" layoutY="265" style="-fx-font-weight: bold;" text="Order Date:" />
       <Label fx:id="lblOrderDate" layoutX="450" layoutY="265" style="-fx-font-size: 15px; -fx-text-fill: #2C3E50;" />

@@ -1,6 +1,7 @@
 package lk.ijse.AutoCareCenter.Util;
 
 import com.jfoenix.controls.JFXTextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.paint.Paint;
 
 import java.util.regex.Matcher;
@@ -59,16 +60,15 @@ public class Regex {
         return false;
     }
 
-    public static boolean setTextColor(TextField location, JFXTextField field) {
+    public static boolean setTextColor(TextField location, TextInputControl field) {
         if (Regex.isTextFiledValid(location, field.getText())) {
-            field.setFocusColor(Paint.valueOf("Green"));
-            field.setUnFocusColor(Paint.valueOf("Green"));
+            field.setStyle("-fx-focus-color: green; -fx-faint-focus-color: transparent;");
             return true;
         } else {
-            field.setFocusColor(Paint.valueOf("Red"));
-            field.setUnFocusColor(Paint.valueOf("Red"));
+            field.setStyle("-fx-focus-color: red; -fx-faint-focus-color: transparent;");
             return false;
         }
     }
+
 }
 

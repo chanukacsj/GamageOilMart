@@ -17,19 +17,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
 import lk.ijse.AutoCareCenter.bo.custom.PurchaseOrderBO;
-import lk.ijse.AutoCareCenter.entity.OrderDetails;
 import lk.ijse.AutoCareCenter.entity.Payment;
-import lk.ijse.AutoCareCenter.model.OrderDetailsDTO;
-import lk.ijse.AutoCareCenter.model.tm.MaterialsTm;
-import lk.ijse.AutoCareCenter.model.tm.OrdersTm;
 import lk.ijse.AutoCareCenter.model.tm.PaymentTm;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 
 public class PaymentViewController {
 
@@ -120,6 +112,9 @@ public class PaymentViewController {
             for (Payment dto : list) {
                 String description = purchaseOrderBO.getDescriptionByCode(dto.getCode());
 
+                // final total = (unitPrice * qty) + service_charge - discount
+                double finalTotal = (dto.getUnitPrice() * dto.getQty()) + dto.getService_charge() - dto.getDiscount();
+
                 masterList.add(new PaymentTm(
                         dto.getId(),
                         dto.getOrderId(),
@@ -127,7 +122,7 @@ public class PaymentViewController {
                         dto.getQty(),
                         dto.getUnitPrice(),
                         dto.getService_charge(),
-                        dto.getTotal(),
+                        finalTotal,
                         dto.getDescription(),
                         dto.getDate(),
                         dto.getDiscount()
@@ -137,11 +132,11 @@ public class PaymentViewController {
             tblPayments.setItems(masterList);
             calculateIncome();
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @FXML
     void cmbDateFilterOnAction(ActionEvent event) {
 
@@ -206,7 +201,7 @@ public class PaymentViewController {
             String dateOnly = tm.getDate().split(" ")[0];
             LocalDate paymentDate = LocalDate.parse(dateOnly);
 
-            double amount = tm.getTotal();
+            double amount = tm.getTotal(); // Already adjusted final total
 
             // Daily
             if (paymentDate.equals(today)) {
@@ -230,14 +225,16 @@ public class PaymentViewController {
         lblYearlyIncome.setText(String.format("%.2f", yearlyIncome));
     }
 
-
     public void btnDeleteOnAction(ActionEvent actionEvent) {
+        // Optional: Delete payment
     }
 
     public void btnBackOnAction(ActionEvent actionEvent) {
+        // Optional: Back navigation
     }
 
     public void getMaterials(MouseEvent mouseEvent) {
+        // Optional: Material selection on click
     }
 
     public void txtDescriptionOnKeyReleased(KeyEvent keyEvent) {

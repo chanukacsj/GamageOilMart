@@ -18,4 +18,5 @@ public class OrderDetailsDTO  implements Serializable {
     private double service_charge;
     private double Total;
     private double discount;
+
 }
