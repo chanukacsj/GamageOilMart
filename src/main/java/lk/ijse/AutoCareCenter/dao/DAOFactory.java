@@ -14,7 +14,7 @@ public class DAOFactory {
     }
 
     public enum DAOTypes {
-         SUPPLIER, MATERIAL, ORDER, ORDERDETAILS, MATERIALDETAIL, LOAN, LOANPAYMENT, PAYMENT, CHEQUE
+         SUPPLIER, MATERIAL, ORDER, ORDERDETAILS, MATERIALDETAIL, LOAN, LOANPAYMENT, PAYMENT, CHEQUE, LOANITEM
     }
 
     public SuperDAO getDAO(DAOTypes daoTypes) {
@@ -37,6 +37,8 @@ public class DAOFactory {
                 return new LoanPaymentDAOImpl();
             case CHEQUE:
                 return new ChequeDAOImpl();
+            case LOANITEM:
+                return new LoanItemDAOImpl();
             default:
                 return null;
         }

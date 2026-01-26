@@ -134,6 +134,15 @@ public class DbConnection {
                         "status TEXT DEFAULT 'PENDING', " +
                         "FOREIGN KEY (paymentId) REFERENCES payment(id))";
         connection.prepareStatement(chequePaymentTable).executeUpdate();
+        // ✅ Loan Item table
+        String loanItemTable = "CREATE TABLE IF NOT EXISTS loan_item (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " + // optional, auto-increment ID
+                "loanId TEXT NOT NULL, " +
+                "itemName TEXT NOT NULL, " +
+                "qty INTEGER NOT NULL, " +
+                "FOREIGN KEY (loanId) REFERENCES loan(loanId)" +
+                ")";
+        connection.prepareStatement(loanItemTable).executeUpdate();
 
         System.out.println("✅ Tables created (if not exists)");
     }

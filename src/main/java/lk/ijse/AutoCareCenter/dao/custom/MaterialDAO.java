@@ -12,4 +12,6 @@ import java.util.List;
 
 public interface MaterialDAO extends CurdDAO<Materials> {
     public List<String> getCodes() throws SQLException, ClassNotFoundException ;
+
+    boolean updateQty(String code, int qty) throws SQLException, ClassNotFoundException;
 }

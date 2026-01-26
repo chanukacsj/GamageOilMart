@@ -94,7 +94,7 @@ public class LoanDAOImpl implements LoanDAO {
         );
 
         if (rs.next()) {
-            return rs.getString("loanId");  // or rs.getString("loanId")
+            return rs.getString("loanId");
         }
         return null;
     }

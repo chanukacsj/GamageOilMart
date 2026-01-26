@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
 import lk.ijse.AutoCareCenter.bo.custom.LoanBO;
 import lk.ijse.AutoCareCenter.model.LoanDTO;
+import lk.ijse.AutoCareCenter.model.LoanItemDTO;
 import lk.ijse.AutoCareCenter.model.LoanPaymentDTO;
 import lk.ijse.AutoCareCenter.model.tm.LoanTm;
 import lk.ijse.AutoCareCenter.model.tm.OrdersTm;
@@ -72,6 +73,13 @@ public class LoanPaymentController {
 
         loadNextId();
         loadAllLoans();
+
+        // ------------------ Add row click listener ------------------
+        tblLoans.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                loadLoanItems(newSelection.getLoanId());
+            }
+        });
     }
 
     // ------------------ Table Setup ------------------
@@ -165,6 +173,28 @@ public class LoanPaymentController {
             new Alert(Alert.AlertType.ERROR, "Failed to load loans!").show();
         }
     }
+    private void loadLoanItems(String loanId) {
+        try {
+            List<LoanItemDTO> items = loanBO.getLoanItems(loanId);
+            ObservableList<OrdersTm> obList = FXCollections.observableArrayList();
+
+            for (LoanItemDTO item : items) {
+
+                obList.add(new OrdersTm(
+                        item.getCode(),
+                        item.getItemName(),
+                        item.getQty()
+                ));
+            }
+
+            tblOrderCart.setItems(obList);
+            calculateTotal();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Failed to load loan items!").show();
+        }
+    }
 
     // ------------------ Payment Window ------------------
     @FXML
@@ -212,7 +242,17 @@ public class LoanPaymentController {
         double total = lblTotal.getText().isEmpty() ? 0.0 : Double.parseDouble(lblTotal.getText());
         double downPayment = txtDownPayment.getText().isEmpty() ? 0.0 : Double.parseDouble(txtDownPayment.getText());
         double balance = lblBalance.getText().isEmpty() ? 0.0 : Double.parseDouble(lblBalance.getText());
-        System.out.println("total_"+total);
+
+        // Convert cart items → LoanItemDTO
+        List<LoanItemDTO> items = tblOrderCart.getItems().stream()
+                .map(tm -> new LoanItemDTO(
+                        lblLoanId.getText(),      // loanId
+                        tm.getDescription(),      // item name
+                        tm.getCode(),             // code
+                        tm.getQty()               // quantity
+                ))
+                .toList();
+
         LoanDTO dto = new LoanDTO(
                 lblLoanId.getText(),
                 lblOrderId.getText(),
@@ -223,10 +263,10 @@ public class LoanPaymentController {
                 balance,
                 "0.0",
                 "ONGOING",
-                LocalDate.now().toString()
+                LocalDate.now().toString(),
+                items
         );
 
-        System.out.println("dto" + dto);
         try {
             boolean saved = loanBO.save(dto);
             new Alert(saved ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR,
