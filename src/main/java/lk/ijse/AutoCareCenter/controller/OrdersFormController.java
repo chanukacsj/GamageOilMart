@@ -151,7 +151,7 @@ public class OrdersFormController {
     PurchaseOrderBO purchaseOrderBO = (PurchaseOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PO);
     ChequeBO chequeBO = (ChequeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CHEQUE);
     double serviceCharge = 0.0;
-    double discountPercent = 0;
+    double discountAmount = 0;
 
     private Map<String, MaterialDetailsDTO> materialMap = new HashMap<>();
 
@@ -273,6 +273,14 @@ public class OrdersFormController {
                         calculateNetTotal();
                     }
                     break;
+            }
+        });
+
+        txtDiscount.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.matches("\\d*(\\.\\d*)?")) { // allow numbers with decimal
+                calculateNetTotal();
+            } else {
+                txtDiscount.setText(oldVal); // prevent invalid input
             }
         });
 
@@ -457,6 +465,7 @@ public class OrdersFormController {
             netTotal += (double) colTotal.getCellData(i);
         }
 
+        // Service charge
         if (txtServiceCharge.getText() == null || txtServiceCharge.getText().isEmpty()) {
             serviceCharge = 0;
         } else {
@@ -469,16 +478,20 @@ public class OrdersFormController {
 
         double totalBeforeDiscount = netTotal + serviceCharge;
 
-        double discount = 0;
+        // Direct discount amount
+        double discountAmount = 0;
         if (txtDiscount.getText() != null && !txtDiscount.getText().isEmpty()) {
             try {
-                discount = Double.parseDouble(txtDiscount.getText()); // percentage
+                discountAmount = Double.parseDouble(txtDiscount.getText());
             } catch (NumberFormatException e) {
-                discount = 0;
+                discountAmount = 0;
             }
         }
 
-        double discountAmount = totalBeforeDiscount * (discount / 100);
+        if (discountAmount > totalBeforeDiscount) {
+            discountAmount = totalBeforeDiscount;
+        }
+
         lblDiscountAmount.setText(String.format("%.2f", discountAmount));
 
         double finalTotal = totalBeforeDiscount - discountAmount;
@@ -500,9 +513,9 @@ public class OrdersFormController {
 
         if (txtDiscount.getText() != null && !txtDiscount.getText().isEmpty()) {
             try {
-                discountPercent = Double.parseDouble(txtDiscount.getText());
-                if (discountPercent < 0 || discountPercent > 100) {
-                    new Alert(Alert.AlertType.WARNING, "Discount must be between 0% - 100%!").show();
+                discountAmount = Double.parseDouble(txtDiscount.getText());
+                if (discountAmount < 0) {
+                    new Alert(Alert.AlertType.WARNING, "Discount cannot be negative!").show();
                     txtDiscount.requestFocus();
                     return;
                 }
@@ -512,6 +525,7 @@ public class OrdersFormController {
                 return;
             }
         }
+
 
         String paymentId;
         try {
@@ -526,7 +540,7 @@ public class OrdersFormController {
                                     tm.getUnitPrice(),
                                     serviceCharge,
                                     tm.getTotal(),
-                                    discountPercent
+                                    discountAmount
                             ))
                             .collect(Collectors.toList())
             );

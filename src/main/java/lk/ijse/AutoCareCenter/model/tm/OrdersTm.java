@@ -26,4 +26,10 @@ public class OrdersTm {
         this.total = total;
         this.btnRemove = btnRemove;
     }
+
+    public OrdersTm(String code, String itemName, int qty) {
+        this.code = code;
+        this.description = itemName;
+        this.qty = qty;
+    }
 }
