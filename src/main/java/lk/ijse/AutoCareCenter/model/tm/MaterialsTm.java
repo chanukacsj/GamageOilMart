@@ -19,6 +19,11 @@ public class MaterialsTm {
     private String addedDate;
     private String status;
     private String barcode;
+    private double unitCost;
+    private double wholesalePrice;
+
+    public MaterialsTm(String code, String supId, String description, double unitPrice, int qtyOnHand, String category, String brand, String addedDate, String status, String barcode) {
+    }
 
 //    public MaterialsTm(String code, String supId, String description, double unitPrice, int qtyOnHand, String category, String brand, String addedDate, String status) {
 //        this.code = code;

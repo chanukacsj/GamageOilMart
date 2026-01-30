@@ -176,9 +176,10 @@ public class OrdersFormController {
 
         chequePane.setVisible(false);
 
-//        txtBarcode.setOnAction(e -> {
-//            handleBarcodeScan();
-//        });
+        txtBarcode.setOnAction(e -> {
+            System.out.println("txtBarcode");
+            handleBarcodeScan();
+        });
 
         Platform.runLater(() -> txtBarcode.requestFocus());
         txtServiceCharge.textProperty().addListener((obs, oldVal, newVal) -> {
@@ -188,7 +189,6 @@ public class OrdersFormController {
         });
 
         Platform.runLater(() -> {
-            setupArrowNavigation(txtBarcode, cmbMaterialDesc, null);
             setupArrowNavigation(cmbMaterialDesc, txtQty, txtBarcode);
             setupArrowNavigation(txtQty, txtServiceCharge, cmbMaterialDesc);
             setupArrowNavigation(txtServiceCharge, txtPaidAmount, txtQty);
@@ -240,13 +240,13 @@ public class OrdersFormController {
 
             switch (e.getCode()) {
 
-                case ENTER:
-                    try {
-                        btnPlaceCartOnAction(new ActionEvent());
-                    } catch (Exception ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    break;
+//                case ENTER:
+//                    try {
+//                        btnPlaceCartOnAction(new ActionEvent());
+//                    } catch (Exception ex) {
+//                        throw new RuntimeException(ex);
+//                    }
+//                    break;
 
                 case ESCAPE:
                     clearForm();
@@ -759,46 +759,49 @@ public class OrdersFormController {
 
     private void handleBarcodeScan() {
         String barcode = txtBarcode.getText().trim();
-
         if (barcode.isEmpty()) return;
 
         try {
-            // Find item by barcode
             MaterialDetailsDTO dto = materialDetailBO.findByBarcode(barcode);
-
             if (dto == null) {
-                java.awt.Toolkit.getDefaultToolkit().beep(); // beep on error
                 new Alert(Alert.AlertType.WARNING, "Item not found for barcode!").show();
                 txtBarcode.clear();
                 return;
             }
 
             String code = dto.getCode();
+            double qtyOnHand = dto.getQtyOnHand();
 
-            // Check if item already exists in cart
+            // Use user input qty if exists, else default 1
+            double inputQty = 1;
+            if (!txtQty.getText().isEmpty() && txtQty.getText().matches("\\d+")) {
+                inputQty = Double.parseDouble(txtQty.getText());
+            }
+
+            double finalQty = convertToBaseUnit(inputQty, "PCS"); // or unit from UI
+
+            if (finalQty > qtyOnHand) {
+                new Alert(Alert.AlertType.WARNING, "Quantity exceeds available stock!").show();
+                txtQty.clear();
+                return;
+            }
+
+            // Check if already in cart
             Optional<OrdersTm> existing = ordersList.stream()
                     .filter(item -> item.getCode().equals(code))
                     .findFirst();
 
             if (existing.isPresent()) {
                 OrdersTm tm = existing.get();
-                if (tm.getQty() + 1 > dto.getQtyOnHand()) {
-                    java.awt.Toolkit.getDefaultToolkit().beep(); // beep on stock limit
+                double newQty = tm.getQty() + finalQty;
+                if (newQty > qtyOnHand) {
                     new Alert(Alert.AlertType.WARNING, "Cannot add more than available stock!").show();
-                } else {
-                    tm.setQty(tm.getQty() + 1); // increment qty
-                    tm.setTotal(tm.getQty() * tm.getUnitPrice()); // update total
-                }
-                tblOrderCart.refresh();
-            } else {
-                if (dto.getQtyOnHand() < 1) {
-                    java.awt.Toolkit.getDefaultToolkit().beep(); // beep on stock empty
-                    new Alert(Alert.AlertType.WARNING, "Item out of stock!").show();
-                    txtBarcode.clear();
                     return;
                 }
-
-                // Add new item
+                tm.setQty((int)newQty);
+                tm.setTotal(tm.getQty() * tm.getUnitPrice());
+                tblOrderCart.refresh();
+            } else {
                 JFXButton btnRemove = new JFXButton("remove");
                 btnRemove.setCursor(Cursor.HAND);
                 btnRemove.setOnAction(e -> {
@@ -810,36 +813,36 @@ public class OrdersFormController {
                 OrdersTm ordersTm = new OrdersTm(
                         dto.getCode(),
                         dto.getDescription(),
-                        1, // default qty 1
+                        (int)finalQty,
                         dto.getUnitPrice(),
-                        dto.getUnitPrice(), // total = unitPrice * qty
+                        finalQty * dto.getUnitPrice(),
                         btnRemove
                 );
+
                 ordersList.add(ordersTm);
+                tblOrderCart.setItems(ordersList);
             }
 
-            // Update UI labels
+            // Update labels
             cmbMaterialCode.setValue(dto.getCode());
             lblDescription.setText(dto.getDescription());
             lblUnitPrice.setText(String.valueOf(dto.getUnitPrice()));
             lblQtyOnHand.setText(String.valueOf(dto.getQtyOnHand()));
 
             calculateNetTotal();
-
-            // Ready for next scan
+            txtQty.clear();
             txtBarcode.clear();
             txtBarcode.requestFocus();
 
-            java.awt.Toolkit.getDefaultToolkit().beep(); // beep on successful scan
-
         } catch (Exception e) {
             e.printStackTrace();
-            java.awt.Toolkit.getDefaultToolkit().beep(); // beep on exception
+            java.awt.Toolkit.getDefaultToolkit().beep();
         }
     }
 
+
     public void txtBarcodeOnAction(ActionEvent actionEvent) {
-        handleBarcodeScan();
+        //handleBarcodeScan();
     }
 
     private void saveChequePayment(String paymentId) throws Exception {

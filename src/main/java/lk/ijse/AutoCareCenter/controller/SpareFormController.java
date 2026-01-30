@@ -35,13 +35,13 @@ public class SpareFormController {
     private TableView<MaterialsTm> tblMaterial;
 
     @FXML
-    private TableColumn<?, ?> colCode,colBarcode, colDescription, colUnitPrice, colQtyOnHand, colSupId, colBrand, colDate, colStatus;
+    private TableColumn<?, ?> colCode,colBarcode, colDescription, colUnitPrice, colQtyOnHand, colSupId, colBrand, colDate, colStatus, colUnitCost, colWholesalePrice;
 
     @FXML
     private JFXComboBox<SupplierDTO> cmbSupId;
 
     @FXML
-    private JFXTextField txtDescription, txtUnitPrice, txtQtyOnHand, txtBrand, txtSearchDescription;
+    private JFXTextField txtDescription, txtUnitCost,txtWholesalePrice, txtUnitPrice, txtQtyOnHand, txtBrand, txtSearchDescription;
 
     @FXML
     private Label lblId;
@@ -82,6 +82,8 @@ public class SpareFormController {
         colDate.setCellValueFactory(new PropertyValueFactory<>("addedDate"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colBarcode.setCellValueFactory(new PropertyValueFactory<>("barcode"));
+        colUnitCost.setCellValueFactory(new PropertyValueFactory<>("unitCost"));
+        colWholesalePrice.setCellValueFactory(new PropertyValueFactory<>("wholesalePrice"));
     }
 
     private void loadNextId() {
@@ -109,7 +111,9 @@ public class SpareFormController {
                         dto.getBrand(),
                         dto.getAddedDate(),
                         dto.getStatus(),
-                        dto.getBarcode()
+                        dto.getBarcode(),
+                        dto.getUnitCost(),
+                        dto.getWholesalePrice()
                 ));
             }
         } catch (Exception e) {
@@ -129,6 +133,8 @@ public class SpareFormController {
         txtUnitPrice.setText(String.valueOf(tm.getUnitPrice()));
         txtQtyOnHand.setText(String.valueOf(tm.getQtyOnHand()));
         txtBrand.setText(tm.getBrand());
+        txtUnitCost.setText(String.valueOf(tm.getUnitCost()));
+        txtWholesalePrice.setText(String.valueOf(tm.getWholesalePrice()));
 
         for (SupplierDTO s : cmbSupId.getItems()) {
             if (s.getId().equals(tm.getSupId())) {
@@ -151,7 +157,9 @@ public class SpareFormController {
                 "Spare Parts",
                 txtBrand.getText(),
                 LocalDate.now().toString(),
-                "Active"
+                "Active",
+                Double.parseDouble(txtUnitCost.getText()),
+                Double.parseDouble(txtWholesalePrice.getText())
         );
 
         try {
@@ -179,7 +187,9 @@ public class SpareFormController {
                 "Spare Parts",
                 txtBrand.getText(),
                 LocalDate.now().toString(),
-                "Active"
+                "Active",
+                Double.parseDouble(txtUnitCost.getText()),
+                Double.parseDouble(txtWholesalePrice.getText())
         );
 
         try {
@@ -246,6 +256,8 @@ public class SpareFormController {
         txtBrand.clear();
         cmbSupId.setValue(null);
         loadNextId();
+        txtUnitCost.clear();
+        txtWholesalePrice.clear();
     }
 
     private void loadSuppliers() {

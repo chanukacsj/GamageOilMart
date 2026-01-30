@@ -37,13 +37,13 @@ public class TubeFormController {
     private TableView<MaterialsTm> tblMaterial;
 
     @FXML
-    private TableColumn<?, ?> colCode, colBarcode, colDescription, colUnitPrice, colQtyOnHand, colSupId, colBrand, colDate, colStatus;
+    private TableColumn<?, ?> colCode, colBarcode, colDescription, colUnitPrice, colQtyOnHand, colSupId, colBrand, colDate, colStatus, colUnitCost, colWholesalePrice;
 
     @FXML
     private JFXComboBox<SupplierDTO> cmbSupId;
 
     @FXML
-    private JFXTextField txtDescription, txtUnitPrice, txtQtyOnHand, txtBrand, txtSearchDescription;
+    private JFXTextField txtDescription , txtUnitCost,txtWholesalePrice, txtUnitPrice, txtQtyOnHand, txtBrand, txtSearchDescription;
 
     @FXML
     private Label lblId;
@@ -83,6 +83,8 @@ public class TubeFormController {
         colDate.setCellValueFactory(new PropertyValueFactory<>("addedDate"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colBarcode.setCellValueFactory(new PropertyValueFactory<>("barcode"));
+        colUnitCost.setCellValueFactory(new PropertyValueFactory<>("unitCost"));
+        colWholesalePrice.setCellValueFactory(new PropertyValueFactory<>("wholesalePrice"));
 
     }
 
@@ -111,7 +113,9 @@ public class TubeFormController {
                         dto.getBrand(),
                         dto.getAddedDate(),
                         dto.getStatus(),
-                        dto.getBarcode()
+                        dto.getBarcode(),
+                        dto.getUnitCost(),
+                        dto.getWholesalePrice()
                 ));
             }
         } catch (Exception e) {
@@ -131,6 +135,8 @@ public class TubeFormController {
         txtUnitPrice.setText(tm.getUnitPrice() + "");
         txtQtyOnHand.setText(tm.getQtyOnHand() + "");
         txtBrand.setText(tm.getBrand());
+        txtUnitCost.setText(tm.getUnitCost() + "");
+        txtWholesalePrice.setText(tm.getWholesalePrice() + "");
 
         for (SupplierDTO s : cmbSupId.getItems()) {
             if (s.getId().equals(tm.getSupId())) {
@@ -156,7 +162,9 @@ public class TubeFormController {
                 "Tube",
                 txtBrand.getText(),
                 LocalDate.now().toString(),
-                "Active"
+                "Active",
+                Double.parseDouble(txtUnitCost.getText()),
+                Double.parseDouble(txtWholesalePrice.getText())
         );
 
         try {
@@ -187,7 +195,9 @@ public class TubeFormController {
                 "Tube",
                 txtBrand.getText(),
                 LocalDate.now().toString(),
-                "Active"
+                "Active",
+                Double.parseDouble(txtUnitCost.getText()),
+                Double.parseDouble(txtWholesalePrice.getText())
         );
 
         try {
@@ -237,6 +247,8 @@ public class TubeFormController {
         txtBrand.clear();
         cmbSupId.setValue(null);
         loadNextId();
+        txtUnitCost.clear();
+        txtWholesalePrice.clear();
     }
 
     private void loadSuppliers() {

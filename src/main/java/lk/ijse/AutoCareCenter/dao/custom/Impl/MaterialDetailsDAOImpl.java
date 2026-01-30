@@ -28,7 +28,10 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
                     rst.getString("category"),
                     rst.getString("brand"),
                     rst.getString("addedDate"),
-                    rst.getString("status")
+                    rst.getString("status"),
+                    rst.getDouble("unitCost"),
+                    rst.getDouble("wholesalePrice")
+
             ));
         }
         return allMaterialDetails;
@@ -45,7 +48,7 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
 
         System.out.println(entity.getBarcode());
         return SqlUtil.execute(
-                "INSERT INTO material_details (code, supId, description, unitPrice, qtyOnHand, category, brand, addedDate, status, barcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO material_details (code, supId, description, unitPrice, qtyOnHand, category, brand, addedDate, status, barcode, unitCost, wholesalePrice) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 entity.getCode(),
                 entity.getSupId(),
                 entity.getDescription(),
@@ -55,25 +58,31 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
                 entity.getBrand(),
                 entity.getAddedDate(),
                 entity.getStatus(),
-                entity.getBarcode()
+                entity.getBarcode(),
+                entity.getUnitCost(),
+                entity.getWholesalePrice()
         );
     }
 
     @Override
     public boolean update(MaterialDetails entity) throws SQLException, ClassNotFoundException {
         return SqlUtil.execute(
-                "UPDATE material_details SET supId = ?, description = ?, unitPrice = ?, qtyOnHand = ?, category = ?, brand = ?, addedDate = ?, status = ? WHERE code = ?",
-                entity.getSupId(),
-                entity.getDescription(),
-                entity.getUnitPrice(),
-                entity.getQtyOnHand(),
-                entity.getCategory(),
-                entity.getBrand(),
-                entity.getAddedDate(),
-                entity.getStatus(),
+                "UPDATE material_details SET supId = ?, description = ?, unitPrice = ?, qtyOnHand = ?, category = ?, brand = ?, addedDate = ?, status = ?, unitCost = ?, wholesalePrice = ? WHERE code = ?",
+
+                entity.getSupId(),          // 1
+                entity.getDescription(),    // 2
+                entity.getUnitPrice(),      // 3
+                entity.getQtyOnHand(),      // 4
+                entity.getCategory(),       // 5
+                entity.getBrand(),          // 6
+                entity.getAddedDate(),      // 7
+                entity.getStatus(),         // 8
+                entity.getUnitCost(),       // 9
+                entity.getWholesalePrice(), // 10
                 entity.getCode()
         );
     }
+
 
     @Override
     public MaterialDetails searchById(String code) throws SQLException, ClassNotFoundException {
@@ -91,7 +100,9 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
                     rst.getString("category"),
                     rst.getString("brand"),
                     rst.getString("addedDate"),
-                    rst.getString("status")
+                    rst.getString("status"),
+                    rst.getDouble("unitCost"),
+                    rst.getDouble("wholesalePrice")
             );
         }
         return null;
@@ -157,7 +168,9 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
                         rs.getString("brand"),
                         rs.getString("addedDate"),
                         rs.getString("status"),
-                        rs.getString("barcode")
+                        rs.getString("barcode"),
+                        rs.getDouble("unitCost"),
+                        rs.getDouble("wholesalePrice")
                 ));
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -204,7 +217,9 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
                         rst.getString("brand"),
                         rst.getString("addedDate"),
                         rst.getString("status"),
-                        rst.getString("barcode")
+                        rst.getString("barcode"),
+                        rst.getDouble("unitCost"),
+                        rst.getDouble("wholesalePrice")
                 );
             }
 

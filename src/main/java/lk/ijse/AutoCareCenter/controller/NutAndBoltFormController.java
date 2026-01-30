@@ -35,13 +35,13 @@ public class NutAndBoltFormController {
     private TableView<MaterialsTm> tblMaterial;
 
     @FXML
-    private TableColumn<?, ?> colCode, colDescription, colUnitPrice, colQtyOnHand,colBarcode, colSupId, colBrand, colDate, colStatus;
+    private TableColumn<?, ?> colCode, colDescription, colUnitPrice, colQtyOnHand,colBarcode, colSupId, colBrand, colDate, colStatus, colUnitCost, colWholesalePrice;
 
     @FXML
     private JFXComboBox<SupplierDTO> cmbSupId;
 
     @FXML
-    private JFXTextField txtDescription, txtUnitPrice, txtQtyOnHand, txtBrand, txtSearchDescription;
+    private JFXTextField txtDescription, txtUnitPrice, txtQtyOnHand, txtBrand, txtSearchDescription, txtUnitCost, txtWholesalePrice;
 
     @FXML
     private Label lblId;
@@ -81,6 +81,8 @@ public class NutAndBoltFormController {
         colDate.setCellValueFactory(new PropertyValueFactory<>("addedDate"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colBarcode.setCellValueFactory(new PropertyValueFactory<>("barcode"));
+        colUnitCost.setCellValueFactory(new PropertyValueFactory<>("unitCost"));
+        colWholesalePrice.setCellValueFactory(new PropertyValueFactory<>("wholesalePrice"));
 
     }
 
@@ -109,7 +111,9 @@ public class NutAndBoltFormController {
                         dto.getBrand(),
                         dto.getAddedDate(),
                         dto.getStatus(),
-                        dto.getBarcode()
+                        dto.getBarcode(),
+                        dto.getUnitCost(),
+                        dto.getWholesalePrice()
                 ));
             }
         } catch (Exception e) {
@@ -129,6 +133,8 @@ public class NutAndBoltFormController {
         txtUnitPrice.setText(String.valueOf(tm.getUnitPrice()));
         txtQtyOnHand.setText(String.valueOf(tm.getQtyOnHand()));
         txtBrand.setText(tm.getBrand());
+        txtUnitCost.setText(String.valueOf(tm.getUnitCost()));
+        txtWholesalePrice.setText(String.valueOf(tm.getWholesalePrice()));
 
         for (SupplierDTO s : cmbSupId.getItems()) {
             if (s.getId().equals(tm.getSupId())) {
@@ -152,7 +158,9 @@ public class NutAndBoltFormController {
                 "Nut & Bolt",
                 txtBrand.getText(),
                 LocalDate.now().toString(),
-                "Active"
+                "Active",
+                Double.parseDouble(txtUnitCost.getText()),
+                Double.parseDouble(txtWholesalePrice.getText())
         );
 
         try {
@@ -180,7 +188,9 @@ public class NutAndBoltFormController {
                 "Nut & Bolt",
                 txtBrand.getText(),
                 LocalDate.now().toString(),
-                "Active"
+                "Active",
+                Double.parseDouble(txtUnitCost.getText()),
+                Double.parseDouble(txtWholesalePrice.getText())
         );
 
         try {
@@ -230,6 +240,9 @@ public class NutAndBoltFormController {
         txtUnitPrice.clear();
         txtBrand.clear();
         cmbSupId.setValue(null);
+        loadNextId();
+        txtUnitCost.clear();
+        txtWholesalePrice.clear();
     }
 
     private void loadSuppliers() {

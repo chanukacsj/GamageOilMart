@@ -18,6 +18,8 @@ public class MaterialDetails {
     private String addedDate;
     private String status;
     private String barcode;
+    private double unitCost;
+    private double wholesalePrice;
 
     public MaterialDetails(String code, String supId, String description, double unitPrice, int qtyOnHand, String category, String brand, String addedDate, String status) {
 
@@ -30,5 +32,21 @@ public class MaterialDetails {
         this.brand = brand;
         this.addedDate = addedDate;
         this.status = status;
+
+    }
+
+    public MaterialDetails(String code, String supId, String description, double unitPrice, int qtyOnHand, String category, String brand, String addedDate, String status, double unitCost, double wholesalePrice) {
+
+        this.code = code;
+        this.supId = supId;
+        this.description = description;
+        this.unitPrice = unitPrice;
+        this.qtyOnHand = qtyOnHand;
+        this.category = category;
+        this.brand = brand;
+        this.addedDate = addedDate;
+        this.status = status;
+        this.unitCost = unitCost;
+        this.wholesalePrice = wholesalePrice;
     }
 }

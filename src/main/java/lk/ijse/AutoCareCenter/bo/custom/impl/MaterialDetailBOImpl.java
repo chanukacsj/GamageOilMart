@@ -19,19 +19,19 @@ public class MaterialDetailBOImpl implements MaterialDetailBO {
         ArrayList<MaterialDetails> all = materialDetailDAO.loadAll();
         ArrayList<MaterialDetailsDTO> allMaterialDetails = new ArrayList<>();
         for (MaterialDetails m : all) {
-            allMaterialDetails.add(new MaterialDetailsDTO(m.getCode(), m.getSupId(), m.getDescription(), m.getUnitPrice(), m.getQtyOnHand(), m.getCategory(), m.getBrand(), m.getAddedDate(), m.getStatus()));
+            allMaterialDetails.add(new MaterialDetailsDTO(m.getCode(), m.getSupId(), m.getDescription(), m.getUnitPrice(), m.getQtyOnHand(), m.getCategory(), m.getBrand(), m.getAddedDate(), m.getStatus(),m.getUnitCost(),m.getWholesalePrice()));
         }
         return allMaterialDetails;
     }
 
     @Override
     public boolean save(MaterialDetailsDTO materialDetailsDTO) throws Exception {
-        return materialDetailDAO.save(new MaterialDetails(materialDetailsDTO.getCode(), materialDetailsDTO.getSupId(), materialDetailsDTO.getDescription(), materialDetailsDTO.getUnitPrice(), materialDetailsDTO.getQtyOnHand(), materialDetailsDTO.getCategory(), materialDetailsDTO.getBrand(), materialDetailsDTO.getAddedDate(), materialDetailsDTO.getStatus(),materialDetailsDTO.getBarcode()));
+        return materialDetailDAO.save(new MaterialDetails(materialDetailsDTO.getCode(), materialDetailsDTO.getSupId(), materialDetailsDTO.getDescription(), materialDetailsDTO.getUnitPrice(), materialDetailsDTO.getQtyOnHand(), materialDetailsDTO.getCategory(), materialDetailsDTO.getBrand(), materialDetailsDTO.getAddedDate(), materialDetailsDTO.getStatus(),materialDetailsDTO.getBarcode(),materialDetailsDTO.getUnitCost(),materialDetailsDTO.getWholesalePrice()));
     }
 
     @Override
     public boolean update(MaterialDetailsDTO materialDetailsDTO) throws SQLException, ClassNotFoundException {
-        return materialDetailDAO.update(new MaterialDetails(materialDetailsDTO.getCode(), materialDetailsDTO.getSupId(), materialDetailsDTO.getDescription(), materialDetailsDTO.getUnitPrice(), materialDetailsDTO.getQtyOnHand(), materialDetailsDTO.getCategory(), materialDetailsDTO.getBrand(), materialDetailsDTO.getAddedDate(), materialDetailsDTO.getStatus()));
+        return materialDetailDAO.update(new MaterialDetails(materialDetailsDTO.getCode(), materialDetailsDTO.getSupId(), materialDetailsDTO.getDescription(), materialDetailsDTO.getUnitPrice(), materialDetailsDTO.getQtyOnHand(), materialDetailsDTO.getCategory(), materialDetailsDTO.getBrand(), materialDetailsDTO.getAddedDate(), materialDetailsDTO.getStatus(),materialDetailsDTO.getUnitCost(),materialDetailsDTO.getWholesalePrice()));
     }
 
     @Override

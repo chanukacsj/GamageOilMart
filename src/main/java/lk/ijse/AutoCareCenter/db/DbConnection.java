@@ -43,20 +43,24 @@ public class DbConnection {
                 "contact TEXT NOT NULL, " +
                 "address TEXT NOT NULL)";
         connection.prepareStatement(supplierTable).executeUpdate();
+// ✅ Auto-create material_details table
+        String materialDetailTable =
+                "CREATE TABLE IF NOT EXISTS material_details (" +
+                        "code TEXT PRIMARY KEY, " +
+                        "supId TEXT NOT NULL, " +
+                        "description TEXT NOT NULL, " +
+                        "category TEXT NOT NULL, " +
+                        "brand TEXT, " +
+                        "unitCost REAL NOT NULL, " +        // stock price
+                        "wholesalePrice REAL NOT NULL, " +  // thoga price
+                        "unitPrice REAL NOT NULL, " +       // retail (sillara) price
+                        "qtyOnHand INTEGER NOT NULL, " +
+                        "addedDate TEXT DEFAULT (datetime('now')), " +
+                        "status TEXT DEFAULT 'Active', " +
+                        "barcode TEXT UNIQUE, " +
+                        "FOREIGN KEY (supId) REFERENCES suppliers(supId)" +
+                        ")";
 
-        // ✅ Auto-create material_details table
-        String materialDetailTable = "CREATE TABLE IF NOT EXISTS material_details (" +
-                "code TEXT PRIMARY KEY, " +
-                "supId TEXT NOT NULL, " +
-                "description TEXT NOT NULL, " +
-                "category TEXT NOT NULL, " +
-                "brand TEXT, " +
-                "unitPrice REAL NOT NULL, " +
-                "qtyOnHand INTEGER NOT NULL, " +
-                "addedDate TEXT DEFAULT (datetime('now')), " +
-                "status TEXT DEFAULT 'Active', " +
-                "barcode TEXT UNIQUE,"+
-                "FOREIGN KEY (supId) REFERENCES suppliers(supId))";
         connection.prepareStatement(materialDetailTable).executeUpdate();
 
         // ✅ Orders table

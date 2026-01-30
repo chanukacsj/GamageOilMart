@@ -21,10 +21,12 @@ import lk.ijse.AutoCareCenter.bo.BOFactory;
 import lk.ijse.AutoCareCenter.bo.custom.MaterialBO;
 import lk.ijse.AutoCareCenter.bo.custom.MaterialDetailBO;
 import lk.ijse.AutoCareCenter.model.MaterialDetailsDTO;
+import lk.ijse.AutoCareCenter.model.MaterialsDTO;
 import lk.ijse.AutoCareCenter.model.SupplierDTO;
 import lk.ijse.AutoCareCenter.model.tm.MaterialsTm;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,7 @@ public class OtherFormController {
     private TableView<MaterialsTm> tblMaterial;
 
     @FXML
-    private TableColumn<?, ?> colCode, colBarcode, colDescription, colUnitPrice, colQtyOnHand, colSupId, colBrand, colDate, colStatus;
+    private TableColumn<?, ?> colCode, colBarcode, colDescription, colUnitPrice, colQtyOnHand, colSupId, colBrand, colDate, colStatus,colUnitCost, colWholesalePrice;
 
     @FXML
     private JFXComboBox<SupplierDTO> cmbSupId;
@@ -48,6 +50,12 @@ public class OtherFormController {
 
     @FXML
     private AnchorPane root;
+
+    @FXML
+    private JFXTextField txtWholesalePrice;
+
+    @FXML
+    private JFXTextField txtUnitCost;
 
     private EventHandler<KeyEvent> keyHandler;
 
@@ -82,7 +90,8 @@ public class OtherFormController {
         colDate.setCellValueFactory(new PropertyValueFactory<>("addedDate"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colBarcode.setCellValueFactory(new PropertyValueFactory<>("barcode"));
-
+        colUnitCost.setCellValueFactory(new PropertyValueFactory<>("unitCost"));
+        colWholesalePrice.setCellValueFactory(new PropertyValueFactory<>("wholesalePrice"));
     }
 
     private void loadNextId() {
@@ -110,7 +119,9 @@ public class OtherFormController {
                         dto.getBrand(),
                         dto.getAddedDate(),
                         dto.getStatus(),
-                        dto.getBarcode()
+                        dto.getBarcode(),
+                        dto.getUnitCost(),
+                        dto.getWholesalePrice()
                 ));
             }
         } catch (Exception e) {
@@ -130,6 +141,9 @@ public class OtherFormController {
         txtUnitPrice.setText(String.valueOf(tm.getUnitPrice()));
         txtQtyOnHand.setText(String.valueOf(tm.getQtyOnHand()));
         txtBrand.setText(tm.getBrand());
+        txtUnitCost.setText(String.valueOf(tm.getUnitCost()));
+        txtWholesalePrice.setText(String.valueOf(tm.getWholesalePrice()));
+
 
         for (SupplierDTO s : cmbSupId.getItems()) {
             if (s.getId().equals(tm.getSupId())) {
@@ -141,29 +155,34 @@ public class OtherFormController {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        if (!isValid()) return;
+        String code = lblId.getText();
+        SupplierDTO selectedSupplier = cmbSupId.getValue();
+        String supId = selectedSupplier != null ? selectedSupplier.getId() : null;
+        String description = txtDescription.getText();
+        String category = "Other";
+        String brand = txtBrand.getText();
+        double unitPrice = Double.parseDouble(txtUnitPrice.getText());
+        int qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
+        String addedDate = LocalDate.now().toString();
+        String status = "Active";
+        double unitCost = Double.parseDouble(txtUnitCost.getText());
+        double wholesalePrice = Double.parseDouble(txtWholesalePrice.getText());
 
-        MaterialDetailsDTO dto = new MaterialDetailsDTO(
-                lblId.getText(),
-                cmbSupId.getValue() != null ? cmbSupId.getValue().getId() : null,
-                txtDescription.getText(),
-                Double.parseDouble(txtUnitPrice.getText()),
-                Integer.parseInt(txtQtyOnHand.getText()),
-                "Other",
-                txtBrand.getText(),
-                LocalDate.now().toString(),
-                "Active"
-        );
+        MaterialsDTO materialsDTO = new MaterialsDTO(code);
+        MaterialDetailsDTO detailsDTO = new MaterialDetailsDTO(code, supId, description, unitPrice, qtyOnHand, category, brand, addedDate, status, unitCost, wholesalePrice);
 
         try {
-            if (materialDetailBO.save(dto)) {
-                new Alert(Alert.AlertType.INFORMATION, "Other Saved!").show();
+            boolean isDetailSaved = materialDetailBO.save(detailsDTO);
+            if (isDetailSaved) {
+                new Alert(Alert.AlertType.INFORMATION, "item saved successfully!").show();
                 loadAllOther();
                 clearFields();
                 loadNextId();
             }
-        } catch (Exception e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -180,7 +199,9 @@ public class OtherFormController {
                 "Other",
                 txtBrand.getText(),
                 LocalDate.now().toString(),
-                "Active"
+                "Active",
+                Double.parseDouble(txtUnitCost.getText()),
+                Double.parseDouble(txtWholesalePrice.getText())
         );
 
         try {
@@ -247,6 +268,8 @@ public class OtherFormController {
         txtBrand.clear();
         cmbSupId.setValue(null);
         loadNextId();
+        txtUnitCost.clear();
+        txtWholesalePrice.clear();
     }
 
     private void loadSuppliers() {
