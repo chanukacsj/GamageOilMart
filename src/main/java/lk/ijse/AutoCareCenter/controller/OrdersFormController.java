@@ -49,6 +49,9 @@ public class OrdersFormController {
     private JFXComboBox<String> cmbMaterialDesc;
 
     @FXML
+    private JFXComboBox<String> cmbPriceType;
+
+    @FXML
     private JFXComboBox<String> cmbUnit;
 
     @FXML
@@ -152,6 +155,8 @@ public class OrdersFormController {
     ChequeBO chequeBO = (ChequeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CHEQUE);
     double serviceCharge = 0.0;
     double discountAmount = 0;
+    private double retailPrice = 0;
+    private double wholesalePrice = 0;
 
     private Map<String, MaterialDetailsDTO> materialMap = new HashMap<>();
 
@@ -283,6 +288,13 @@ public class OrdersFormController {
                 txtDiscount.setText(oldVal); // prevent invalid input
             }
         });
+        cmbPriceType.setItems(FXCollections.observableArrayList(
+                "RETAIL",
+                "WHOLESALE"
+        ));
+
+        cmbPriceType.setValue("RETAIL"); // default
+
 
     }
 
@@ -593,11 +605,27 @@ public class OrdersFormController {
 
             if (materials != null) {
 
-                lblDescription.setText(materials.getDescription());
-                lblUnitPrice.setText(String.valueOf(materials.getUnitPrice()));
-                lblQtyOnHand.setText(String.valueOf(materials.getQtyOnHand()));
 
-                // 🔥 OIL or NOT
+                retailPrice = materials.getUnitPrice();
+                wholesalePrice = materials.getWholesalePrice();
+
+                MaterialDetailsDTO dto = new MaterialDetailsDTO(
+                        materials.getCode(),
+                        materials.getSupId(),
+                        materials.getDescription(),
+                        materials.getCategory(),
+                        materials.getBrand(),
+                        materials.getUnitPrice(),
+                        materials.getUnitCost(),
+                        materials.getWholesalePrice(),
+                        materials.getQtyOnHand(),
+                        materials.getBarcode()
+                );
+
+
+                applyMaterialToUI(dto);
+
+
                 if ("OIL".equalsIgnoreCase(materials.getCategory())) {
                     cmbUnit.setDisable(false);
                 } else {
@@ -769,16 +797,15 @@ public class OrdersFormController {
                 return;
             }
 
-            String code = dto.getCode();
             double qtyOnHand = dto.getQtyOnHand();
 
-            // Use user input qty if exists, else default 1
+            // 🔹 Qty (default = 1)
             double inputQty = 1;
-            if (!txtQty.getText().isEmpty() && txtQty.getText().matches("\\d+")) {
+            if (txtQty.getText() != null && txtQty.getText().matches("\\d+")) {
                 inputQty = Double.parseDouble(txtQty.getText());
             }
 
-            double finalQty = convertToBaseUnit(inputQty, "PCS"); // or unit from UI
+            double finalQty = convertToBaseUnit(inputQty, "PCS");
 
             if (finalQty > qtyOnHand) {
                 new Alert(Alert.AlertType.WARNING, "Quantity exceeds available stock!").show();
@@ -786,21 +813,31 @@ public class OrdersFormController {
                 return;
             }
 
-            // Check if already in cart
+
+            double selectedPrice =
+                    "WHOLESALE".equals(cmbPriceType.getValue())
+                            ? dto.getWholesalePrice()
+                            : dto.getUnitPrice();
+
+
+            // 🔹 Check cart
             Optional<OrdersTm> existing = ordersList.stream()
-                    .filter(item -> item.getCode().equals(code))
+                    .filter(item -> item.getCode().equals(dto.getCode()))
                     .findFirst();
 
             if (existing.isPresent()) {
                 OrdersTm tm = existing.get();
                 double newQty = tm.getQty() + finalQty;
+
                 if (newQty > qtyOnHand) {
                     new Alert(Alert.AlertType.WARNING, "Cannot add more than available stock!").show();
                     return;
                 }
-                tm.setQty((int)newQty);
-                tm.setTotal(tm.getQty() * tm.getUnitPrice());
+
+                tm.setQty((int) newQty);
+                tm.setTotal(newQty * tm.getUnitPrice());
                 tblOrderCart.refresh();
+
             } else {
                 JFXButton btnRemove = new JFXButton("remove");
                 btnRemove.setCursor(Cursor.HAND);
@@ -813,9 +850,9 @@ public class OrdersFormController {
                 OrdersTm ordersTm = new OrdersTm(
                         dto.getCode(),
                         dto.getDescription(),
-                        (int)finalQty,
-                        dto.getUnitPrice(),
-                        finalQty * dto.getUnitPrice(),
+                        (int) finalQty,
+                        selectedPrice,
+                        finalQty * selectedPrice,
                         btnRemove
                 );
 
@@ -823,11 +860,9 @@ public class OrdersFormController {
                 tblOrderCart.setItems(ordersList);
             }
 
-            // Update labels
-            cmbMaterialCode.setValue(dto.getCode());
-            lblDescription.setText(dto.getDescription());
-            lblUnitPrice.setText(String.valueOf(dto.getUnitPrice()));
-            lblQtyOnHand.setText(String.valueOf(dto.getQtyOnHand()));
+            // 🔹 UI updates
+            applyMaterialToUI(dto);
+          //  lblQtyOnHand.setText(String.valueOf(dto.getQtyOnHand()));
 
             calculateNetTotal();
             txtQty.clear();
@@ -839,6 +874,7 @@ public class OrdersFormController {
             java.awt.Toolkit.getDefaultToolkit().beep();
         }
     }
+
 
 
     public void txtBarcodeOnAction(ActionEvent actionEvent) {
@@ -961,6 +997,37 @@ public class OrdersFormController {
         // 🧹 Focus back to barcode (POS style)
         Platform.runLater(() -> txtBarcode.requestFocus());
     }
+    private void applyMaterialToUI(MaterialDetailsDTO dto) {
+
+        if (dto == null) return;
+
+        // Sync combos
+        cmbMaterialCode.setValue(dto.getCode());
+
+        // Labels
+        lblDescription.setText(dto.getDescription());
+        lblQtyOnHand.setText(String.valueOf(dto.getQtyOnHand()));
+
+        // Prices (🔥 update controller level variables)
+        retailPrice = dto.getUnitPrice();
+        wholesalePrice = dto.getWholesalePrice();
+
+        // Apply selected price type
+        if ("WHOLESALE".equals(cmbPriceType.getValue())) {
+            lblUnitPrice.setText(String.valueOf(wholesalePrice));
+        } else {
+            lblUnitPrice.setText(String.valueOf(retailPrice));
+        }
+
+        // Unit handling
+        if ("OIL".equalsIgnoreCase(dto.getCategory())) {
+            cmbUnit.setDisable(false);
+            cmbUnit.setValue("ML");
+        } else {
+            cmbUnit.setDisable(true);
+            cmbUnit.setValue("PCS");
+        }
+    }
 
     private void loadMaterialDescriptions() {
         ObservableList<String> descList = FXCollections.observableArrayList();
@@ -1038,14 +1105,10 @@ public class OrdersFormController {
         MaterialDetailsDTO dto = materialMap.get(desc);
         if (dto == null) return;
 
-        cmbMaterialCode.setValue(dto.getCode());
-        lblDescription.setText(dto.getDescription());
-        lblUnitPrice.setText(String.valueOf(dto.getUnitPrice()));
-        lblQtyOnHand.setText(String.valueOf(dto.getQtyOnHand()));
-
+        applyMaterialToUI(dto);
+        cmbMaterialDesc.getEditor().clear();
         txtQty.requestFocus();
 
-        cmbMaterialDesc.getEditor().clear();
     }
 
 
@@ -1084,6 +1147,20 @@ public class OrdersFormController {
                 return qty;
         }
     }
+    @FXML
+    void cmbPriceTypeOnAction(ActionEvent event) {
+
+        if (cmbPriceType.getValue() == null) return;
+
+        if ("WHOLESALE".equals(cmbPriceType.getValue())) {
+            lblUnitPrice.setText(String.valueOf(wholesalePrice));
+        } else {
+            lblUnitPrice.setText(String.valueOf(retailPrice));
+        }
+
+        txtQty.requestFocus();
+    }
+
 
     private void refreshPage() {
         try {

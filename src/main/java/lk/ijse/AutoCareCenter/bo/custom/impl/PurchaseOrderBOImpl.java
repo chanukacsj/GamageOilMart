@@ -80,7 +80,9 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
                 materialDetails.setQtyOnHand(materialDetails.getQtyOnHand() - d.getQty());
 
                 //update item
-                boolean b = materialDetailDAO.update(new MaterialDetails(materialDetails.getCode(), materialDetails.getSupId(), materialDetails.getDescription(), materialDetails.getUnitPrice(), materialDetails.getQtyOnHand(), materialDetails.getCategory(), materialDetails.getBrand(), materialDetails.getAddedDate(), materialDetails.getStatus()));
+                System.out.println("update");
+                System.out.println(materialDetails.getWholesalePrice());
+                boolean b = materialDetailDAO.update(new MaterialDetails(materialDetails.getCode(), materialDetails.getSupId(), materialDetails.getDescription(), materialDetails.getUnitPrice(), materialDetails.getQtyOnHand(), materialDetails.getCategory(), materialDetails.getBrand(), materialDetails.getAddedDate(), materialDetails.getStatus(),materialDetails.getUnitCost(),materialDetails.getWholesalePrice()));
 
                 if (!b) {
                     connection.rollback();
@@ -130,7 +132,7 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
     public MaterialDetailsDTO findItem(String code) throws SQLException, ClassNotFoundException {
         try {
             MaterialDetails i = materialDetailDAO.searchById(code);
-            return new MaterialDetailsDTO(i.getCode(), i.getSupId(), i.getDescription(), i.getUnitPrice(), i.getQtyOnHand(), i.getCategory(), i.getBrand(), i.getAddedDate(), i.getStatus());
+            return new MaterialDetailsDTO(i.getCode(), i.getSupId(), i.getDescription(), i.getUnitPrice(), i.getQtyOnHand(), i.getCategory(), i.getBrand(), i.getAddedDate(), i.getStatus(),i.getUnitCost(),i.getWholesalePrice());
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find the Material " + code, e);
         } catch (ClassNotFoundException e) {

@@ -37,13 +37,13 @@ public class TyreFormController {
     private TableView<MaterialsTm> tblMaterial;
 
     @FXML
-    private TableColumn<?, ?> colCode,colBarcode, colDescription, colUnitPrice, colQtyOnHand, colSupId, colBrand, colDate, colStatus;
+    private TableColumn<?, ?> colCode, colBarcode, colDescription, colUnitPrice, colQtyOnHand, colSupId, colBrand, colDate, colStatus, colUnitCost, colWholesalePrice;
 
     @FXML
     private JFXComboBox<SupplierDTO> cmbSupId;
 
     @FXML
-    private JFXTextField txtDescription, txtUnitPrice, txtQtyOnHand, txtBrand;
+    private JFXTextField txtDescription, txtUnitPrice, txtQtyOnHand, txtBrand, txtUnitCost, txtWholesalePrice;
 
     @FXML
     private Label lblId;
@@ -85,6 +85,8 @@ public class TyreFormController {
         colDate.setCellValueFactory(new PropertyValueFactory<>("addedDate"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colBarcode.setCellValueFactory(new PropertyValueFactory<>("barcode"));
+        colUnitCost.setCellValueFactory(new PropertyValueFactory<>("unitCost"));
+        colWholesalePrice.setCellValueFactory(new PropertyValueFactory<>("wholesalePrice"));
 
     }
 
@@ -123,7 +125,9 @@ public class TyreFormController {
                         dto.getBrand(),
                         dto.getAddedDate(),
                         dto.getStatus(),
-                        dto.getBarcode()
+                        dto.getBarcode(),
+                        dto.getUnitCost(),
+                        dto.getWholesalePrice()
                 ));
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -142,6 +146,8 @@ public class TyreFormController {
         txtUnitPrice.setText(String.valueOf(tm.getUnitPrice()));
         txtQtyOnHand.setText(String.valueOf(tm.getQtyOnHand()));
         txtBrand.setText(tm.getBrand());
+        txtUnitCost.setText(String.valueOf(tm.getUnitCost()));
+        txtWholesalePrice.setText(String.valueOf(tm.getWholesalePrice()));
 
         for (SupplierDTO supplier : cmbSupId.getItems()) {
             if (supplier.getId().equals(tm.getSupId())) {
@@ -163,9 +169,11 @@ public class TyreFormController {
         int qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
         String addedDate = LocalDate.now().toString();
         String status = "Active";
+        double unitCost = Double.parseDouble(txtUnitCost.getText());
+        double wholesalePrice = Double.parseDouble(txtWholesalePrice.getText());
 
         MaterialsDTO materialsDTO = new MaterialsDTO(code);
-        MaterialDetailsDTO detailsDTO = new MaterialDetailsDTO(code, supId, description, unitPrice, qtyOnHand, category, brand, addedDate, status);
+        MaterialDetailsDTO detailsDTO = new MaterialDetailsDTO(code, supId, description, unitPrice, qtyOnHand, category, brand, addedDate, status, unitCost, wholesalePrice);
 
         try {
             boolean isDetailSaved = materialDetailBO.save(detailsDTO);
@@ -193,8 +201,10 @@ public class TyreFormController {
         String brand = txtBrand.getText();
         double unitPrice = Double.parseDouble(txtUnitPrice.getText());
         int qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
+        double unitCost = Double.parseDouble(txtUnitCost.getText());
+        double wholesalePrice = Double.parseDouble(txtWholesalePrice.getText());
 
-        MaterialDetailsDTO detailsDTO = new MaterialDetailsDTO(code, supId, description, unitPrice, qtyOnHand, "Tyres", brand, LocalDate.now().toString(), "Active");
+        MaterialDetailsDTO detailsDTO = new MaterialDetailsDTO(code, supId, description, unitPrice, qtyOnHand, "Tyres", brand, LocalDate.now().toString(), "Active", unitCost, wholesalePrice);
 
         try {
             boolean isUpdated = materialDetailBO.update(detailsDTO);
@@ -249,6 +259,8 @@ public class TyreFormController {
         txtUnitPrice.clear();
         txtBrand.clear();
         cmbSupId.setValue(null);
+        txtUnitCost.clear();
+        txtWholesalePrice.clear();
     }
 
     private void setupKeyListeners() {

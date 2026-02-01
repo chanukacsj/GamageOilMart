@@ -66,8 +66,13 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
 
     @Override
     public boolean update(MaterialDetails entity) throws SQLException, ClassNotFoundException {
+        System.out.println("entity = " );
+        System.out.println(entity.getUnitCost());
+        System.out.println(entity.getWholesalePrice());
         return SqlUtil.execute(
-                "UPDATE material_details SET supId = ?, description = ?, unitPrice = ?, qtyOnHand = ?, category = ?, brand = ?, addedDate = ?, status = ?, unitCost = ?, wholesalePrice = ? WHERE code = ?",
+                "UPDATE material_details\n" +
+                        "SET supId = ?, description = ?, unitPrice = ?, qtyOnHand = ?, category = ?, brand = ?, addedDate = ?, status = ?, unitCost = ?, wholesalePrice = ?\n" +
+                        "WHERE code = ?\n",
 
                 entity.getSupId(),          // 1
                 entity.getDescription(),    // 2
@@ -79,7 +84,8 @@ public class MaterialDetailsDAOImpl implements MaterialDetailDAO {
                 entity.getStatus(),         // 8
                 entity.getUnitCost(),       // 9
                 entity.getWholesalePrice(), // 10
-                entity.getCode()
+                entity.getCode()            // 11
+
         );
     }
 

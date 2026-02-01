@@ -17,10 +17,10 @@
    <Label layoutX="400" layoutY="15" style="-fx-font-size: 32px; -fx-text-fill: white; -fx-font-weight: bold;" text="Payment" />
 
    <!-- MAIN CARD -->
-   <AnchorPane layoutX="37.0" layoutY="90.0" prefHeight="500.0" prefWidth="926.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 18;                        -fx-padding: 25;                        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 25, 0, 0, 6);">
+   <AnchorPane layoutX="37.0" layoutY="84.0" prefHeight="500.0" prefWidth="926.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 18;                        -fx-padding: 25;                        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 25, 0, 0, 6);">
 
       <!-- TABLE -->
-      <TableView fx:id="tblOrderCart" layoutX="25.0" layoutY="25.0" prefHeight="220" prefWidth="850" style="-fx-background-radius: 10; -fx-border-radius: 10;">
+      <TableView fx:id="tblOrderCart" layoutX="25.0" layoutY="5.0" prefHeight="220" prefWidth="850" style="-fx-background-radius: 10; -fx-border-radius: 10;">
          <columns>
             <TableColumn fx:id="colItemCode" prefWidth="90" text="Code" />
             <TableColumn fx:id="colDescription" prefWidth="160" text="Description" />
@@ -48,6 +48,7 @@
 
       <!-- MATERIAL SELECTION AREA -->
       <Rectangle arcHeight="15" arcWidth="15" height="120.0" layoutX="25.0" layoutY="330.0" style="-fx-fill: #F7F9FA; -fx-stroke: #E0E0E0; -fx-stroke-width: 1;" width="850.0" />
+      <JFXComboBox fx:id="cmbPriceType" layoutX="32.0" layoutY="232.0" onAction="#cmbPriceTypeOnAction" prefWidth="200" promptText="Price Type" />
 
       <Label layoutX="40" layoutY="350" style="-fx-font-weight: bold;" text="Material Code:" />
       <JFXComboBox fx:id="cmbMaterialCode" layoutX="150" layoutY="345" onAction="#cmbmaterialOnAction" prefWidth="180" />

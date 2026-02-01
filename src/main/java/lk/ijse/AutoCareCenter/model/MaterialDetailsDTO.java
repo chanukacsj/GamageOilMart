@@ -48,4 +48,19 @@ public class MaterialDetailsDTO {
         this.unitCost = unitCost;
         this.wholesalePrice = wholesalePrice;
     }
+
+
+    public MaterialDetailsDTO(String code, String supId, String description, String category, String brand, double unitPrice, double unitCost, double wholesalePrice, int qtyOnHand, String barcode) {
+
+        this.code = code;
+        this.supId = supId;
+        this.description = description;
+        this.category = category;
+        this.brand = brand;
+        this.unitPrice = unitPrice;
+        this.unitCost = unitCost;
+        this.wholesalePrice = wholesalePrice;
+        this.qtyOnHand = qtyOnHand;
+        this.barcode = barcode;
+    }
 }
