@@ -15,11 +15,6 @@
       <Rectangle fx:id="rectangle" arcHeight="10.0" arcWidth="10.0" fill="#1e3c72" height="651.0" layoutX="10.0" layoutY="80.0" opacity="0.95" strokeType="INSIDE" styleClass="rectangle" width="1000.0" />
       <Line endX="-73.00001525878906" endY="31.29290008544922" layoutX="73.0" layoutY="32.0" startX="-73.00001525878906" startY="-30.9999942779541" />
       <Line endX="952.0" endY="7.62939453125E-6" layoutX="59.0" layoutY="689.0" opacity="0.13" startX="-59.00001525878906" startY="7.62939453125E-6" />
-      <ImageView fitHeight="43.0" fitWidth="44.0" layoutX="960.0" layoutY="15.0">
-         <image>
-            <Image url="@../asserts/people.png" />
-         </image>
-      </ImageView>
       <Label fx:id="lblId" layoutX="227.0" layoutY="182.0">
          <font>
             <Font name="System Bold" size="16.0" />

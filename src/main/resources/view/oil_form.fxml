@@ -58,7 +58,7 @@
       <JFXButton fx:id="btnClear" layoutX="297.0" layoutY="357.0" onAction="#btnClearOnAction" prefWidth="90" text="Clear" />
 
       <!-- Table -->
-      <TableView fx:id="tblMaterial" layoutX="26.0" layoutY="396.0" onMouseClicked="#getMaterials" prefHeight="300" prefWidth="932.0">
+      <TableView fx:id="tblMaterial" layoutX="35.0" layoutY="396.0" onMouseClicked="#getMaterials" prefHeight="300" prefWidth="932.0">
 
          <columns>
             <TableColumn fx:id="colCode" prefWidth="90" text="Code" />

@@ -50,6 +50,7 @@ public class TyresFormController {
         setUi("tyre_form.fxml");
     }
 
-    public void btnBackOnAction(ActionEvent actionEvent) {
+    public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("material_form.fxml");
     }
 }

@@ -49,11 +49,6 @@
       </image>
    </ImageView>
    <Label layoutX="359.0" layoutY="12.0" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Automotive Products" textFill="WHITE" />
-   <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="960.0" layoutY="15.0">
-      <image>
-         <Image url="@../asserts/people.png" />
-      </image>
-   </ImageView>
    <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="307.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@../asserts/icons8-add-50.png" />

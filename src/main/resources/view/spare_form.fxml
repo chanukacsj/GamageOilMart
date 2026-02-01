@@ -12,40 +12,40 @@
 
 <AnchorPane fx:id="root" prefHeight="720.0" prefWidth="1020.0" styleClass="root" stylesheets="@../css/oil.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.AutoCareCenter.controller.SpareFormController">
    <children>
-      <Rectangle fill="#1a237e" height="60" layoutX="10.0" layoutY="10.0" width="1020" />
-      <Label layoutX="370.0" layoutY="22.0" style="-fx-font-size:28; -fx-font-weight:bold;" text="Manage Spare Parts" textFill="WHITE" />
-      <Rectangle arcHeight="15" arcWidth="15" fill="white" height="214.0" layoutX="71.0" layoutY="143.0" opacity="0.12" width="900" />
-      <Label layoutX="190.0" layoutY="138.0" text="Material Code" />
-      <JFXTextField fx:id="txtCode" layoutX="190.0" layoutY="163.0" prefWidth="200" styleClass="form-field" />
+      <Rectangle fill="#1a237e" height="60" layoutX="-3.0" layoutY="3.0" width="1020" />
+      <Label layoutX="379.0" layoutY="13.0" style="-fx-font-size:28; -fx-font-weight:bold;" text="Manage Spare Parts" textFill="WHITE" />
+      <Rectangle arcHeight="15" arcWidth="15" fill="white" height="214.0" layoutX="60.0" layoutY="139.0" opacity="0.12" width="900" />
+      <Label layoutX="179.0" layoutY="134.0" text="Material Code" />
+      <JFXTextField fx:id="txtCode" layoutX="179.0" layoutY="159.0" prefWidth="200" styleClass="form-field" />
 
-      <Label layoutX="440.0" layoutY="138.0" text="Description" />
-      <JFXTextField fx:id="txtDescription" layoutX="440.0" layoutY="163.0" prefWidth="200" styleClass="form-field" />
+      <Label layoutX="429.0" layoutY="134.0" text="Description" />
+      <JFXTextField fx:id="txtDescription" layoutX="429.0" layoutY="159.0" prefWidth="200" styleClass="form-field" />
 
-      <Label layoutX="690.0" layoutY="138.0" text="Supplier" />
-      <JFXComboBox fx:id="cmbSupId" layoutX="690.0" layoutY="163.0" prefWidth="150" styleClass="form-field" />
+      <Label layoutX="679.0" layoutY="134.0" text="Supplier" />
+      <JFXComboBox fx:id="cmbSupId" layoutX="679.0" layoutY="159.0" prefWidth="150" styleClass="form-field" />
 
       <!-- Row 2 -->
-      <Label layoutX="190.0" layoutY="213.0" text="Retail Price (Unit Price)" />
-      <JFXTextField fx:id="txtUnitPrice" layoutX="190.0" layoutY="238.0" prefWidth="200" styleClass="form-field" />
+      <Label layoutX="179.0" layoutY="209.0" text="Retail Price (Unit Price)" />
+      <JFXTextField fx:id="txtUnitPrice" layoutX="179.0" layoutY="234.0" prefWidth="200" styleClass="form-field" />
 
-      <Label layoutX="440.0" layoutY="213.0" text="Qty On Hand" />
-      <JFXTextField fx:id="txtQtyOnHand" layoutX="440.0" layoutY="238.0" prefWidth="200" styleClass="form-field" />
+      <Label layoutX="429.0" layoutY="209.0" text="Qty On Hand" />
+      <JFXTextField fx:id="txtQtyOnHand" layoutX="429.0" layoutY="234.0" prefWidth="200" styleClass="form-field" />
 
-      <Label layoutX="690.0" layoutY="213.0" text="Brand" />
-      <JFXTextField fx:id="txtBrand" layoutX="690.0" layoutY="238.0" prefWidth="150" styleClass="form-field" />
+      <Label layoutX="679.0" layoutY="209.0" text="Brand" />
+      <JFXTextField fx:id="txtBrand" layoutX="679.0" layoutY="234.0" prefWidth="150" styleClass="form-field" />
 
       <!-- Row 3 (NEW) -->
-      <Label layoutX="190.0" layoutY="283.0" text="Stock Price" />
-      <JFXTextField fx:id="txtUnitCost" layoutX="190.0" layoutY="308.0" prefWidth="200" styleClass="form-field" />
+      <Label layoutX="179.0" layoutY="279.0" text="Stock Price" />
+      <JFXTextField fx:id="txtUnitCost" layoutX="179.0" layoutY="304.0" prefWidth="200" styleClass="form-field" />
 
-      <Label layoutX="440.0" layoutY="283.0" text="Wholesale Price" />
-      <JFXTextField fx:id="txtWholesalePrice" layoutX="440.0" layoutY="308.0" prefWidth="200" styleClass="form-field" />
+      <Label layoutX="429.0" layoutY="279.0" text="Wholesale Price" />
+      <JFXTextField fx:id="txtWholesalePrice" layoutX="429.0" layoutY="304.0" prefWidth="200" styleClass="form-field" />
 
-      <JFXButton fx:id="btnSave" layoutX="607.0" layoutY="367.0" onAction="#btnSaveOnAction" prefWidth="90" text="Save" />
-      <JFXButton fx:id="btnUpdate" layoutX="507.0" layoutY="367.0" onAction="#btnUpdateOnAction" prefWidth="90" text="Update" />
-      <JFXButton fx:id="btnDelete" layoutX="407.0" layoutY="367.0" onAction="#btnDeleteOnAction" prefWidth="90" text="Delete" />
-      <JFXButton fx:id="btnClear" layoutX="307.0" layoutY="367.0" onAction="#btnClearOnAction" prefWidth="90" text="Clear" />
-      <TableView fx:id="tblMaterial" layoutX="36.0" layoutY="406.0" onMouseClicked="#getMaterials" prefHeight="300" prefWidth="932.0">
+      <JFXButton fx:id="btnSave" layoutX="596.0" layoutY="363.0" onAction="#btnSaveOnAction" prefWidth="90" text="Save" />
+      <JFXButton fx:id="btnUpdate" layoutX="496.0" layoutY="363.0" onAction="#btnUpdateOnAction" prefWidth="90" text="Update" />
+      <JFXButton fx:id="btnDelete" layoutX="396.0" layoutY="363.0" onAction="#btnDeleteOnAction" prefWidth="90" text="Delete" />
+      <JFXButton fx:id="btnClear" layoutX="296.0" layoutY="363.0" onAction="#btnClearOnAction" prefWidth="90" text="Clear" />
+      <TableView fx:id="tblMaterial" layoutX="52.0" layoutY="406.0" onMouseClicked="#getMaterials" prefHeight="300" prefWidth="925.0">
          <columns>
             <TableColumn fx:id="colCode" prefWidth="90" text="Code" />
             <TableColumn fx:id="colDescription" prefWidth="117.59994506835938" text="Description" />
@@ -60,22 +60,22 @@
             <TableColumn fx:id="colStatus" prefWidth="66.40008544921875" text="Status" />
          </columns>
       </TableView>
-      <Label fx:id="lblId" layoutX="201.0" layoutY="165.0" prefHeight="26.0" prefWidth="150.0" styleClass="form-label" />
-      <Rectangle arcHeight="15" arcWidth="15" fill="white" height="53.0" layoutX="72.0" layoutY="79.0" opacity="0.12" width="900.0" />
-      <Label layoutX="96.0" layoutY="95.0" styleClass="form-label" text="Search by Description" />
-      <JFXTextField fx:id="txtSearchDescription" layoutX="266.0" layoutY="90.0" onKeyReleased="#txtDescriptionOnKeyReleased" prefWidth="300" promptText="Type description here..." styleClass="form-field" />
-      <JFXButton fx:id="btnSearch" layoutX="590.0" layoutY="89.0" onAction="#btnSearchOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #2980b9; -fx-background-radius: 8;" text="Search" textFill="white">
+      <Label fx:id="lblId" layoutX="190.0" layoutY="161.0" prefHeight="26.0" prefWidth="150.0" styleClass="form-label" />
+      <Rectangle arcHeight="15" arcWidth="15" fill="white" height="53.0" layoutX="61.0" layoutY="75.0" opacity="0.12" width="900.0" />
+      <Label layoutX="85.0" layoutY="91.0" styleClass="form-label" text="Search by Description" />
+      <JFXTextField fx:id="txtSearchDescription" layoutX="255.0" layoutY="86.0" onKeyReleased="#txtDescriptionOnKeyReleased" prefWidth="300" promptText="Type description here..." styleClass="form-field" />
+      <JFXButton fx:id="btnSearch" layoutX="579.0" layoutY="85.0" onAction="#btnSearchOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #2980b9; -fx-background-radius: 8;" text="Search" textFill="white">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
-      <JFXButton fx:id="btnReset" layoutX="691.0" layoutY="89.0" onAction="#btnResetOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #7f8c8d; -fx-background-radius: 8;" text="Reset" textFill="white">
+      <JFXButton fx:id="btnReset" layoutX="680.0" layoutY="85.0" onAction="#btnResetOnAction" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #7f8c8d; -fx-background-radius: 8;" text="Reset" textFill="white">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
-      <JFXButton layoutX="715.0" layoutY="303.0" onAction="#btnPrintBarcodeOnAction" prefHeight="26.0" prefWidth="100.0" style="-fx-background-color:#6a1b9a; -fx-text-fill:white;" text="Print Barcode" />
-      <JFXButton fx:id="btnBack" buttonType="RAISED" contentDisplay="LEFT" layoutX="37.0" layoutY="20.0" onAction="#btnBackOnAction" prefHeight="40.0" prefWidth="100.0" styleClass="back-button" text="← Back" />
+      <JFXButton layoutX="704.0" layoutY="299.0" onAction="#btnPrintBarcodeOnAction" prefHeight="26.0" prefWidth="100.0" style="-fx-background-color:#6a1b9a; -fx-text-fill:white;" text="Print Barcode" />
+      <JFXButton fx:id="btnBack" buttonType="RAISED" contentDisplay="LEFT" layoutX="28.0" layoutY="13.0" onAction="#btnBackOnAction" prefHeight="40.0" prefWidth="100.0" styleClass="back-button" text="← Back" />
    </children>
 
 </AnchorPane>
