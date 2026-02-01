@@ -9,4 +9,11 @@ import java.util.ArrayList;
 public interface PaymentBO extends SuperBO {
     public ArrayList<PaymentDTO> loadAll() throws SQLException, ClassNotFoundException;
 
+    double getDailyProfit() throws Exception;
+
+    double getMonthlyProfit() throws Exception;
+
+    double getYearlyProfit() throws Exception;
 }
+
+

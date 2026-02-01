@@ -16,6 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import lk.ijse.AutoCareCenter.bo.BOFactory;
+import lk.ijse.AutoCareCenter.bo.custom.PaymentBO;
 import lk.ijse.AutoCareCenter.bo.custom.PurchaseOrderBO;
 import lk.ijse.AutoCareCenter.entity.Payment;
 import lk.ijse.AutoCareCenter.model.tm.PaymentTm;
@@ -42,6 +43,16 @@ public class PaymentViewController {
 
     @FXML
     private Label lblMonthlyIncome;
+
+    @FXML
+    private Label lblDailyProfit;
+
+    @FXML
+    private Label lblMonthlyProfit;
+
+    @FXML
+    private Label lblYearlyProfit;
+
 
     @FXML
     private Label lblYearlyIncome;
@@ -79,7 +90,7 @@ public class PaymentViewController {
     private ObservableList<PaymentTm> masterList = FXCollections.observableArrayList();
 
     PurchaseOrderBO purchaseOrderBO = (PurchaseOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PO);
-
+    PaymentBO paymentBO = (PaymentBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PAYMENT);
     public void initialize() {
         ColId.setCellValueFactory(new PropertyValueFactory<>("id"));
         ColDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -102,6 +113,7 @@ public class PaymentViewController {
 
         cmbDateFilter.setValue("All");
         loadAllPayments();
+        loadProfitSummary();
     }
 
     private void loadAllPayments() {
@@ -280,5 +292,20 @@ public class PaymentViewController {
     public void btnResetOnAction(ActionEvent actionEvent) {
         txtSearchDescription.clear();
         loadAllPayments();
+    }
+    private void loadProfitSummary() {
+        try {
+            lblDailyProfit.setText(
+                    String.format("%.2f", paymentBO.getDailyProfit())
+            );
+            lblMonthlyProfit.setText(
+                    String.format("%.2f", paymentBO.getMonthlyProfit())
+            );
+            lblYearlyProfit.setText(
+                    String.format("%.2f", paymentBO.getYearlyProfit())
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

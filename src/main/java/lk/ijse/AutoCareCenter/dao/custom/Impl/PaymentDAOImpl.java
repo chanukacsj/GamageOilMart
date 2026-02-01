@@ -79,4 +79,39 @@ public class PaymentDAOImpl implements PaymentDAO {
     public String currentId() throws SQLException, ClassNotFoundException {
         return "";
     }
+    @Override
+    public double getDailyProfit() throws Exception {
+        ResultSet rs = SqlUtil.execute(
+                "SELECT SUM((p.unitPrice - md.unitCost) * p.qty) AS profit " +
+                        "FROM payment p " +
+                        "JOIN material_details md ON p.code = md.code " +
+                        "WHERE DATE(p.date) = DATE('now')"
+        );
+        return rs.next() ? rs.getDouble("profit") : 0.0;
+    }
+
+
+    @Override
+    public double getMonthlyProfit() throws Exception {
+        ResultSet rs = SqlUtil.execute(
+                "SELECT SUM((p.unitPrice - md.unitCost) * p.qty) AS profit " +
+                        "FROM payment p " +
+                        "JOIN material_details md ON p.code = md.code " +
+                        "WHERE strftime('%Y-%m', p.date) = strftime('%Y-%m','now')"
+        );
+        return rs.next() ? rs.getDouble("profit") : 0.0;
+    }
+
+
+    @Override
+    public double getYearlyProfit() throws Exception {
+        ResultSet rs = SqlUtil.execute(
+                "SELECT SUM((p.unitPrice - md.unitCost) * p.qty) AS profit " +
+                        "FROM payment p " +
+                        "JOIN material_details md ON p.code = md.code " +
+                        "WHERE strftime('%Y', p.date) = strftime('%Y','now')"
+        );
+        return rs.next() ? rs.getDouble("profit") : 0.0;
+    }
+
 }

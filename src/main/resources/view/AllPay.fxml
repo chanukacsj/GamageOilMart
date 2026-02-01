@@ -18,7 +18,7 @@
 
    <!-- Form Background -->
    <Rectangle arcHeight="15.0" arcWidth="15.0" fill="white" height="150.0" layoutX="60.0" layoutY="70.0" opacity="0.12" />
-   <JFXButton fx:id="btnDelete" layoutX="64.0" layoutY="145.0" onAction="#btnDeleteOnAction" prefHeight="32.0" prefWidth="90.0" styleClass="btn-delete" text="Delete" />
+   <JFXButton fx:id="btnDelete" layoutX="64.0" layoutY="138.0" onAction="#btnDeleteOnAction" prefHeight="32.0" prefWidth="90.0" styleClass="btn-delete" text="Delete" />
    <JFXButton fx:id="btnBack" layoutX="30.0" layoutY="10.0" onAction="#btnBackOnAction" prefHeight="40.0" prefWidth="100.0" styleClass="back-button" text="← Back" />
    <Label layoutX="476.0" layoutY="12.0" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Payments" textFill="WHITE" />
    <Group layoutX="60.0" layoutY="70.0">
@@ -40,12 +40,20 @@
 
 
    </Group>
-   <Label fx:id="lblDailyIncome" layoutX="554.0" layoutY="661.0" text="0.00" />
-   <Label fx:id="lblMonthlyIncome" layoutX="364.0" layoutY="662.0" text="0.00" />
-   <Label fx:id="lblYearlyIncome" layoutX="152.0" layoutY="662.0" text="0.00" />
+   <Label fx:id="lblDailyIncome" layoutX="752.0" layoutY="671.0" text="0.00" />
+   <Label fx:id="lblMonthlyIncome" layoutX="562.0" layoutY="672.0" text="0.00" />
+   <Label fx:id="lblYearlyIncome" layoutX="350.0" layoutY="672.0" text="0.00" />
+   <!-- PROFIT LABELS -->
+   <Label layoutX="240.0" layoutY="638.0" styleClass="form-label" text="Yearly Profit =" />
+   <Label layoutX="437.0" layoutY="639.0" styleClass="form-label" text="Monthly Profit =" />
+   <Label layoutX="649.0" layoutY="638.0" styleClass="form-label" text="Daily Profit =" />
 
-   <JFXComboBox fx:id="cmbDateFilter" layoutX="809.0" layoutY="147.0" onAction="#cmbDateFilterOnAction" prefWidth="150" unFocusColor="WHITE" />
-   <TableView fx:id="tblPayments" layoutX="44.0" layoutY="198.0" prefHeight="438.0" prefWidth="932.0" style="-fx-background-radius: 10; -fx-border-radius: 10;">
+   <Label fx:id="lblYearlyProfit" layoutX="350.0" layoutY="639.0" text="0.00" />
+   <Label fx:id="lblMonthlyProfit" layoutX="562.0" layoutY="640.0" text="0.00" />
+   <Label fx:id="lblDailyProfit" layoutX="752.0" layoutY="639.0" text="0.00" />
+
+   <JFXComboBox fx:id="cmbDateFilter" layoutX="809.0" layoutY="140.0" onAction="#cmbDateFilterOnAction" prefWidth="150" unFocusColor="WHITE" />
+   <TableView fx:id="tblPayments" layoutX="44.0" layoutY="184.0" prefHeight="438.0" prefWidth="932.0" style="-fx-background-radius: 10; -fx-border-radius: 10;">
       <columns>
          <TableColumn fx:id="ColId" prefWidth="90" text="ID" />
          <TableColumn fx:id="ColDescription" prefWidth="160" text="Description" />
@@ -59,7 +67,7 @@
          <TableColumn fx:id="ColDate" text="Date" />
       </columns>
    </TableView>
-   <Label layoutX="42.0" layoutY="660.0" styleClass="form-label" text="Yearly Income =" />
-   <Label layoutX="239.0" layoutY="661.0" styleClass="form-label" text="Monthly Income =" />
-   <Label layoutX="451.0" layoutY="660.0" styleClass="form-label" text="Daily Income =" />
+   <Label layoutX="240.0" layoutY="670.0" styleClass="form-label" text="Yearly Income =" />
+   <Label layoutX="437.0" layoutY="671.0" styleClass="form-label" text="Monthly Income =" />
+   <Label layoutX="649.0" layoutY="670.0" styleClass="form-label" text="Daily Income =" />
 </AnchorPane>

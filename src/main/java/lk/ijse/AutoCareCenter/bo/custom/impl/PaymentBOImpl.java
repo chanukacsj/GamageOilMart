@@ -23,4 +23,19 @@ public class PaymentBOImpl implements PaymentBO {
         }
         return allPayment;
     }
+    @Override
+    public double getDailyProfit() throws Exception {
+        return paymentDAO.getDailyProfit();
+    }
+
+    @Override
+    public double getMonthlyProfit() throws Exception {
+        return paymentDAO.getMonthlyProfit();
+    }
+
+    @Override
+    public double getYearlyProfit() throws Exception {
+        return paymentDAO.getYearlyProfit();
+    }
+
 }
